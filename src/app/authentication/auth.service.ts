@@ -26,4 +26,8 @@ export class AuthService {
   get currentUserId(): string {
     return this.user.uid;
   }
+
+  get currentUserData(): firebase.User {
+    return this.user;
+  }
 }

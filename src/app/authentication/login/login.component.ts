@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
@@ -17,7 +17,7 @@ export class LoginComponent implements OnInit {
   ]);
   private passwordFormControl = new FormControl('', []);
 
-  constructor(private auth: AngularFireAuth, private router: Router) { }
+  constructor(private auth: AngularFireAuth, private router: Router, private zone: NgZone) { }
 
   ngOnInit() {
   }
@@ -28,20 +28,34 @@ export class LoginComponent implements OnInit {
         window.alert(error.message);
       })
       .then(() => {
-        this.router.navigate(['/']);
+        this.zone.run(() => {
+          this.router.navigate(['/']);
+        });
       });
   }
 
   signInWithGoogle() {
-    this.auth.auth.signInWithPopup(new auth.GoogleAuthProvider());
+    this.signInWithProvider(new auth.GoogleAuthProvider());
   }
   signInWithFacebook() {
-    this.auth.auth.signInWithPopup(new auth.FacebookAuthProvider());
+    this.signInWithProvider(new auth.FacebookAuthProvider());
   }
   signInWithTwitter() {
-    this.auth.auth.signInWithPopup(new auth.TwitterAuthProvider());
+    this.signInWithProvider(new auth.TwitterAuthProvider());
   }
   signInWithGithub() {
-    this.auth.auth.signInWithPopup(new auth.GithubAuthProvider());
+    this.signInWithProvider(new auth.GithubAuthProvider());
+  }
+
+  private signInWithProvider(provider: auth.AuthProvider) {
+    this.auth.auth.signInWithPopup(provider)
+      .catch((error) => {
+        window.alert(error.message);
+      })
+      .then(() => {
+        this.zone.run(() => {
+          this.router.navigate(['/']);
+        });
+      });
   }
 }

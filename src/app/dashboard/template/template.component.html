@@ -1,25 +1,33 @@
 <lib-dashboard title="Test Dashboard">
-    <lib-dashboard-tile title="Red">
-        <span style="background-color: red;">Red</span>
-    </lib-dashboard-tile>
-    <lib-dashboard-tile title="Blue">
-        <span style="background-color: blue;">Blue</span>
-    </lib-dashboard-tile>
-    <lib-dashboard-tile title="Green">
-        <span style="background-color: green;">Green</span>
-    </lib-dashboard-tile>
-    <lib-dashboard-tile title="Welcome">
-        <lib-tile-user>
-            <span *libTileUserTemplate="let user" class="mat-display-2">Welcome {{user.displayName}}</span>
-        </lib-tile-user>
-    </lib-dashboard-tile>
     <lib-dashboard-tile title="Accounts">
         <lib-tile-collection path="accounts">
             <span *libTileCollectionTemplate="let account">Account: {{account.name}}</span>
         </lib-tile-collection>
     </lib-dashboard-tile>
     <lib-dashboard-section class="dashboard-col-9">
-        <span>&nbsp;</span>
+        <lib-tile-user>
+            <div class="hbox" *libTileUserTemplate="let user">
+                <div class="vbox primary">
+                    <span class="mat-body">{{current | async | amDateFormat:'LL'}}</span>
+                    <span class="no-margin mat-display-4">{{current | async | amDateFormat:'HH:mm'}}</span>
+                    <span class="mat-body">{{current | async | amDateFormat:'dddd'}}</span>
+                </div>
+                <div class="vbox spacer">
+                    <span class="template-title mat-headline primary">{{greetings}},
+                        <strong>{{user.displayName}}!</strong></span>
+                    <div class="hbox">
+                        <button mat-raised-button color="accent" (click)="createCollaboration()">Start</button>
+                    </div>
+                </div>
+            </div>
+        </lib-tile-user>
+        <lib-tile-collection path="collaborations">
+            <mat-card *libTileCollectionTemplate="let collaboration" class="template-card">
+                <mat-card-title class="mat-card-title">{{collaboration.name}}</mat-card-title>
+                <mat-card-content class="template-card-content">
+                    Controls that collect and validate user input. </mat-card-content>
+            </mat-card>
+        </lib-tile-collection>
     </lib-dashboard-section>
     <lib-dashboard-section class="dashboard-col-3">
         <span>&nbsp;</span>

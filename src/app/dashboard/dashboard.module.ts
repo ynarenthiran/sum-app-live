@@ -6,8 +6,13 @@ import {
   MatIconModule,
   MatToolbarModule,
   MatExpansionModule,
-  MatListModule
+  MatListModule,
+  MatMenuModule,
+  MatFormFieldModule,
+  MatInputModule,
+  MatCardModule
 } from '@angular/material';
+import { MomentModule } from 'ngx-moment';
 
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import {
@@ -48,7 +53,12 @@ import { TemplateComponent } from './template/template.component';
     MatToolbarModule,
     MatExpansionModule,
     MatListModule,
-    DashboardRoutingModule
+    MatMenuModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatCardModule,
+    DashboardRoutingModule,
+    MomentModule
   ],
   exports: [
     DashboardComponent,

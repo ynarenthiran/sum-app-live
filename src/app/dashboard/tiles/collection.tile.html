@@ -1,4 +1,12 @@
-<ng-container *ngIf="collection$ | async as collection">
-    <ng-container *ngFor="let record of collection" [ngTemplateOutlet]="template.templateRef"
-        [ngTemplateOutletContext]="{$implicit: record}"></ng-container>
-</ng-container>
+<div #contents class="tile-collection-wrapper">
+    <div class="tile-collection" *ngIf="collection$ | async as collection">
+        <ng-container *ngFor="let record of collection" [ngTemplateOutlet]="template.templateRef"
+            [ngTemplateOutletContext]="{$implicit: record}"></ng-container>
+    </div>
+</div>
+<button mat-fab class="tile-left" (click)="scrollLeft(contents)">
+    <mat-icon>chevron_left</mat-icon>
+</button>
+<button mat-fab class="tile-right" (click)="scrollRight(contents)">
+    <mat-icon>chevron_right</mat-icon>
+</button>

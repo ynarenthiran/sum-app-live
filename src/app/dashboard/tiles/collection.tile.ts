@@ -1,9 +1,10 @@
 import {
-  Component, OnInit, Directive, ContentChild, TemplateRef, Input,
+  Component, OnInit, Directive, ContentChild, TemplateRef, Input, ElementRef, ViewChild,
 } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { AppConfigService } from 'src/app/services/app.config';
 
 interface User {
   id: string;
@@ -21,7 +22,8 @@ export class TileCollectionTemplate {
 
 @Component({
   selector: 'lib-tile-collection',
-  templateUrl: './collection.tile.html'
+  templateUrl: './collection.tile.html',
+  styleUrls: ['./collection.tile.scss']
 })
 export class TileCollection implements OnInit {
   collection$: Observable<any[]>;
@@ -34,13 +36,16 @@ export class TileCollection implements OnInit {
   @ContentChild(TileCollectionTemplate)
   template: TileCollectionTemplate;
 
-  constructor(private db: AngularFirestore) { }
+  @ViewChild('contents')
+  contents: ElementRef;
+
+  constructor(private hostEl: ElementRef, private db: AngularFirestore, private config: AppConfigService) { }
 
   ngOnInit() {
   }
 
   getCollection(path: string): Observable<any[]> {
-    return this.db.collection(path)
+    return this.db.collection('accounts/' + this.config.getConfig().accountId + '/' + path)
       .snapshotChanges()
       .pipe(
         map(actions => actions.map(a => {
@@ -48,5 +53,12 @@ export class TileCollection implements OnInit {
           return Object.assign(rec, { id: a.payload.doc.id });
         }))
       );
+  }
+
+  scrollLeft() {
+    this.contents.nativeElement.scrollLeft -= 100;
+  }
+  scrollRight() {
+    this.contents.nativeElement.scrollLeft += 100;
   }
 }

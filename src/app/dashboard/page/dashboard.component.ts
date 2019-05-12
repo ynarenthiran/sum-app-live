@@ -13,6 +13,8 @@ import {
   TemplateRef,
   ViewContainerRef
 } from '@angular/core';
+import { AuthService } from 'src/app/authentication/auth.service';
+import { Router } from '@angular/router';
 
 const DRAG_EFFECT: string = 'link';
 const CLASS_DROP_TARGET: string = "dashboard-drop-target";
@@ -133,7 +135,8 @@ export class DashboardTile {
 @Component({
   selector: 'lib-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss']
+  styleUrls: ['./dashboard.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class DashboardComponent implements OnInit, AfterContentInit {
   @ContentChildren(DashboardTile)
@@ -149,7 +152,7 @@ export class DashboardComponent implements OnInit, AfterContentInit {
 
   droppedTile: DashboardTile = null;
 
-  constructor(public el: ElementRef) { }
+  constructor(public el: ElementRef, private auth: AuthService, private router: Router) { }
 
   ngOnInit() {
   }
@@ -163,5 +166,9 @@ export class DashboardComponent implements OnInit, AfterContentInit {
     this.sections.forEach(section => {
       section.owner = owner;
     });
+  }
+
+  onLogoff() {
+    this.router.navigate(['auth', 'logout']);
   }
 }
