@@ -1,4 +1,4 @@
-<lib-dashboard title="Test Dashboard">
+<lib-dashboard title="Dashboard" class="dashboard-gap-small">
     <lib-dashboard-tile title="Accounts">
         <lib-tile-collection path="accounts">
             <span *libTileCollectionTemplate="let account">Account: {{account.name}}</span>
@@ -30,6 +30,10 @@
         </lib-tile-collection>
     </lib-dashboard-section>
     <lib-dashboard-section class="dashboard-col-3">
-        <span>&nbsp;</span>
+        <lib-tile-list>
+            <mat-list-item *libTileListTemplate="let link">
+                Path: {{link.path}}
+            </mat-list-item>
+        </lib-tile-list>
     </lib-dashboard-section>
 </lib-dashboard>

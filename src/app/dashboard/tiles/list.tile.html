@@ -1,0 +1,11 @@
+<mat-card>
+    <mat-card-header>
+        <mat-icon mat-card-avatar>launch</mat-icon>
+        <mat-card-title>Links</mat-card-title>
+        <mat-card-subtitle>Launch applications</mat-card-subtitle>
+    </mat-card-header>
+    <mat-nav-list *ngIf="list$ | async as list">
+        <ng-container *ngFor="let record of list" [ngTemplateOutlet]="template.templateRef"
+            [ngTemplateOutletContext]="{$implicit: record}"></ng-container>
+    </mat-nav-list>
+</mat-card>

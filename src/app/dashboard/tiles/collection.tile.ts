@@ -6,12 +6,6 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AppConfigService } from 'src/app/services/app.config';
 
-interface User {
-  id: string;
-  displayName: string;
-  email: string;
-}
-
 @Directive({
   selector: '[libTileCollectionTemplate]'
 })

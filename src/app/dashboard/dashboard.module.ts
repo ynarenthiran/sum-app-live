@@ -31,6 +31,10 @@ import {
   TileCollectionTemplate
 } from './tiles/collection.tile';
 import { TemplateComponent } from './template/template.component';
+import {
+  TileList,
+  TileListTemplate
+} from './tiles/list.tile';
 
 @NgModule({
   declarations: [
@@ -43,6 +47,8 @@ import { TemplateComponent } from './template/template.component';
     TileUserTemplate,
     TileCollection,
     TileCollectionTemplate,
+    TileList,
+    TileListTemplate,
     TemplateComponent
   ],
   imports: [
@@ -67,7 +73,9 @@ import { TemplateComponent } from './template/template.component';
     TileUser,
     TileUserTemplate,
     TileCollection,
-    TileCollectionTemplate
+    TileCollectionTemplate,
+    TileList,
+    TileListTemplate
   ]
 })
 export class DashboardModule { }
