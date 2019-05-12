@@ -22,7 +22,7 @@ export class AppConfigService {
       });
     }
     else {
-      const name = host.split(":")[0];
+      const name = host.split(".")[0];
       return this.db.collection("accounts", ref => ref.where('name', '==', name))
       .get()
       .toPromise()
