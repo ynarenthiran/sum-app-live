@@ -1,0 +1,87 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+}
+.dashboard-container {
+    flex: 1 1 auto;
+}
+.dashboard-panel {
+    padding: 10px;
+}
+.dashboard-panel mat-expansion-panel-body {
+    padding: 0;
+}
+.dashboard-drop-target {
+    border: 2px dashed black;
+}
+.dashboard-content {
+    display: grid;
+    grid-gap: 0;
+    padding: 0;
+}
+lib-dashboard-section {
+    grid-column: span 1;
+    display: grid; 
+    grid-auto-flow: row;
+    grid-gap: 0;
+    padding: 0;
+}
+
+.dashboard-drop-zone lib-dashboard-section * {
+    pointer-events: none;
+}
+
+/* For mobile phones: */
+.dashboard-content {
+    grid-template-columns: 1fr;
+}
+
+[class*="dashboard-col-"] {
+    grid-column: span 1;
+}
+.dashboard-gap-none .dashboard-content,.dashboard-sgap-none  {
+    grid-gap: 0;
+    padding: 0;
+}
+.dashboard-gap-small .dashboard-content,.dashboard-gap-medium .dashboard-content,.dashboard-gap-large .dashboard-content,
+.dashboard-sgap-small,.dashboard-sgap-medium,.dashboard-sgap-large  {
+    grid-gap: 1em;
+    padding: 1em;
+}
+.dashboard-flow-row,.dashboard-flow-column {
+    display: grid; 
+    grid-auto-flow: row;
+}
+
+/* For desktop: */
+@media only screen and (min-width: 768px) {
+    .dashboard-content {
+        grid-template-columns: repeat(12, 1fr);
+    }
+    
+    .dashboard-col-1 {grid-column: span 1;}
+    .dashboard-col-2 {grid-column: span 2;}
+    .dashboard-col-3 {grid-column: span 3;}
+    .dashboard-col-4 {grid-column: span 4;}
+    .dashboard-col-5 {grid-column: span 5;}
+    .dashboard-col-6 {grid-column: span 6;}
+    .dashboard-col-7 {grid-column: span 7;}
+    .dashboard-col-8 {grid-column: span 8;}
+    .dashboard-col-9 {grid-column: span 9;}
+    .dashboard-col-10 {grid-column: span 10;}
+    .dashboard-col-11 {grid-column: span 11;}
+    .dashboard-col-12 {grid-column: span 12;}
+
+    .dashboard-gap-none .dashboard-content,.dashboard-sgap-none {grid-gap: 0; padding: 0;}
+    .dashboard-gap-small .dashboard-content,.dashboard-sgap-small {grid-gap: 1em; padding: 1em;}
+    .dashboard-gap-medium .dashboard-content,.dashboard-sgap-medium {grid-gap: 2em; padding: 2em;}
+    .dashboard-gap-large .dashboard-content,.dashboard-sgap-large {grid-gap: 4em; padding: 4em;}
+
+    .dashboard-flow-row {display: grid; grid-auto-flow: column;}
+    .dashboard-flow-column {display: grid; grid-auto-flow: row;}
+}

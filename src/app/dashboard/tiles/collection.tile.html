@@ -1,0 +1,4 @@
+<ng-container *ngIf="collection$ | async as collection">
+    <ng-container *ngFor="let record of collection" [ngTemplateOutlet]="template.templateRef"
+        [ngTemplateOutletContext]="{$implicit: record}"></ng-container>
+</ng-container>

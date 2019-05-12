@@ -1,0 +1,74 @@
+:host {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+}
+.login-page {
+    display: flex;
+    flex-direction: row;
+    position: relative;
+}
+.login-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 32px;
+    width: 320px;
+}
+.login-form form {
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+.login-separator {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #e0e0e0;
+}
+.login-separator:before {
+    content: '';
+    position: absolute;
+    top: 10px;
+    border-left: 1px solid;
+    bottom: 10px;
+}
+.login-separator span {
+    background-color: #ffffff;
+    padding: 10px 0 10px;
+    z-index: 1;
+}
+.login-options {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: stretch;
+    padding: 32px;
+}
+.login-options button {
+    margin: 5px;
+}
+.login-btn-google {
+    background-color: #dd4b39;
+    color: #ffffff;
+}
+.login-btn-facebook {
+    background-color: #3b5998;
+    color: #ffffff;
+}
+.login-btn-twitter {
+    background-color: #5baaf4;
+    color: #ffffff;
+}
+.login-btn-github {
+    background-color: #464646;
+    color: #ffffff;
+}

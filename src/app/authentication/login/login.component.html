@@ -1,0 +1,45 @@
+<div class="login-page mat-elevation-z2">
+  <div class="login-form">
+    <span class="mat-title">Sign In</span>
+    <form>
+      <mat-form-field>
+        <input matInput placeholder="Email" [formControl]="emailFormControl">
+        <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
+          Please enter a valid email address
+        </mat-error>
+        <mat-error *ngIf="emailFormControl.hasError('required')">
+          Email is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="Password" [type]="hide ? 'password' : 'text'" [formControl]="passwordFormControl">
+        <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+      </mat-form-field>
+    </form>
+    <div>
+      <button mat-raised-button color="accent" [disabled]="emailFormControl.invalid || passwordFormControl.invalid"
+        (click)="signIn()">
+        Sign In
+      </button>
+    </div>
+  </div>
+  <div class="login-separator">
+    <span class="mat-body">OR</span>
+  </div>
+  <div class="login-options">
+    <span class="mat-body">Sign In With</span>
+    <button mat-raised-button class="login-btn-google" (click)="signInWithGoogle()">
+      Google
+    </button>
+    <button mat-raised-button class="login-btn-facebook" (click)="signInWithFacebook()">
+      Facebook
+    </button>
+    <button mat-raised-button class="login-btn-twitter" (click)="signInWithTwitter()">
+      Twitter
+    </button>
+    <button mat-raised-button class="login-btn-github" (click)="signInWithGithub()">
+      GitHub
+    </button>
+    <!--https://firebase.google.com/docs/auth/web/custom-auth-->
+  </div>
+</div>

@@ -1,0 +1,3 @@
+<ng-container *ngIf="user$ | async as user">
+    <ng-container [ngTemplateOutlet]="template.templateRef" [ngTemplateOutletContext]="{$implicit: user}"></ng-container>
+</ng-container>
