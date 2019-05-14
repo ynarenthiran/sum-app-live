@@ -1,0 +1,33 @@
+<div class="page-header-bg">
+</div>
+<div class="page-sidebar-container">
+  <div class="page-sidebar">
+    <div class="page-sidebar-header">
+    </div>
+    <div class="page-sidebar-content">
+      <!--Section Selection List Here-->
+      <mat-nav-list>
+        <mat-list-item *ngFor="let section of sections" (click)="selectSection(section)"
+          [ngClass]="{'sidebar-nav-list-item': true, 'page-sidebar-active': section.active}">
+          <a matLine>{{ section.title }}</a>
+        </mat-list-item>
+      </mat-nav-list>
+    </div>
+  </div>
+  <div class="page-sidebar-content page">
+    <div class="page-header">
+      <!--Application Header Here-->
+      <div class="page-header-inner mat-title">
+        <button mat-icon-button (click)="panel.toggle()">
+          <mat-icon>menu</mat-icon>
+        </button>
+        <ng-content select="lib-page-title"></ng-content>
+      </div>
+      <span class="page-spacer"></span>
+    </div>
+    <div class="page-content mat-elevation-z4">
+      <!--Section Content Here-->
+      <ng-container [ngTemplateOutlet]="selectedSection?.content"></ng-container>
+    </div>
+  </div>
+</div>

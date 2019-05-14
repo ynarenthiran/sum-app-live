@@ -29,10 +29,11 @@ export class TileList implements OnInit {
   }
 
   getList(): Observable<any> {
-    let entries: [];
+    let entries: any[] = [];
     this.router.config.forEach((route) => {
-      
+      if (route.path != '' && route.path != 'auth')
+        entries.push(route);
     });
-    return of(this.router.config);
+    return of(entries);
   }
 }

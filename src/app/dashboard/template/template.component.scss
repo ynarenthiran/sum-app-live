@@ -4,7 +4,19 @@
 .template-card {
     max-width: 320px;
     min-width: 320px;
+    display: flex;
+    flex-direction: column;
 }
 .template-card-content {
-    overflow: auto;
+    flex: 1 1 auto;
+    white-space: nowrap; 
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.template-card-icon {
+    font-size: 40px;
+}
+.template-card-actions {
+    display: flex;
+    flex-direction: row;
 }

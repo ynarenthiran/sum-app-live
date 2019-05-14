@@ -4,6 +4,7 @@ import { interval, Observable, config } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AuthService } from 'src/app/authentication/auth.service';
 import { AppConfigService } from 'src/app/services/app.config';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard-template',
@@ -15,7 +16,7 @@ export class TemplateComponent implements OnInit {
   greetings: string;
   accountId: string;
 
-  constructor(private auth: AuthService, private config: AppConfigService) { }
+  constructor(private auth: AuthService, private config: AppConfigService, private router: Router) { }
 
   ngOnInit() {
     this.accountId = this.config.getConfig().accountId;
@@ -34,6 +35,15 @@ export class TemplateComponent implements OnInit {
   }
 
   createCollaboration() {
+    //this.router.navigate(['collaboration', 'create']);
+    this.openInNewTab(['collaboration', 'create']);
+  }
 
+  openInNewTab(cmds: any[]) {
+    let url: string = '';
+    cmds.forEach((cmd) => {
+      url += '/' + cmd;
+    });
+    window.open(url, "_blank");
   }
 }

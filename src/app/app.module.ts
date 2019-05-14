@@ -10,6 +10,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { environment } from '../environments/environment';
 import { AppConfigService } from './services/app.config';
+import { TestComponent } from './test/test.component';
+import { LayoutModule } from './layout/layout.module';
 
 const appInitializerFn = (appConfig: AppConfigService) => {
   return () => {
@@ -19,12 +21,14 @@ const appInitializerFn = (appConfig: AppConfigService) => {
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    TestComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     AngularFireModule.initializeApp(environment.firebase),
+    LayoutModule,
     AppRoutingModule
   ],
   providers: [
@@ -34,7 +38,7 @@ const appInitializerFn = (appConfig: AppConfigService) => {
     AppConfigService,
     {
       provide: APP_INITIALIZER,
-      useFactory: appInitializerFn, 
+      useFactory: appInitializerFn,
       multi: true,
       deps: [AppConfigService]
     }
