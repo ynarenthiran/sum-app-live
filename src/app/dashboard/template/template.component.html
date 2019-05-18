@@ -25,7 +25,9 @@
             <mat-card *libTileCollectionTemplate="let collaboration" class="template-card">
                 <mat-card-header>
                     <mat-icon mat-card-avatar class="template-card-icon">question_answer</mat-icon>
-                    <mat-card-title>{{collaboration.name}}</mat-card-title>
+                    <mat-card-title>
+                        <a class="template-link" (click)="openCollaboration(collaboration.id)">{{collaboration.name}}</a>
+                    </mat-card-title>
                     <mat-card-subtitle>12 minutes ago</mat-card-subtitle>
                 </mat-card-header>
                 <mat-card-content class="template-card-content">

@@ -1,0 +1,26 @@
+<lib-page>
+  <lib-page-title>{{collaboration?.name}}</lib-page-title>
+  <lib-page-sub-title>{{collaboration?.description}}</lib-page-sub-title>
+  <lib-page-section title="Messages">
+    <lib-page-section-content>
+      <span>Messages</span>
+    </lib-page-section-content>
+  </lib-page-section>
+  <lib-page-section title="Documents">
+    <lib-page-section-content>
+      <span>Documents</span>
+    </lib-page-section-content>
+  </lib-page-section>
+  <lib-page-section title="Members">
+    <lib-page-section-toolbar>
+      <div class="toolbar-button-main secondary-bgcolor">
+        <button mat-fab color="accent" (click)="member.addMember()">
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+    </lib-page-section-toolbar>
+    <lib-page-section-content>
+      <app-collaboration-member #member [collaborationId]="collaborationId"></app-collaboration-member>
+    </lib-page-section-content>
+  </lib-page-section>
+</lib-page>

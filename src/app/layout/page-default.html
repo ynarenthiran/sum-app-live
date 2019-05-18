@@ -1,33 +1,45 @@
-<div class="page-header-bg">
+<div class="page-header-bg primary-bgcolor">
 </div>
 <div class="page-sidebar-container">
-  <div class="page-sidebar">
-    <div class="page-sidebar-header">
+  <div class="page-sidebar"
+    [ngClass]="{'page-sidebar-visible': isSidebarVisible, 'page-sidebar-invisible': !isSidebarVisible}">
+    <div class="page-sidebar-header main">
     </div>
     <div class="page-sidebar-content">
       <!--Section Selection List Here-->
       <mat-nav-list>
         <mat-list-item *ngFor="let section of sections" (click)="selectSection(section)"
-          [ngClass]="{'sidebar-nav-list-item': true, 'page-sidebar-active': section.active}">
+          [ngClass]="{'sidebar-nav-list-item': true, 'primary-bgcolor': section.active, 'main': section.active}">
           <a matLine>{{ section.title }}</a>
         </mat-list-item>
       </mat-nav-list>
     </div>
   </div>
   <div class="page-sidebar-content page">
-    <div class="page-header">
+    <div class="page-header main">
       <!--Application Header Here-->
       <div class="page-header-inner mat-title">
-        <button mat-icon-button (click)="panel.toggle()">
+        <button mat-icon-button (click)="isSidebarVisible = !isSidebarVisible;">
           <mat-icon>menu</mat-icon>
         </button>
-        <ng-content select="lib-page-title"></ng-content>
+        <div class="vbox">
+          <span class="mat-headline no-margin"><strong>
+              <ng-content select="lib-page-title"></ng-content>
+            </strong></span>
+          <span class="mat-subheading-1 no-margin">
+            <ng-content select="lib-page-sub-title"></ng-content>
+          </span>
+        </div>
       </div>
       <span class="page-spacer"></span>
     </div>
-    <div class="page-content mat-elevation-z4">
+    <div class="page-content main-bgcolor mat-elevation-z4">
+      <!--Section Toolbar Here-->
+      <mat-toolbar class="page-toolbar secondary-bgcolor">
+        <ng-container [ngTemplateOutlet]="selectedSection?.toolbar?.content"></ng-container>
+      </mat-toolbar>
       <!--Section Content Here-->
-      <ng-container [ngTemplateOutlet]="selectedSection?.content"></ng-container>
+      <ng-container [ngTemplateOutlet]="selectedSection?.content?.content"></ng-container>
     </div>
   </div>
 </div>

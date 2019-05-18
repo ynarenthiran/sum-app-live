@@ -3,6 +3,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { auth } from 'firebase';
+import { AccountService } from 'src/app/services/account.service';
 
 @Component({
   selector: 'lib-auth-login',
@@ -17,42 +18,45 @@ export class LoginComponent implements OnInit {
   ]);
   private passwordFormControl = new FormControl('', []);
 
-  constructor(private auth: AngularFireAuth, private router: Router, private zone: NgZone) { }
+  constructor(private auth: AngularFireAuth, private router: Router, private zone: NgZone, private srv: AccountService) { }
 
   ngOnInit() {
   }
 
   signIn() {
-    this.auth.auth.signInWithEmailAndPassword(this.emailFormControl.value, this.passwordFormControl.value)
-      .catch((error) => {
-        window.alert(error.message);
-      })
-      .then(() => {
-        this.zone.run(() => {
-          this.router.navigate(['/']);
-        });
-      });
+    this.onSignIn(
+      this.auth.auth.signInWithEmailAndPassword(this.emailFormControl.value, this.passwordFormControl.value));
   }
 
   signInWithGoogle() {
-    this.signInWithProvider(new auth.GoogleAuthProvider());
+    this.onSignIn(
+      this.signInWithProvider(new auth.GoogleAuthProvider()));
   }
   signInWithFacebook() {
-    this.signInWithProvider(new auth.FacebookAuthProvider());
+    this.onSignIn(
+      this.signInWithProvider(new auth.FacebookAuthProvider()));
   }
   signInWithTwitter() {
-    this.signInWithProvider(new auth.TwitterAuthProvider());
+    this.onSignIn(
+      this.signInWithProvider(new auth.TwitterAuthProvider()));
   }
   signInWithGithub() {
-    this.signInWithProvider(new auth.GithubAuthProvider());
+    this.onSignIn(
+      this.signInWithProvider(new auth.GithubAuthProvider()));
   }
 
-  private signInWithProvider(provider: auth.AuthProvider) {
-    this.auth.auth.signInWithPopup(provider)
+  private signInWithProvider(provider: auth.AuthProvider): Promise<auth.UserCredential> {
+    return this.auth.auth.signInWithPopup(provider);
+  }
+
+  onSignIn(promise: Promise<auth.UserCredential>) {
+    promise
       .catch((error) => {
         window.alert(error.message);
       })
-      .then(() => {
+      .then((credential) => {
+        if (credential)
+          this.srv.setUserRegistration(credential.user.uid);
         this.zone.run(() => {
           this.router.navigate(['/']);
         });

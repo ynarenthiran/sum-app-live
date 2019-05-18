@@ -39,6 +39,10 @@ export class TemplateComponent implements OnInit {
     this.openInNewTab(['collaboration', 'create']);
   }
 
+  openCollaboration(id: string) {
+    this.openInNewTab(['collaboration', id]);
+  }
+
   openInNewTab(cmds: any[]) {
     let url: string = '';
     cmds.forEach((cmd) => {

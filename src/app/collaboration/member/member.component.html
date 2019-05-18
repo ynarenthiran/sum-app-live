@@ -1,0 +1,33 @@
+<mat-table [dataSource]="members$">
+  <!-- Name Column -->
+  <ng-container matColumnDef="displayName">
+    <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
+    <mat-cell *matCellDef="let element">{{element.user?.displayName}}</mat-cell>
+  </ng-container>
+  <!-- Email Column -->
+  <ng-container matColumnDef="email">
+    <mat-header-cell *matHeaderCellDef>Email</mat-header-cell>
+    <mat-cell *matCellDef="let element">{{element.user?.email}}</mat-cell>
+  </ng-container>
+  <!-- Valid From Column -->
+  <ng-container matColumnDef="validFrom">
+    <mat-header-cell *matHeaderCellDef>From</mat-header-cell>
+    <mat-cell *matCellDef="let element">{{element.validFrom.toDate() | date}}</mat-cell>
+  </ng-container>
+  <!-- Valid To Column -->
+  <ng-container matColumnDef="validTo">
+    <mat-header-cell *matHeaderCellDef>To</mat-header-cell>
+    <mat-cell *matCellDef="let element">{{element.validTo.toDate() | date}}</mat-cell>
+  </ng-container>
+  <!-- Actions Column -->
+  <ng-container matColumnDef="actions" stickyEnd>
+    <mat-header-cell *matHeaderCellDef></mat-header-cell>
+    <mat-cell *matCellDef="let element">
+      <button mat-icon-button>
+        <mat-icon>edit</mat-icon>
+      </button>
+    </mat-cell>
+  </ng-container>
+  <mat-header-row mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+</mat-table>

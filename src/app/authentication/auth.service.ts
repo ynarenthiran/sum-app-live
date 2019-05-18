@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { Observable } from 'rxjs';
+import { Observable, combineLatest, of } from 'rxjs';
+import { AccountService } from '../services/account.service';
+import { map, flatMap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -9,18 +11,21 @@ export class AuthService {
 
   private user: firebase.User = null;
 
-  constructor(private af: AngularFireAuth) {
+  constructor(private af: AngularFireAuth, private srv: AccountService) {
     this.af.authState.subscribe((auth) => {
       this.user = auth;
-    })
+    });
   }
 
-  get authenticated(): boolean {
-    return this.user != null;
-  }
-
-  get currentUser(): Observable<firebase.User> {
-    return this.af.authState;
+  isAuthenticated(): Observable<boolean> {
+    return this.af.authState.pipe(
+      flatMap((user) => {
+        if (user)
+          return this.srv.getUserRegistration(user.uid);
+        else
+          return of(false);
+      })
+    );
   }
 
   get currentUserId(): string {

@@ -1,0 +1,13 @@
+<form #form [formGroup]="formGroup" class="form-core">
+  <mat-form-field *ngFor="let formElement of formElements">
+    <mat-label>{{formElement.label}}</mat-label>
+    <ng-container [ngSwitch]="formElement.controlType">
+      <input matInput [placeholder]="formElement.label" [formControlName]="formElement.key" [id]="formElement.key"
+        [type]="formElement.type" *ngSwitchCase="formElementControlType.Input" />
+      <mat-select [placeholder]="formElement.label" [formControlName]="formElement.key" [id]="formElement.key"
+        [multiple]="formElement.multi" *ngSwitchCase="formElementControlType.Select">
+        <mat-option *ngFor="let value of formElement.values" [value]="value">{{value}}</mat-option>
+      </mat-select>
+    </ng-container>
+  </mat-form-field>
+</form>

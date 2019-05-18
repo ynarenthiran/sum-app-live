@@ -19,7 +19,6 @@
     height: 216px;
     min-height: 216px;
     max-height: 216px;
-    background-color: #3F51B5;
 }
 .page-sidebar-container {
     display: flex;
@@ -28,8 +27,13 @@
     z-index: 5;
     height: 100%;
 }
-.page-sidebar {
+.page-sidebar-visible {
     display: flex;
+}
+.page-sidebar-invisible {
+    display: none;
+}
+.page-sidebar {
     flex-direction: column;
     width: 208px;
     min-width: 208px;
@@ -42,14 +46,9 @@
     height: 216px;
     min-height: 216px;
     max-height: 216px;
-    color: #FFFFFF;
 }
 .page-sidebar-content {
     flex: 1 1 auto;
-}
-.page-sidebar-active {
-    background-color: #3F51B5;
-    color: #FFFFFF;
 }
 .page {
     display: flex;
@@ -63,15 +62,20 @@
     height: 152px;
     min-height: 152px;
     max-height: 152px;
-    color: #FFFFFF;
 }
 .page-header-inner {
+    display: flex;
+    flex-direction: row;
     margin: 0px;
 }
 .page-content {
     display: flex;
     flex-direction: column;
     flex: 1 1 auto;
-    background-color: #FFFFFF;
+    border-radius: 8px 8px 0 0;
+}
+.page-toolbar {
+    position: relative;
+    height: 64px;
     border-radius: 8px 8px 0 0;
 }

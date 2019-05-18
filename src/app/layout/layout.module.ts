@@ -13,7 +13,10 @@ import {
   PageComponent,
   PageSection,
   PageTitle,
-  PageContent
+  PageContent,
+  PageSubTitle,
+  PageSectionContent,
+  PageSectionToolbar
 } from './page.component';
 
 @NgModule({
@@ -30,13 +33,19 @@ import {
     PageComponent,
     PageSection,
     PageTitle,
-    PageContent
+    PageSubTitle,
+    PageContent,
+    PageSectionContent,
+    PageSectionToolbar
   ],
   exports: [
     PageComponent,
     PageSection,
     PageTitle,
-    PageContent
+    PageSubTitle,
+    PageContent,
+    PageSectionContent,
+    PageSectionToolbar
   ],
   providers: [
   ],
