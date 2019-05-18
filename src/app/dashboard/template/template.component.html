@@ -21,28 +21,18 @@
                 </div>
             </div>
         </lib-tile-user>
-        <lib-tile-collection path="collaborations">
+        <lib-tile-collection [collection]="collaborations$">
             <mat-card *libTileCollectionTemplate="let collaboration" class="template-card">
                 <mat-card-header>
                     <mat-icon mat-card-avatar class="template-card-icon">question_answer</mat-icon>
                     <mat-card-title>
-                        <a class="template-link" (click)="openCollaboration(collaboration.id)">{{collaboration.name}}</a>
+                        <a class="template-link"
+                            (click)="openCollaboration(collaboration.id)">{{collaboration.name}}</a>
                     </mat-card-title>
-                    <mat-card-subtitle>12 minutes ago</mat-card-subtitle>
+                    <mat-card-subtitle>{{collaboration.createdOn}}</mat-card-subtitle>
                 </mat-card-header>
                 <mat-card-content class="template-card-content">
-                    The Shiba Inu is the smallest of the six original. The Shiba Inu is the smallest of the six
-                    original. The Shiba Inu is the smallest of the six original. The Shiba Inu is the smallest of
-                    the six original. The Shiba Inu is the smallest of the six original. The Shiba Inu is the
-                    smallest of the six original.
-                    The Shiba Inu is the smallest of the six original. The Shiba Inu is the smallest of the six
-                    original. The Shiba Inu is the smallest of the six original. The Shiba Inu is the smallest of
-                    the six original. The Shiba Inu is the smallest of the six original. The Shiba Inu is the
-                    smallest of the six original.
-                    The Shiba Inu is the smallest of the six original. The Shiba Inu is the smallest of the six
-                    original. The Shiba Inu is the smallest of the six original. The Shiba Inu is the smallest of
-                    the six original. The Shiba Inu is the smallest of the six original. The Shiba Inu is the
-                    smallest of the six original.
+                    {{collaboration.description}}
                 </mat-card-content>
                 <mat-card-actions class="template-card-actions">
                     <span class="spacer"></span>

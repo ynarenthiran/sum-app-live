@@ -9,7 +9,7 @@ export interface Collaboration {
   id: string;
   name: string;
   description: string;
-  createByUid: string;
+  createdByUid: string;
   createdOn: Date;
 }
 export interface Member {
@@ -31,10 +31,6 @@ export interface User {
 export class CollaborationService {
 
   constructor(private db: AngularFirestore, private config: AppConfigService, private auth: AuthService) { }
-
-  toDateString(date: Date): string {
-    return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
-  }
 
   getCollaboration(id: string, onValue: (value: Collaboration) => void, onError: (error: any) => void): Subscription {
     return this.db.doc<Collaboration>(`accounts/${this.config.getConfig().accountId}/collaborations/${id}`)
@@ -58,8 +54,8 @@ export class CollaborationService {
     const obj = {
       name: collaboration.name,
       description: collaboration.description,
-      createdOn: new Date(),
-      createByUid: this.auth.currentUserId
+      createdByUid: this.auth.currentUserId,
+      createdOn: new Date()
     };
     return this.db.collection(`accounts/${this.config.getConfig().accountId}/collaborations`)
       .add(obj)
@@ -93,8 +89,8 @@ export class CollaborationService {
 
   postMember(id: string, member: Member) {
     const obj = {
-      validFrom: this.toDateString(member.validFrom),
-      validTo: this.toDateString(member.validTo),
+      validFrom: member.validFrom,
+      validTo: member.validTo,
       roles: member.roles
     }
     return this.db.doc(`accounts/${this.config.getConfig().accountId}/collaborations/${id}/members/${member.id}`)
