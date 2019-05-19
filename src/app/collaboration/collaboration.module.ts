@@ -3,7 +3,10 @@ import { CommonModule } from '@angular/common';
 import {
   MatIconModule,
   MatTableModule,
-  MatButtonModule
+  MatButtonModule,
+  MatListModule,
+  MatButtonToggleModule,
+  MatTooltipModule
 } from '@angular/material';
 
 import { CollaborationRoutingModule } from './collaboration-routing.module';
@@ -13,12 +16,16 @@ import { LayoutModule } from '../layout/layout.module';
 import { DialogModule } from '../dialog/dialog.module';
 import { CollaborationService } from './collaboration.service';
 import { MemberComponent } from './member/member.component';
+import { DocumentComponent, DocumentBreadcrumbs, DocumentDropArea } from './document/document.component';
 
 @NgModule({
   declarations: [
     CreateComponent,
     CollaborationComponent,
-    MemberComponent
+    MemberComponent,
+    DocumentComponent,
+    DocumentBreadcrumbs,
+    DocumentDropArea
   ],
   imports: [
     CommonModule,
@@ -27,7 +34,10 @@ import { MemberComponent } from './member/member.component';
     DialogModule,
     MatIconModule,
     MatTableModule,
-    MatButtonModule
+    MatButtonModule,
+    MatListModule,
+    MatButtonToggleModule,
+    MatTooltipModule
   ],
   providers: [
     CollaborationService

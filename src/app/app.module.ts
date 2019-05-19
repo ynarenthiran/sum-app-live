@@ -4,7 +4,7 @@ import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { AngularFireStorage } from '@angular/fire/storage';
+import { AngularFireStorage, AngularFireStorageModule } from '@angular/fire/storage';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -28,6 +28,7 @@ const appInitializerFn = (appConfig: AppConfigService) => {
     BrowserModule,
     BrowserAnimationsModule,
     AngularFireModule.initializeApp(environment.firebase),
+    AngularFireStorageModule,
     LayoutModule,
     AppRoutingModule
   ],

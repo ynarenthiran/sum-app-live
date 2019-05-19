@@ -7,8 +7,23 @@
     </lib-page-section-content>
   </lib-page-section>
   <lib-page-section title="Documents">
+    <lib-page-section-toolbar>
+      <div class="toolbar-button-main secondary-bgcolor">
+        <button mat-fab color="accent" (click)="document.addFolder()">
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+      <app-collaboration-document-breadcrumbs [items]="document.path" (navigate)="document.openFolderPath($event)"
+        class="toolbar-spacer">
+      </app-collaboration-document-breadcrumbs>
+      <mat-button-toggle-group name="viewStyle" [(value)]="document.viewType">
+        <mat-button-toggle *ngFor="let type of document.viewTypes" [value]="type.value">
+          <mat-icon>{{type.icon}}</mat-icon>
+        </mat-button-toggle>
+      </mat-button-toggle-group>
+    </lib-page-section-toolbar>
     <lib-page-section-content>
-      <span>Documents</span>
+      <app-collaboration-document #document [collaborationId]="collaborationId"></app-collaboration-document>
     </lib-page-section-content>
   </lib-page-section>
   <lib-page-section title="Members">

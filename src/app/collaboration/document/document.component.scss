@@ -1,0 +1,58 @@
+.document-breadcrumbs {
+    display: flex;
+    list-style: none;
+    padding-left: 100px;
+}
+.document-breadcrumbs li {
+    float: left;
+}
+.document-breadcrumbs li a {
+    text-decoration: none;
+    cursor: pointer;
+    padding: 0 5px 0 5px;
+}
+.document-breadcrumbs li:last-child a {
+    cursor: default;
+}
+.document-breadcrumbs li a::after {
+    content: "/";
+    padding-left: 10px;
+}
+.document-breadcrumbs li a::after {
+    content: "/";
+    padding-left: 10px;
+}
+.document-breadcrumbs li:last-child a::after { 
+    content: "";
+    padding-left: 0;
+}
+.document-drop-target {
+    border: 2px dashed black;
+}
+.document-download-link {
+    display: none;
+}
+.document-view-icon {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 15px;
+}
+.document-item {
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    user-select: none;
+}
+.document-item mat-icon {
+    font-size: 64px;
+    width: 64px;
+    height: 64px;
+}
+.document-item span {
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 100%;
+    width: 0;
+}

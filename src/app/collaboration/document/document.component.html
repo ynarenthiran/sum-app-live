@@ -1,0 +1,25 @@
+<ng-container [ngSwitch]="viewType">
+  <ng-container *ngSwitchCase="documentViewType.Icon">
+    <ng-container *ngTemplateOutlet="iconView"></ng-container>
+  </ng-container>
+  <ng-container *ngSwitchCase="documentViewType.List">
+    <ng-container *ngTemplateOutlet="listView"></ng-container>
+  </ng-container>
+</ng-container>
+<a #downloadLink download="file" class="document-download-link"></a>
+<!-- Tasks Icon View -->
+<ng-template #iconView>
+  <div appDocumentDropArea (fileDropped)="onFileDropped($event)" class="document-view-icon mat-body">
+    <div class="document-item" *ngFor="let file of files$ | async" [matTooltip]="file.name"
+      (dblclick)="onOpenDocumentItem(file)">
+      <mat-icon [ngClass]="{gold: file.isFolder}">{{file.isFolder ? 'folder' : 'description'}}</mat-icon>
+      <span>{{file.name}}</span>
+    </div>
+  </div>
+</ng-template>
+<!-- Tasks List View -->
+<ng-template #listView>
+  <mat-list>
+    <mat-list-item *ngFor="let file of files$ | async" (click)="onOpenDocumentItem(file)">{{file.name}}</mat-list-item>
+  </mat-list>
+</ng-template>

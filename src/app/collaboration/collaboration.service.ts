@@ -4,6 +4,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { Subscription, Observable, combineLatest } from 'rxjs';
 import { map, flatMap } from 'rxjs/operators';
 import { AuthService } from '../authentication/auth.service';
+import { AngularFireStorage } from '@angular/fire/storage';
 
 export interface Collaboration {
   id: string;
@@ -24,13 +25,21 @@ export interface User {
   displayName: string;
   email: string;
 }
+export interface File {
+  id: string;
+  name: string;
+  description: string;
+  path: string;
+  parentId: string;
+  isFolder: boolean;
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class CollaborationService {
 
-  constructor(private db: AngularFirestore, private config: AppConfigService, private auth: AuthService) { }
+  constructor(private db: AngularFirestore, private storage: AngularFireStorage, private config: AppConfigService, private auth: AuthService) { }
 
   getCollaboration(id: string, onValue: (value: Collaboration) => void, onError: (error: any) => void): Subscription {
     return this.db.doc<Collaboration>(`accounts/${this.config.getConfig().accountId}/collaborations/${id}`)
@@ -95,5 +104,53 @@ export class CollaborationService {
     }
     return this.db.doc(`accounts/${this.config.getConfig().accountId}/collaborations/${id}/members/${member.id}`)
       .set(obj);
+  }
+
+  getFiles(id: string, parent: string): Observable<File[]> {
+    return this.db.collection<File>(`accounts/${this.config.getConfig().accountId}/collaborations/${id}/documents`,
+      ref => ref.where('parentId', '==', parent))
+      .snapshotChanges()
+      .pipe(
+        map(actions => actions.map(a => {
+          const file = a.payload.doc.data() as File;
+          const id = a.payload.doc.id;
+          return Object.assign(file, { id: id }) as File;
+        }))
+      );
+  }
+
+  postFolder(id: string, file: File) {
+    const obj = {
+      name: file.name,
+      description: file.description,
+      path: file.path,
+      parentId: file.parentId,
+      isFolder: true
+    }
+    return this.db.collection(`accounts/${this.config.getConfig().accountId}/collaborations/${id}/documents`)
+      .add(obj);
+  }
+
+  postFiles(id: string, folder: File, files: any[]) {
+    const accountId = this.config.getConfig().accountId;
+    for (var file of files) {
+      const filePath = folder == null ? file.name : folder.path + "/" + file.name;
+      const path = `accounts/${accountId}/collaborations/${id}/documents/${filePath}`;
+      this.storage.upload(path, file);
+      const obj = {
+        name: file.name,
+        description: file.name,
+        path: filePath,
+        parentId: folder == null ? "" : folder.id,
+        isFolder: false
+      };
+      this.db.collection(`accounts/${this.config.getConfig().accountId}/collaborations/${id}/documents`).add(obj);
+    }
+  }
+
+  getFileUrl(id: string, file: File): Observable<any> {
+    const accountId = this.config.getConfig().accountId;
+    const path = `accounts/${accountId}/collaborations/${id}/documents/${file.path}`;
+    return this.storage.ref(path).getDownloadURL();
   }
 }

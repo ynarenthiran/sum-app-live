@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, AfterViewChecked, ChangeDetectorRef, NgZone } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { DialogService } from 'src/app/dialog/dialog.component';
 import { Collaboration, CollaborationService } from '../collaboration.service';
 import { Router } from '@angular/router';

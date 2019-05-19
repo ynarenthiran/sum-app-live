@@ -1,0 +1,10 @@
+<ul class="document-breadcrumbs">
+    <li>
+        <a (click)="onItemNavigate(-1)">
+            <mat-icon>home</mat-icon>
+        </a>
+    </li>
+    <li *ngFor="let item of items; index as i">
+        <a (click)="onItemNavigate(i)">{{item.name}}</a>
+    </li>
+</ul>
