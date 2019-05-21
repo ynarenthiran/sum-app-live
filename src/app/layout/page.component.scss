@@ -33,11 +33,17 @@
 .page-sidebar-invisible {
     display: none;
 }
-.page-sidebar {
+.page-leftbar {
     flex-direction: column;
     width: 208px;
     min-width: 208px;
     max-width: 208px;
+}
+.page-rightbar {
+    flex-direction: column;
+    width: 320px;
+    min-width: 320px;
+    max-width: 320px;
 }
 .page-sidebar-header {
     display: flex;

@@ -6,7 +6,8 @@ import {
   MatButtonModule,
   MatListModule,
   MatButtonToggleModule,
-  MatTooltipModule
+  MatTooltipModule,
+  MatChipsModule
 } from '@angular/material';
 
 import { CollaborationRoutingModule } from './collaboration-routing.module';
@@ -16,7 +17,7 @@ import { LayoutModule } from '../layout/layout.module';
 import { DialogModule } from '../dialog/dialog.module';
 import { CollaborationService } from './collaboration.service';
 import { MemberComponent } from './member/member.component';
-import { DocumentComponent, DocumentBreadcrumbs, DocumentDropArea } from './document/document.component';
+import { DocumentComponent, DocumentBreadcrumbs, DocumentDropArea, DocumentDetail } from './document/document.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { DocumentComponent, DocumentBreadcrumbs, DocumentDropArea } from './docu
     MemberComponent,
     DocumentComponent,
     DocumentBreadcrumbs,
-    DocumentDropArea
+    DocumentDropArea,
+    DocumentDetail
   ],
   imports: [
     CommonModule,
@@ -37,7 +39,8 @@ import { DocumentComponent, DocumentBreadcrumbs, DocumentDropArea } from './docu
     MatButtonModule,
     MatListModule,
     MatButtonToggleModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatChipsModule
   ],
   providers: [
     CollaborationService

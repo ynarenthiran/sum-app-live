@@ -73,6 +73,21 @@ export class DocumentBreadcrumbs implements OnInit {
   }
 }
 
+@Component({
+  selector: 'app-collaboration-document-detail',
+  templateUrl: './document.detail.html',
+  styleUrls: ['./document.component.scss']
+})
+export class DocumentDetail implements OnInit {
+  @Input()
+  file: File;
+
+  constructor() { }
+
+  ngOnInit() {
+  }
+}
+
 export enum DocumentViewType {
   Icon = 'Icon',
   List = 'List'
@@ -88,6 +103,7 @@ export class DocumentComponent implements OnInit {
     this._parent = value;
     this.files$ = this.srv.getFiles(this._collaborationId,
       this._parent == null ? "" : this._parent.id);
+    this.selectedFile = null;
   }
   private _parent: File;
 
@@ -103,6 +119,7 @@ export class DocumentComponent implements OnInit {
   downloadLink: ElementRef;
 
   path: File[] = [];
+  selectedFile: File = null;
 
   private documentViewType = DocumentViewType;
   viewTypes = [
@@ -145,6 +162,10 @@ export class DocumentComponent implements OnInit {
       const droppedFiles: any[] = event.files;
       this.srv.postFiles(this._collaborationId, this._parent, droppedFiles);
     }
+  }
+
+  onSelectDocumentItem(file: File) {
+    this.selectedFile = file;
   }
 
   onOpenDocumentItem(file: File) {

@@ -37,35 +37,43 @@
 }
 
 /* Color classes */
+$color-primary: #3f51b5;
+$color-accent: #ff4081;
+$color-warn: #f44336;
+$color-gold: #ffd700;
+$color-disabled: #b0b0b0;
+$color-main: #ffffff;
+$color-secondary: #efebe9;
+
 .primary {
-    color: #3f51b5;
+    color: $color-primary;
 }
 .primary-bgcolor {
-    background-color: #3f51b5;
+    background-color: $color-primary;
 }
 .accent {
-    color: #ff4081;
+    color: $color-accent;
 }
 .warn {
-    color: #f44336;
+    color: $color-warn;
 }
 .gold {
-    color: #ffd700;
+    color: $color-gold;
 }
 .disabled {
-    color: #b0b0b0;
+    color: $color-disabled;
 }
 .disabled-border {
-    border-color: #b0b0b0;
+    border-color: $color-disabled;
 }
 .main {
-    color: #ffffff;
+    color: $color-main;
 }
 .main-bgcolor {
-    background-color: #ffffff;
+    background-color: $color-main;
 }
 .secondary-bgcolor {
-    background-color: #efebe9;
+    background-color: $color-secondary;
 }
 
 /* Spacing classes */

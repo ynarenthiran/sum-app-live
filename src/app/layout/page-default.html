@@ -1,8 +1,8 @@
 <div class="page-header-bg primary-bgcolor">
 </div>
 <div class="page-sidebar-container">
-  <div class="page-sidebar"
-    [ngClass]="{'page-sidebar-visible': isSidebarVisible, 'page-sidebar-invisible': !isSidebarVisible}">
+  <div class="page-leftbar"
+    [ngClass]="{'page-sidebar-visible': isLeftbarVisible, 'page-sidebar-invisible': !isLeftbarVisible}">
     <div class="page-sidebar-header main">
     </div>
     <div class="page-sidebar-content">
@@ -19,7 +19,7 @@
     <div class="page-header main">
       <!--Application Header Here-->
       <div class="page-header-inner mat-title">
-        <button mat-icon-button (click)="isSidebarVisible = !isSidebarVisible;">
+        <button mat-icon-button (click)="isLeftbarVisible = !isLeftbarVisible;">
           <mat-icon>menu</mat-icon>
         </button>
         <div class="vbox">
@@ -40,6 +40,15 @@
       </mat-toolbar>
       <!--Section Content Here-->
       <ng-container [ngTemplateOutlet]="selectedSection?.content?.content"></ng-container>
+    </div>
+  </div>
+  <div class="page-rightbar"
+    [ngClass]="{'page-sidebar-visible': isRightbarVisible, 'page-sidebar-invisible': !isRightbarVisible}">
+    <div class="page-sidebar-header main">
+    </div>
+    <div class="page-sidebar-content">
+      <!--Detail panel Here-->
+      <ng-container [ngTemplateOutlet]="selectedSection?.detail?.content"></ng-container>
     </div>
   </div>
 </div>

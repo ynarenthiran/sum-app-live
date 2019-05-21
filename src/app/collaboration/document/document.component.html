@@ -10,17 +10,18 @@
 <!-- Tasks Icon View -->
 <ng-template #iconView>
   <div appDocumentDropArea (fileDropped)="onFileDropped($event)" class="document-view-icon mat-body">
-    <div class="document-item" *ngFor="let file of files$ | async" [matTooltip]="file.name"
-      (dblclick)="onOpenDocumentItem(file)">
-      <mat-icon [ngClass]="{gold: file.isFolder}">{{file.isFolder ? 'folder' : 'description'}}</mat-icon>
-      <span>{{file.name}}</span>
-    </div>
+    <a *ngFor="let file of files$ | async" (click)="onSelectDocumentItem(file)">
+      <div class="document-item" [matTooltip]="file.name" (dblclick)="onOpenDocumentItem(file)">
+        <mat-icon [ngClass]="{gold: file.isFolder}">{{file.isFolder ? 'folder' : 'description'}}</mat-icon>
+        <span>{{file.name}}</span>
+      </div>
+    </a>
   </div>
 </ng-template>
 <!-- Tasks List View -->
 <ng-template #listView>
-  <mat-list>
-    <mat-list-item *ngFor="let file of files$ | async" (click)="onOpenDocumentItem(file)">
+  <mat-list [ngClass]="{document-selected: true}">
+    <mat-list-item *ngFor="let file of files$ | async" (dblclick)="onOpenDocumentItem(file)">
       <mat-icon [ngClass]="{gold: file.isFolder}">{{file.isFolder ? 'folder' : 'description'}}</mat-icon>
       <h4 mat-line> {{file.name}} </h4>
       <p mat-line> {{file.description}} </p>

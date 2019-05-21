@@ -42,6 +42,14 @@ export class PageSectionContent {
   @ViewChild(TemplateRef) content: TemplateRef<any>;
 }
 
+@Component({
+  selector: 'lib-page-section-detail',
+  templateUrl: './page-section-detail.html'
+})
+export class PageSectionDetail {
+  @ViewChild(TemplateRef) content: TemplateRef<any>;
+}
+
 @Directive({
   selector: 'lib-page-section'
 })
@@ -50,6 +58,7 @@ export class PageSection {
   @Input('title') title: string;
   @ContentChild(PageSectionContent) content: PageSectionContent;
   @ContentChild(PageSectionToolbar) toolbar: PageSectionToolbar;
+  @ContentChild(PageSectionDetail) detail: PageSectionDetail;
 }
 
 @Component({
@@ -60,7 +69,8 @@ export class PageSection {
 export class PageComponent implements AfterContentInit {
   @ContentChildren(PageSection) sections: QueryList<PageSection>;
 
-  private isSidebarVisible: boolean = true;
+  private isLeftbarVisible: boolean = true;
+  isRightbarVisible: boolean = false;
   private selectedSection: PageSection;
 
   constructor(private cd: ChangeDetectorRef) {
@@ -78,5 +88,6 @@ export class PageComponent implements AfterContentInit {
     }
     this.selectedSection = section;
     this.selectedSection.active = true;
+    this.isRightbarVisible = false;
   }
 }

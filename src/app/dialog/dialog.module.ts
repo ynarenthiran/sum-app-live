@@ -29,6 +29,7 @@ import { InputDialogComponent, ConfirmDialogComponent, DialogService } from './d
     MatSelectModule
   ],
   exports: [
+    FormComponent
   ],
   entryComponents: [
     InputDialogComponent,
