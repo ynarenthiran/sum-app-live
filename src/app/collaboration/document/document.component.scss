@@ -41,8 +41,10 @@
 .document-item {
     display: flex;
     flex-direction: column;
+    align-items: center;
     padding: 15px;
     user-select: none;
+    width: 94px;
 }
 .document-item mat-icon {
     font-size: 64px;

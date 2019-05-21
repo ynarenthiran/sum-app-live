@@ -63,6 +63,9 @@ $color-secondary: #efebe9;
 .disabled {
     color: $color-disabled;
 }
+.disabled-bgcolor {
+    background-color: $color-disabled;
+}
 .disabled-border {
     border-color: $color-disabled;
 }

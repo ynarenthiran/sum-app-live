@@ -4,12 +4,15 @@ import {
   Input,
   ViewChild,
   TemplateRef,
+  ChangeDetectorRef,
+  OnInit,
+  AfterContentInit,
   ContentChildren,
   QueryList,
-  ChangeDetectorRef,
-  AfterContentInit,
-  ContentChild
+  ContentChild,
+  Injectable
 } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Directive({
   selector: 'lib-page-title'
@@ -22,9 +25,14 @@ export class PageTitle { }
 export class PageSubTitle { }
 
 @Directive({
-  selector: 'lib-page-content'
+  selector: 'lib-page-section-definition'
 })
-export class PageContent { }
+export class PageSectionDefinition {
+  @Input()
+  title: string;
+  @Input()
+  path: string;
+}
 
 @Component({
   selector: 'lib-page-section-toolbar',
@@ -34,13 +42,10 @@ export class PageSectionToolbar {
   @ViewChild(TemplateRef) content: TemplateRef<any>;
 }
 
-@Component({
-  selector: 'lib-page-section-content',
-  templateUrl: './page-section-content.html'
+@Directive({
+  selector: 'lib-page-section-content'
 })
-export class PageSectionContent {
-  @ViewChild(TemplateRef) content: TemplateRef<any>;
-}
+export class PageSectionContent { }
 
 @Component({
   selector: 'lib-page-section-detail',
@@ -50,44 +55,47 @@ export class PageSectionDetail {
   @ViewChild(TemplateRef) content: TemplateRef<any>;
 }
 
-@Directive({
-  selector: 'lib-page-section'
+@Component({
+  selector: 'lib-page-section',
+  templateUrl: './page-section.html',
+  styleUrls: ['./page.component.scss']
 })
 export class PageSection {
-  @Input() active: boolean = false;
-  @Input('title') title: string;
-  @ContentChild(PageSectionContent) content: PageSectionContent;
   @ContentChild(PageSectionToolbar) toolbar: PageSectionToolbar;
-  @ContentChild(PageSectionDetail) detail: PageSectionDetail;
 }
 
+interface SectionInfo {
+  title: string;
+  path: string;
+  active: boolean;
+}
 @Component({
   selector: 'lib-page',
   templateUrl: './page-default.html',
-  styleUrls: ['./page.component.scss'],
+  styleUrls: ['./page.component.scss']
 })
-export class PageComponent implements AfterContentInit {
-  @ContentChildren(PageSection) sections: QueryList<PageSection>;
+export class PageComponent implements OnInit, AfterContentInit {
+  @ContentChildren(PageSectionDefinition)
+  sectionDefinitions: QueryList<PageSectionDefinition>;
 
+  private isDetailVisible: boolean = true;
   private isLeftbarVisible: boolean = true;
-  isRightbarVisible: boolean = false;
-  private selectedSection: PageSection;
+  private sections: SectionInfo[] = [];
 
-  constructor(private cd: ChangeDetectorRef) {
+  constructor(private cd: ChangeDetectorRef, private router: Router, private route: ActivatedRoute) {
+  }
+
+  ngOnInit() {
   }
 
   ngAfterContentInit() {
-    if (!this.selectedSection) {
-      this.selectSection(this.sections.first);
-    }
+    this.sectionDefinitions.forEach(sectionDef => {
+      this.sections.push({ title: sectionDef.title, path: sectionDef.path, active: false });
+    })
   }
 
-  selectSection(section: PageSection) {
-    if (this.selectedSection) {
-      this.selectedSection.active = false;
-    }
-    this.selectedSection = section;
-    this.selectedSection.active = true;
-    this.isRightbarVisible = false;
+  selectSection(section: SectionInfo) {
+    // Launch section and clear detail
+    this.router.navigate([{ outlets: { primary: [section.path], detail: null } }], { relativeTo: this.route });
   }
 }

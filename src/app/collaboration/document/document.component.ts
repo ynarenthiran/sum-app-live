@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter, ElementRef, Directive, 
 import { CollaborationService, File } from '../collaboration.service';
 import { DialogService } from 'src/app/dialog/dialog.component';
 import { Observable } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Directive({
   selector: '[appDocumentDropArea]'
@@ -49,31 +50,6 @@ export class DocumentDropArea {
 }
 
 @Component({
-  selector: 'app-collaboration-document-breadcrumbs',
-  templateUrl: './document.breadcrumbs.html',
-  styleUrls: ['./document.component.scss']
-})
-export class DocumentBreadcrumbs implements OnInit {
-  @Input()
-  items: any[];
-
-  @Output()
-  navigate: EventEmitter<number> = new EventEmitter<number>();
-
-  constructor() { }
-
-  ngOnInit() {
-  }
-
-  onItemNavigate(index) {
-    if (index < this.items.length - 1) {
-      // Don't navigate last folder
-      this.navigate.emit(index);
-    }
-  }
-}
-
-@Component({
   selector: 'app-collaboration-document-detail',
   templateUrl: './document.detail.html',
   styleUrls: ['./document.component.scss']
@@ -101,19 +77,13 @@ export enum DocumentViewType {
 export class DocumentComponent implements OnInit {
   set parent(value: File) {
     this._parent = value;
-    this.files$ = this.srv.getFiles(this._collaborationId,
+    this.files$ = this.srv.getFiles(this.collaborationId,
       this._parent == null ? "" : this._parent.id);
     this.selectedFile = null;
   }
   private _parent: File;
 
-  @Input()
-  set collaborationId(id: string) {
-    this._collaborationId = id;
-    this.parent = null;
-    this.path = [];
-  }
-  private _collaborationId: string;
+  private collaborationId: string;
 
   @ViewChild('downloadLink')
   downloadLink: ElementRef;
@@ -126,13 +96,22 @@ export class DocumentComponent implements OnInit {
     { icon: 'view_module', value: DocumentViewType.Icon },
     { icon: 'view_list', value: DocumentViewType.List }
   ];
-  viewType: DocumentViewType = DocumentViewType.Icon;
+  viewType: DocumentViewType;
 
   private files$: Observable<File[]>;
 
-  constructor(private srv: CollaborationService, private dialog: DialogService) { }
+  constructor(private srv: CollaborationService, private dialog: DialogService, private router: Router, private route: ActivatedRoute) {
+    route.parent.params.subscribe(params => {
+      this.collaborationId = params.id;
+      this.parent = null;
+      this.path = [];
+    });
+  }
 
   ngOnInit() {
+    setTimeout(() => {
+      this.viewType = DocumentViewType.Icon;
+    });
   }
 
   addFolder() {
@@ -154,18 +133,23 @@ export class DocumentComponent implements OnInit {
       path: this._parent == null ? "" : this._parent.path,
       parentId: this._parent == null ? "" : this._parent.id
     });
-    this.srv.postFolder(this._collaborationId, folder);
+    this.srv.postFolder(this.collaborationId, folder);
   }
 
   onFileDropped(event: any) {
     if (event.files) {
       const droppedFiles: any[] = event.files;
-      this.srv.postFiles(this._collaborationId, this._parent, droppedFiles);
+      this.srv.postFiles(this.collaborationId, this._parent, droppedFiles);
     }
   }
 
   onSelectDocumentItem(file: File) {
     this.selectedFile = file;
+    this.openDocumentDetails();
+  }
+
+  openDocumentDetails() {
+    this.router.navigate([{ outlets: { detail: ['documentDetails', this.selectedFile.id] } }], { relativeTo: this.route.parent });
   }
 
   onOpenDocumentItem(file: File) {
@@ -173,7 +157,7 @@ export class DocumentComponent implements OnInit {
       this.openFolder(file);
     }
     else {
-      this.srv.getFileUrl(this._collaborationId, file).subscribe((url) => {
+      this.srv.getFileUrl(this.collaborationId, file).subscribe((url) => {
         let link = this.downloadLink.nativeElement;
         link.href = url;
         link.click();
@@ -197,6 +181,13 @@ export class DocumentComponent implements OnInit {
       const folder = this.path[index];
       this.path = this.path.slice(0, index);
       this.openFolder(folder);
+    }
+  }
+
+  onItemNavigate(index) {
+    if (index < this.path.length - 1) {
+      // Don't navigate last folder
+      this.openFolderPath(index);
     }
   }
 }

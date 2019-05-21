@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import {
   MatButtonModule,
   MatIconModule,
@@ -13,16 +14,17 @@ import {
   PageComponent,
   PageSection,
   PageTitle,
-  PageContent,
   PageSubTitle,
   PageSectionContent,
   PageSectionToolbar,
-  PageSectionDetail
+  PageSectionDetail,
+  PageSectionDefinition
 } from './page.component';
 
 @NgModule({
   imports: [
     CommonModule,
+    RouterModule,
     MatButtonModule,
     MatIconModule,
     MatMenuModule,
@@ -35,7 +37,7 @@ import {
     PageSection,
     PageTitle,
     PageSubTitle,
-    PageContent,
+    PageSectionDefinition,
     PageSectionContent,
     PageSectionToolbar,
     PageSectionDetail
@@ -45,7 +47,7 @@ import {
     PageSection,
     PageTitle,
     PageSubTitle,
-    PageContent,
+    PageSectionDefinition,
     PageSectionContent,
     PageSectionToolbar,
     PageSectionDetail

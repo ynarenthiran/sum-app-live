@@ -1,26 +1,50 @@
-<ng-container [ngSwitch]="viewType">
-  <ng-container *ngSwitchCase="documentViewType.Icon">
-    <ng-container *ngTemplateOutlet="iconView"></ng-container>
-  </ng-container>
-  <ng-container *ngSwitchCase="documentViewType.List">
-    <ng-container *ngTemplateOutlet="listView"></ng-container>
-  </ng-container>
-</ng-container>
-<a #downloadLink download="file" class="document-download-link"></a>
-<!-- Tasks Icon View -->
+<lib-page-section>
+  <lib-page-section-toolbar>
+    <div class="toolbar-button-main secondary-bgcolor">
+      <button mat-fab color="accent" (click)="addFolder()">
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
+    <ul class="document-breadcrumbs toolbar-spacer">
+      <li><a (click)="onItemNavigate(-1)">
+          <mat-icon>home</mat-icon>
+        </a></li>
+      <li *ngFor="let item of path; index as i">
+        <a (click)="onItemNavigate(i)">{{item.name}}</a>
+      </li>
+    </ul>
+    <mat-button-toggle-group name="viewStyle" [(value)]="viewType">
+      <mat-button-toggle *ngFor="let type of viewTypes" [value]="type.value">
+        <mat-icon>{{type.icon}}</mat-icon>
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+  </lib-page-section-toolbar>
+  <lib-page-section-content>
+    <ng-container [ngSwitch]="viewType">
+      <ng-container *ngSwitchCase="documentViewType.Icon">
+        <ng-container *ngTemplateOutlet="iconView"></ng-container>
+      </ng-container>
+      <ng-container *ngSwitchCase="documentViewType.List">
+        <ng-container *ngTemplateOutlet="listView"></ng-container>
+      </ng-container>
+    </ng-container>
+    <a #downloadLink download="file" class="document-download-link"></a>
+  </lib-page-section-content>
+</lib-page-section>
+<!-- Documents Icon View -->
 <ng-template #iconView>
   <div appDocumentDropArea (fileDropped)="onFileDropped($event)" class="document-view-icon mat-body">
-    <a *ngFor="let file of files$ | async" (click)="onSelectDocumentItem(file)">
+    <button mat-flat-button *ngFor="let file of files$ | async" (click)="onSelectDocumentItem(file)">
       <div class="document-item" [matTooltip]="file.name" (dblclick)="onOpenDocumentItem(file)">
         <mat-icon [ngClass]="{gold: file.isFolder}">{{file.isFolder ? 'folder' : 'description'}}</mat-icon>
         <span>{{file.name}}</span>
       </div>
-    </a>
+    </button>
   </div>
 </ng-template>
-<!-- Tasks List View -->
+<!-- Documents List View -->
 <ng-template #listView>
-  <mat-list [ngClass]="{document-selected: true}">
+  <mat-list>
     <mat-list-item *ngFor="let file of files$ | async" (dblclick)="onOpenDocumentItem(file)">
       <mat-icon [ngClass]="{gold: file.isFolder}">{{file.isFolder ? 'folder' : 'description'}}</mat-icon>
       <h4 mat-line> {{file.name}} </h4>

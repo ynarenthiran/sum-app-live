@@ -1,51 +1,6 @@
-<lib-page #page>
+<lib-page>
   <lib-page-title>{{collaboration?.name}}</lib-page-title>
   <lib-page-sub-title>{{collaboration?.description}}</lib-page-sub-title>
-  <!--Messages-->
-  <lib-page-section title="Messages">
-    <lib-page-section-content>
-      <span>Messages</span>
-    </lib-page-section-content>
-  </lib-page-section>
-  <!--Documents-->
-  <lib-page-section title="Documents">
-    <lib-page-section-toolbar>
-      <div class="toolbar-button-main secondary-bgcolor">
-        <button mat-fab color="accent" (click)="document.addFolder()">
-          <mat-icon>add</mat-icon>
-        </button>
-      </div>
-      <app-collaboration-document-breadcrumbs [items]="document.path" (navigate)="document.openFolderPath($event)"
-        class="toolbar-spacer">
-      </app-collaboration-document-breadcrumbs>
-      <mat-button-toggle [checked]="page.isRightbarVisible" (click)="page.isRightbarVisible = !page.isRightbarVisible">
-        <mat-icon>chrome_reader_mode</mat-icon>
-      </mat-button-toggle>
-      <mat-button-toggle-group name="viewStyle" [(value)]="document.viewType">
-        <mat-button-toggle *ngFor="let type of document.viewTypes" [value]="type.value">
-          <mat-icon>{{type.icon}}</mat-icon>
-        </mat-button-toggle>
-      </mat-button-toggle-group>
-    </lib-page-section-toolbar>
-    <lib-page-section-content>
-      <app-collaboration-document #document [collaborationId]="collaborationId"></app-collaboration-document>
-    </lib-page-section-content>
-    <lib-page-section-detail>
-      <app-collaboration-document-detail [file]="document.selectedFile">
-      </app-collaboration-document-detail>
-    </lib-page-section-detail>
-  </lib-page-section>
-  <!--Members-->
-  <lib-page-section title="Members">
-    <lib-page-section-toolbar>
-      <div class="toolbar-button-main secondary-bgcolor">
-        <button mat-fab color="accent" (click)="member.addMember()">
-          <mat-icon>add</mat-icon>
-        </button>
-      </div>
-    </lib-page-section-toolbar>
-    <lib-page-section-content>
-      <app-collaboration-member #member [collaborationId]="collaborationId"></app-collaboration-member>
-    </lib-page-section-content>
-  </lib-page-section>
+  <lib-page-section-definition title="Members" path="members"></lib-page-section-definition>
+  <lib-page-section-definition title="Documents" path="documents"></lib-page-section-definition>
 </lib-page>
