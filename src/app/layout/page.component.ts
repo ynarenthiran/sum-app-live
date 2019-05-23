@@ -10,9 +10,11 @@ import {
   ContentChildren,
   QueryList,
   ContentChild,
-  Injectable
+  Injectable,
+  OnDestroy
 } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Directive({
   selector: 'lib-page-title'
@@ -74,10 +76,11 @@ interface SectionInfo {
   templateUrl: './page-default.html',
   styleUrls: ['./page.component.scss']
 })
-export class PageComponent implements OnInit, AfterContentInit {
+export class PageComponent implements OnInit, OnDestroy, AfterContentInit {
   @ContentChildren(PageSectionDefinition)
   sectionDefinitions: QueryList<PageSectionDefinition>;
 
+  private subscriptions: Subscription = new Subscription();
   private isDetailVisible: boolean = true;
   private isLeftbarVisible: boolean = true;
   private sections: SectionInfo[] = [];
@@ -86,12 +89,37 @@ export class PageComponent implements OnInit, AfterContentInit {
   }
 
   ngOnInit() {
+    this.subscriptions.add(
+      this.router.events.subscribe(event => {
+        if (event instanceof NavigationEnd) {
+          this.updateSectionStatus();
+        }
+      })
+    );
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
   }
 
   ngAfterContentInit() {
-    this.sectionDefinitions.forEach(sectionDef => {
-      this.sections.push({ title: sectionDef.title, path: sectionDef.path, active: false });
+    if (this.sectionDefinitions.length != this.sections.length) {
+      this.sectionDefinitions.forEach(sectionDef => {
+        this.sections.push({ title: sectionDef.title, path: sectionDef.path, active: false });
+      })
+      this.updateSectionStatus();
+    }
+  }
+
+  updateSectionStatus() {
+    this.sections.forEach((section) => {
+      const sectionRoute =
+        this.route.children.find((route) => route.outlet == "primary" && route.routeConfig.path == section.path);
+      section.active = sectionRoute ? true : false;
     })
+    const detailRoute =
+      this.route.children.find((route) => route.outlet == "detail");
+    this.isDetailVisible = detailRoute ? true : false;
   }
 
   selectSection(section: SectionInfo) {
