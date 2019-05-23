@@ -11,8 +11,7 @@ const routes: Routes = [
     path: ':id', component: CollaborationComponent,
     children: [
       { path: 'members', component: MemberComponent },
-      { path: 'documents', component: DocumentComponent },
-      { path: 'documentDetails/:fileid', component: DocumentDetail, outlet: 'detail' }
+      { path: 'documents', component: DocumentComponent }
     ]
   }
 ];

@@ -39,12 +39,12 @@
     </div>
   </div>
   <div class="page-rightbar"
-    [ngClass]="{'page-sidebar-visible': isDetailVisible, 'page-sidebar-invisible': !isDetailVisible}">
+    [ngClass]="{'page-sidebar-visible': pageSrv.isDetailVisible, 'page-sidebar-invisible': !pageSrv.isDetailVisible}">
     <div class="page-sidebar-header main">
     </div>
     <div class="page-sidebar-content">
       <!--Detail panel Here-->
-      <router-outlet name="detail"></router-outlet>
+      <ng-container [ngTemplateOutlet]="pageSrv.detail"></ng-container>
     </div>
   </div>
 </div>

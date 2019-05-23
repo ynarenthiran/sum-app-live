@@ -16,6 +16,33 @@ import {
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { Subscription } from 'rxjs';
 
+@Injectable({
+  providedIn: 'root'
+})
+export class PageService {
+  get detail(): TemplateRef<any> {
+    return this._detail;
+  }
+  get isDetailVisible(): boolean {
+    return this._isDetailVisible;
+  }
+
+  private _detail: TemplateRef<any> = null;
+  private _isDetailVisible: boolean = false;
+
+  constructor() { }
+
+  openDetail(detail: TemplateRef<any>) {
+    this._detail = detail;
+    this._isDetailVisible = true;
+  }
+
+  closeDetail() {
+    this._detail = null;
+    this._isDetailVisible = false;
+  }
+}
+
 @Directive({
   selector: 'lib-page-title'
 })
@@ -81,11 +108,10 @@ export class PageComponent implements OnInit, OnDestroy, AfterContentInit {
   sectionDefinitions: QueryList<PageSectionDefinition>;
 
   private subscriptions: Subscription = new Subscription();
-  private isDetailVisible: boolean = true;
   private isLeftbarVisible: boolean = true;
   private sections: SectionInfo[] = [];
 
-  constructor(private cd: ChangeDetectorRef, private router: Router, private route: ActivatedRoute) {
+  constructor(private cd: ChangeDetectorRef, private router: Router, private route: ActivatedRoute, private pageSrv: PageService) {
   }
 
   ngOnInit() {
@@ -117,13 +143,11 @@ export class PageComponent implements OnInit, OnDestroy, AfterContentInit {
         this.route.children.find((route) => route.outlet == "primary" && route.routeConfig.path == section.path);
       section.active = sectionRoute ? true : false;
     })
-    const detailRoute =
-      this.route.children.find((route) => route.outlet == "detail");
-    this.isDetailVisible = detailRoute ? true : false;
   }
 
   selectSection(section: SectionInfo) {
     // Launch section and clear detail
-    this.router.navigate([{ outlets: { primary: [section.path], detail: null } }], { relativeTo: this.route });
+    this.pageSrv.closeDetail();
+    this.router.navigate([section.path], { relativeTo: this.route });
   }
 }

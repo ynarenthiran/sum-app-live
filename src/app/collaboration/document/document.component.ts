@@ -1,8 +1,9 @@
-import { Component, OnInit, Input, Output, EventEmitter, ElementRef, Directive, HostListener, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ElementRef, Directive, HostListener, ViewChild, TemplateRef } from '@angular/core';
 import { CollaborationService, File } from '../collaboration.service';
 import { DialogService } from 'src/app/dialog/dialog.component';
 import { Observable } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
+import { PageService } from 'src/app/layout/page.component';
 
 @Directive({
   selector: '[appDocumentDropArea]'
@@ -88,6 +89,9 @@ export class DocumentComponent implements OnInit {
   @ViewChild('downloadLink')
   downloadLink: ElementRef;
 
+  @ViewChild('documentDetail')
+  documentDetail: TemplateRef<any>;
+
   path: File[] = [];
   selectedFile: File = null;
 
@@ -100,7 +104,8 @@ export class DocumentComponent implements OnInit {
 
   private files$: Observable<File[]>;
 
-  constructor(private srv: CollaborationService, private dialog: DialogService, private router: Router, private route: ActivatedRoute) {
+  constructor(private srv: CollaborationService, private dialog: DialogService, private router: Router,
+    private route: ActivatedRoute, private pageSrv: PageService) {
     route.parent.params.subscribe(params => {
       this.collaborationId = params.id;
       this.parent = null;
@@ -149,7 +154,8 @@ export class DocumentComponent implements OnInit {
   }
 
   openDocumentDetails() {
-    this.router.navigate([{ outlets: { detail: ['documentDetails', this.selectedFile.id] } }], { relativeTo: this.route.parent });
+    //
+    this.pageSrv.openDetail(this.documentDetail);
   }
 
   onOpenDocumentItem(file: File) {

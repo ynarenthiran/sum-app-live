@@ -18,7 +18,8 @@ import {
   PageSectionContent,
   PageSectionToolbar,
   PageSectionDetail,
-  PageSectionDefinition
+  PageSectionDefinition,
+  PageService
 } from './page.component';
 
 @NgModule({
@@ -53,6 +54,7 @@ import {
     PageSectionDetail
   ],
   providers: [
+    PageService
   ],
   entryComponents: [
   ]
