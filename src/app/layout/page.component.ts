@@ -16,6 +16,10 @@ import {
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { Subscription } from 'rxjs';
 
+export interface DetailHeader {
+  title?: string;
+  subTitle?: string;
+}
 @Injectable({
   providedIn: 'root'
 })
@@ -26,20 +30,26 @@ export class PageService {
   get isDetailVisible(): boolean {
     return this._isDetailVisible;
   }
+  get header(): DetailHeader {
+    return this._header;
+  }
 
   private _detail: TemplateRef<any> = null;
   private _isDetailVisible: boolean = false;
+  private _header: DetailHeader = null;
 
   constructor() { }
 
-  openDetail(detail: TemplateRef<any>) {
+  openDetail(detail: TemplateRef<any>, header?: DetailHeader) {
     this._detail = detail;
     this._isDetailVisible = true;
+    this._header = header;
   }
 
   closeDetail() {
     this._detail = null;
     this._isDetailVisible = false;
+    this._header = null;
   }
 }
 

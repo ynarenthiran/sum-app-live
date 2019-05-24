@@ -44,6 +44,12 @@ export class FormComponent implements OnInit, OnChanges, AfterViewInit {
   @Input()
   values: any;
 
+  @Input()
+  labels: any;
+
+  @Input()
+  readOnly: boolean;
+
   @ViewChild('form')
   form: Form;
 
@@ -66,8 +72,15 @@ export class FormComponent implements OnInit, OnChanges, AfterViewInit {
     this.formElements = [];
     let controls: any = {};
     if (this.model) {
+      let labels: any = this.labels;
+      if (!labels) {
+        labels = {};
+        Object.keys(this.model).forEach((k) => {
+          labels[k] = k;
+        });
+      }
       // Build form elements
-      Object.keys(this.model).forEach((k) => {
+      Object.keys(labels).forEach((k) => {
         controls[k] = new FormControl(this.model[k]);
         let type: FormElementType = FormElementType.Default;
         let controlType: FormElementControlType = FormElementControlType.Input;
@@ -92,10 +105,12 @@ export class FormComponent implements OnInit, OnChanges, AfterViewInit {
         else if (dataType == "string") {
           type = FormElementType.String;
         }
-        this.formElements.push({ key: k, label: k, type: type, controlType: controlType, values: values, multi: multi });
+        this.formElements.push({ key: k, label: labels[k], type: type, controlType: controlType, values: values, multi: multi });
       });
     }
     this.formGroup = new FormGroup(controls);
+    if (this.readOnly)
+      this.formGroup.disable();
   }
 
   getData(): any {

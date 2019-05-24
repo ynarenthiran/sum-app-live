@@ -1,9 +1,11 @@
 import { Component, OnInit, Input, Output, EventEmitter, ElementRef, Directive, HostListener, ViewChild, TemplateRef } from '@angular/core';
-import { CollaborationService, File } from '../collaboration.service';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { CollaborationService, File, FileExt } from '../collaboration.service';
 import { DialogService } from 'src/app/dialog/dialog.component';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PageService } from 'src/app/layout/page.component';
+import { MatChipInputEvent } from '@angular/material';
 
 @Directive({
   selector: '[appDocumentDropArea]'
@@ -50,21 +52,6 @@ export class DocumentDropArea {
   }
 }
 
-@Component({
-  selector: 'app-collaboration-document-detail',
-  templateUrl: './document.detail.html',
-  styleUrls: ['./document.component.scss']
-})
-export class DocumentDetail implements OnInit {
-  @Input()
-  file: File;
-
-  constructor() { }
-
-  ngOnInit() {
-  }
-}
-
 export enum DocumentViewType {
   Icon = 'Icon',
   List = 'List'
@@ -76,6 +63,8 @@ export enum DocumentViewType {
   styleUrls: ['./document.component.scss']
 })
 export class DocumentComponent implements OnInit {
+  readonly separatorKeysCodes: number[] = [ENTER, COMMA];
+
   set parent(value: File) {
     this._parent = value;
     this.files$ = this.srv.getFiles(this.collaborationId,
@@ -92,8 +81,9 @@ export class DocumentComponent implements OnInit {
   @ViewChild('documentDetail')
   documentDetail: TemplateRef<any>;
 
-  path: File[] = [];
-  selectedFile: File = null;
+  private path: File[] = [];
+  private selectedFile: File = null;
+  private selectedFile$: Observable<FileExt> = of(null);
 
   private documentViewType = DocumentViewType;
   viewTypes = [
@@ -134,7 +124,7 @@ export class DocumentComponent implements OnInit {
   onAddFolder(folderIn: any) {
     const folder: File = Object.assign({} as File, {
       name: folderIn.Name,
-      description: "",
+      description: folderIn.Name,
       path: this._parent == null ? "" : this._parent.path,
       parentId: this._parent == null ? "" : this._parent.id
     });
@@ -154,8 +144,30 @@ export class DocumentComponent implements OnInit {
   }
 
   openDocumentDetails() {
-    //
-    this.pageSrv.openDetail(this.documentDetail);
+    this.selectedFile$ = this.srv.getFileExt(this.collaborationId, this.selectedFile.id);
+    this.pageSrv.openDetail(this.documentDetail, {
+      title: this.selectedFile.name,
+      subTitle: this.selectedFile.description
+    });
+  }
+
+  addTag(event: MatChipInputEvent): void {
+    const input = event.input;
+    const value = event.value;
+    if ((value || '').trim()) {
+      if (!this.selectedFile.tags) this.selectedFile.tags = [];
+      this.selectedFile.tags.push(value.trim());
+    }
+    if (input) {
+      input.value = '';
+    }
+  }
+
+  removeTag(tag: string): void {
+    const index = this.selectedFile.tags.indexOf(tag);
+    if (index >= 0) {
+      this.selectedFile.tags.splice(index, 1);
+    }
   }
 
   onOpenDocumentItem(file: File) {

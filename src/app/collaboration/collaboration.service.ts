@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AppConfigService } from '../services/app.config';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Subscription, Observable, combineLatest } from 'rxjs';
-import { map, flatMap } from 'rxjs/operators';
+import { map, flatMap, concatAll } from 'rxjs/operators';
 import { AuthService } from '../authentication/auth.service';
 import { AngularFireStorage } from '@angular/fire/storage';
 
@@ -30,8 +30,17 @@ export interface File {
   name: string;
   description: string;
   path: string;
+  createdByUid: string;
+  createdOn: Date;
+  changedByUid: string;
+  changedOn: Date;
   parentId: string;
   isFolder: boolean;
+  tags: string[];
+}
+export interface FileExt extends File {
+  createdBy: User;
+  changedBy: User;
 }
 
 @Injectable({
@@ -119,15 +128,74 @@ export class CollaborationService {
       );
   }
 
+  getFilesExt(id: string): Observable<FileExt[]> {
+    const accountId = this.config.getConfig().accountId;
+    return this.db.collection<FileExt>(`accounts/${accountId}/collaborations/${id}/documents`)
+      .snapshotChanges()
+      .pipe(
+        map(actions =>
+          actions.map(a => {
+            const file = a.payload.doc.data() as File;
+            const id = a.payload.doc.id;
+            const createdBy = this.db.doc<User>(`users/${file.createdByUid}`)
+              .snapshotChanges()
+              .pipe(
+                map(action => action.payload.data() as User)
+              );
+            const changedBy = this.db.doc<User>(`users/${file.changedByUid}`)
+              .snapshotChanges()
+              .pipe(
+                map(action => action.payload.data() as User)
+              );
+            return combineLatest(createdBy, changedBy).pipe(
+              map(values => Object.assign(file, { createdBy: values[0], changedBy: values[1] }))
+            );
+          })),
+        flatMap(files => combineLatest(files))
+      );
+  }
+
+  getFileExt(id: string, fileId: string): Observable<FileExt> {
+    const accountId = this.config.getConfig().accountId;
+    return this.db.doc<FileExt>(`accounts/${accountId}/collaborations/${id}/documents/${fileId}`)
+      .snapshotChanges()
+      .pipe(
+        map(a => {
+          const file = a.payload.data() as File;
+          const id = a.payload.id;
+          const createdBy = this.db.doc<User>(`users/${file.createdByUid}`)
+            .snapshotChanges()
+            .pipe(
+              map(action => action.payload.data() as User)
+            );
+          const changedBy = this.db.doc<User>(`users/${file.changedByUid}`)
+            .snapshotChanges()
+            .pipe(
+              map(action => action.payload.data() as User)
+            );
+          return combineLatest(createdBy, changedBy).pipe(
+            map(values => Object.assign(file, { createdBy: values[0], changedBy: values[1] }))
+          );
+        }),
+        concatAll()
+      );
+  }
+
   postFolder(id: string, file: File) {
+    const accountId = this.config.getConfig().accountId;
     const obj = {
       name: file.name,
       description: file.description,
-      path: file.path,
+      path: file == null ? file.name : file.path + "/" + file.name,
+      createdByUid: this.auth.currentUserId,
+      createdOn: new Date(),
+      changedByUid: this.auth.currentUserId,
+      changedOn: new Date(),
       parentId: file.parentId,
-      isFolder: true
+      isFolder: true,
+      tags: []
     }
-    return this.db.collection(`accounts/${this.config.getConfig().accountId}/collaborations/${id}/documents`)
+    return this.db.collection(`accounts/${accountId}/collaborations/${id}/documents`)
       .add(obj);
   }
 
@@ -141,11 +209,26 @@ export class CollaborationService {
         name: file.name,
         description: file.name,
         path: filePath,
+        createdByUid: this.auth.currentUserId,
+        createdOn: new Date(),
+        changedByUid: this.auth.currentUserId,
+        changedOn: new Date(),
         parentId: folder == null ? "" : folder.id,
-        isFolder: false
+        isFolder: false,
+        tags: []
       };
-      this.db.collection(`accounts/${this.config.getConfig().accountId}/collaborations/${id}/documents`).add(obj);
+      this.db.collection(`accounts/${accountId}/collaborations/${id}/documents`).add(obj);
     }
+  }
+
+  updateFileTags(id: string, file: File) {
+    const accountId = this.config.getConfig().accountId;
+    const obj = {
+      changedByUid: this.auth.currentUserId,
+      changedOn: new Date(),
+      tags: file.tags
+    };
+    this.db.doc(`accounts/${accountId}/collaborations/${id}/documents/${file.id}`).set(obj);
   }
 
   getFileUrl(id: string, file: File): Observable<any> {

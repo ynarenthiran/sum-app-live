@@ -54,5 +54,47 @@
 </ng-template>
 <!-- Documents Detail -->
 <ng-template #documentDetail>
-  <span>Hello World !!!</span>
+  <div *ngIf="selectedFile$ | async as detailFile" class="mat-typography document-section">
+    <h2>Attributes</h2>
+    <mat-divider></mat-divider>
+    <table class="document-tags">
+      <tr>
+        <td><strong>Path:</strong></td>
+        <td>{{detailFile.path}}</td>
+      </tr>
+      <tr>
+        <td><strong>Created By:</strong></td>
+        <td>{{detailFile.createdBy?.displayName}}</td>
+      </tr>
+      <tr>
+        <td><strong>Created On:</strong></td>
+        <td>{{detailFile.createdOn?.toDate() | date:'medium'}}</td>
+      </tr>
+      <tr>
+        <td><strong>Last Changed By:</strong></td>
+        <td>{{detailFile.changedBy?.displayName}}</td>
+      </tr>
+      <tr>
+        <td><strong>Last Changed On:</strong></td>
+        <td>{{detailFile.changedOn?.toDate() | date:'medium'}}</td>
+      </tr>
+    </table>
+    <div class="hbox">
+      <h2>Tags</h2>
+      <button mat-icon-button>
+        <mat-icon>edit</mat-icon>
+      </button>
+    </div>
+    <mat-divider></mat-divider>
+    <mat-form-field appearance="outline" class="document-tags">
+      <mat-chip-list #chipList>
+        <mat-chip *ngFor="let tag of detailFile.tags" removable="true" (removed)="removeTag(tag)">
+          {{tag}}
+          <mat-icon matChipRemove>cancel</mat-icon>
+        </mat-chip>
+        <input [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+          matChipInputAddOnBlur="true" (matChipInputTokenEnd)="addTag($event)">
+      </mat-chip-list>
+    </mat-form-field>
+  </div>
 </ng-template>

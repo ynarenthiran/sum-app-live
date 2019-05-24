@@ -8,7 +8,8 @@ import {
   MatButtonToggleModule,
   MatTooltipModule,
   MatChipsModule,
-  MatRippleModule
+  MatRippleModule,
+  MatFormFieldModule
 } from '@angular/material';
 
 import { CollaborationRoutingModule } from './collaboration-routing.module';
@@ -20,8 +21,7 @@ import { CollaborationService } from './collaboration.service';
 import { MemberComponent } from './member/member.component';
 import {
   DocumentComponent,
-  DocumentDropArea,
-  DocumentDetail
+  DocumentDropArea
 } from './document/document.component';
 
 @NgModule({
@@ -30,8 +30,7 @@ import {
     CollaborationComponent,
     MemberComponent,
     DocumentComponent,
-    DocumentDropArea,
-    DocumentDetail
+    DocumentDropArea
   ],
   imports: [
     CommonModule,
@@ -45,7 +44,9 @@ import {
     MatButtonToggleModule,
     MatTooltipModule,
     MatChipsModule,
-    MatRippleModule
+    MatRippleModule,
+    MatChipsModule,
+    MatFormFieldModule
   ],
   providers: [
     CollaborationService

@@ -3,7 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { CreateComponent } from './create/create.component';
 import { CollaborationComponent } from './collaboration/collaboration.component';
 import { MemberComponent } from './member/member.component';
-import { DocumentComponent, DocumentDetail } from './document/document.component';
+import { DocumentComponent } from './document/document.component';
 
 const routes: Routes = [
   { path: 'create', component: CreateComponent },
