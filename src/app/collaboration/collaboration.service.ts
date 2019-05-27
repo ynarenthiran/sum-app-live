@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AppConfigService } from '../services/app.config';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Subscription, Observable, combineLatest } from 'rxjs';
-import { map, flatMap, concatAll } from 'rxjs/operators';
+import { map, flatMap, concatAll, distinct } from 'rxjs/operators';
 import { AuthService } from '../authentication/auth.service';
 import { AngularFireStorage } from '@angular/fire/storage';
 
@@ -19,6 +19,7 @@ export interface Member {
   validTo: Date;
   user: User;
   roles: string[];
+  tags: string[];
 }
 export interface User {
   id: string;
@@ -109,7 +110,8 @@ export class CollaborationService {
     const obj = {
       validFrom: member.validFrom,
       validTo: member.validTo,
-      roles: member.roles
+      roles: member.roles,
+      tags: member.tags
     }
     return this.db.doc(`accounts/${this.config.getConfig().accountId}/collaborations/${id}/members/${member.id}`)
       .set(obj);
@@ -125,6 +127,38 @@ export class CollaborationService {
           const id = a.payload.doc.id;
           return Object.assign(file, { id: id }) as File;
         }))
+      );
+  }
+
+  getFilesByTags(id: string, tags: string[], parent: string): Observable<File[]> {
+    const accountId = this.config.getConfig().accountId;
+    let aObservables: Observable<string[]>[] = [];
+    tags.forEach(tag => {
+      aObservables.push(
+        this.db.collection(`accounts/${accountId}/collaborations/${id}/documentTags`,
+          ref => ref.where('tag', '==', tag))
+          .snapshotChanges()
+          .pipe(
+            map(actions => actions.map(a => {
+              const obj: any = a.payload.doc.data();
+              const fileId: string = obj.documentId;
+              return fileId;
+            }))
+          ));
+    });
+    return combineLatest(aObservables)
+      .pipe(
+        map(arr => arr.reduce((acc, arr) => acc.concat(arr))),
+        distinct(fileIds => fileIds),
+        map(fileIds => fileIds.map(fileId => this.db.doc<File>(`accounts/${accountId}/collaborations/${id}/documents/${fileId}`)
+          .snapshotChanges()
+          .pipe(
+            map(action => {
+              const file = action.payload.data() as File;
+              return Object.assign(file, { id: action.payload.id }) as File;
+            })
+          ))),
+        flatMap(files => combineLatest(files))
       );
   }
 
@@ -174,7 +208,7 @@ export class CollaborationService {
               map(action => action.payload.data() as User)
             );
           return combineLatest(createdBy, changedBy).pipe(
-            map(values => Object.assign(file, { createdBy: values[0], changedBy: values[1] }))
+            map(values => Object.assign(file, { id: id, createdBy: values[0], changedBy: values[1] }))
           );
         }),
         concatAll()
@@ -228,7 +262,7 @@ export class CollaborationService {
       changedOn: new Date(),
       tags: file.tags
     };
-    this.db.doc(`accounts/${accountId}/collaborations/${id}/documents/${file.id}`).set(obj);
+    this.db.doc(`accounts/${accountId}/collaborations/${id}/documents/${file.id}`).update(obj);
   }
 
   getFileUrl(id: string, file: File): Observable<any> {

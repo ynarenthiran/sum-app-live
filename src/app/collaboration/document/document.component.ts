@@ -151,22 +151,24 @@ export class DocumentComponent implements OnInit {
     });
   }
 
-  addTag(event: MatChipInputEvent): void {
+  addTag(detailFile: File, event: MatChipInputEvent): void {
     const input = event.input;
     const value = event.value;
     if ((value || '').trim()) {
-      if (!this.selectedFile.tags) this.selectedFile.tags = [];
-      this.selectedFile.tags.push(value.trim());
+      if (!detailFile.tags) detailFile.tags = [];
+      detailFile.tags.push(value.trim());
+      this.srv.updateFileTags(this.collaborationId, detailFile);
     }
     if (input) {
       input.value = '';
     }
   }
 
-  removeTag(tag: string): void {
+  removeTag(detailFile: File, tag: string): void {
     const index = this.selectedFile.tags.indexOf(tag);
     if (index >= 0) {
       this.selectedFile.tags.splice(index, 1);
+      this.srv.updateFileTags(this.collaborationId, detailFile);
     }
   }
 

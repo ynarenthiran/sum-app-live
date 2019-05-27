@@ -81,19 +81,19 @@
     </table>
     <div class="hbox">
       <h2>Tags</h2>
-      <button mat-icon-button>
+      <!--<button mat-icon-button>
         <mat-icon>edit</mat-icon>
-      </button>
+      </button>-->
     </div>
     <mat-divider></mat-divider>
     <mat-form-field appearance="outline" class="document-tags">
       <mat-chip-list #chipList>
-        <mat-chip *ngFor="let tag of detailFile.tags" removable="true" (removed)="removeTag(tag)">
+        <mat-chip *ngFor="let tag of detailFile.tags" removable="true" (removed)="removeTag(detailFile, tag)">
           {{tag}}
           <mat-icon matChipRemove>cancel</mat-icon>
         </mat-chip>
         <input [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-          matChipInputAddOnBlur="true" (matChipInputTokenEnd)="addTag($event)">
+          matChipInputAddOnBlur="true" (matChipInputTokenEnd)="addTag(detailFile, $event)">
       </mat-chip-list>
     </mat-form-field>
   </div>

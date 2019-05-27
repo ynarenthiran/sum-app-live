@@ -26,7 +26,7 @@ export class MemberComponent implements OnInit {
   }
 
   addMember() {
-    this.dialog.openDialog({ User: "", Roles: [] },
+    this.dialog.openDialog({ User: "", Roles: [], Tags: [] },
       {
         title: "Add Member",
         width: "300px",
