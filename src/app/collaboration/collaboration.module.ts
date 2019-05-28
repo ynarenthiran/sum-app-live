@@ -43,7 +43,6 @@ import {
     MatListModule,
     MatButtonToggleModule,
     MatTooltipModule,
-    MatChipsModule,
     MatRippleModule,
     MatChipsModule,
     MatFormFieldModule

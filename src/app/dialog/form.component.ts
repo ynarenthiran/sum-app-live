@@ -8,6 +8,8 @@ import {
   AfterViewInit
 } from '@angular/core';
 import { FormGroup, Form, FormControl } from '@angular/forms';
+import { MatChipInputEvent } from '@angular/material';
+import { ENTER, COMMA } from '@angular/cdk/keycodes';
 
 enum FormElementType {
   String = "text",
@@ -18,7 +20,8 @@ enum FormElementType {
 
 enum FormElementControlType {
   Input = "input",
-  Select = "select"
+  Select = "select",
+  Chips = "chips"
 }
 
 interface FormElement {
@@ -36,6 +39,7 @@ interface FormElement {
   styleUrls: ['./form.component.scss']
 })
 export class FormComponent implements OnInit, OnChanges, AfterViewInit {
+  readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   private formElementControlType = FormElementControlType;
 
   @Input()
@@ -87,15 +91,12 @@ export class FormComponent implements OnInit, OnChanges, AfterViewInit {
         let values: any[] = [];
         let multi: boolean = false;
         const dataType = typeof this.model[k];
-        if (this.values && this.values[k]) {
-          controlType = FormElementControlType.Select;
-          values = this.values[k];
-        }
         if (dataType == "object") {
           if (this.model[k] instanceof Date) {
             type = FormElementType.Date;
           }
           else if (this.model[k] instanceof Array) {
+            controlType = FormElementControlType.Chips;
             multi = true;
           }
         }
@@ -104,6 +105,10 @@ export class FormComponent implements OnInit, OnChanges, AfterViewInit {
         }
         else if (dataType == "string") {
           type = FormElementType.String;
+        }
+        if (this.values && this.values[k]) {
+          controlType = FormElementControlType.Select;
+          values = this.values[k];
         }
         this.formElements.push({ key: k, label: labels[k], type: type, controlType: controlType, values: values, multi: multi });
       });
@@ -116,4 +121,23 @@ export class FormComponent implements OnInit, OnChanges, AfterViewInit {
   getData(): any {
     return this.formGroup.value;
   }
+
+  addChip(chips: any[], event: MatChipInputEvent): void {
+    const input = event.input;
+    const value = event.value;
+    if ((value || '').trim()) {
+      chips.push(value.trim());
+    }
+    if (input) {
+      input.value = '';
+    }
+  }
+
+  removeChip(chips: any[], chip: string): void {
+    const index = chips.indexOf(chip);
+    if (index >= 0) {
+      chips.splice(index, 1);
+    }
+  }
+
 }

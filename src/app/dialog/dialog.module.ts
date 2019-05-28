@@ -6,7 +6,9 @@ import {
   MatFormFieldModule,
   MatInputModule,
   MatDialogModule,
-  MatSelectModule
+  MatSelectModule,
+  MatChipsModule,
+  MatIconModule
 } from '@angular/material';
 
 import { FormComponent } from './form.component';
@@ -26,7 +28,9 @@ import { InputDialogComponent, ConfirmDialogComponent, DialogService } from './d
     MatFormFieldModule,
     MatInputModule,
     MatDialogModule,
-    MatSelectModule
+    MatSelectModule,
+    MatChipsModule,
+    MatIconModule
   ],
   exports: [
     FormComponent

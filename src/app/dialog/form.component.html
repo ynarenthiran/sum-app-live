@@ -2,6 +2,14 @@
   <mat-form-field *ngFor="let formElement of formElements">
     <mat-label>{{formElement.label}}</mat-label>
     <ng-container [ngSwitch]="formElement.controlType">
+      <mat-chip-list #chipList *ngSwitchCase="formElementControlType.Chips">
+        <mat-chip *ngFor="let chip of model[formElement.key]" removable="true" (removed)="removeChip(model[formElement.key], chip)">
+          {{chip}}
+          <mat-icon matChipRemove>cancel</mat-icon>
+        </mat-chip>
+        <input [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+          matChipInputAddOnBlur="true" (matChipInputTokenEnd)="addChip(model[formElement.key], $event)">
+      </mat-chip-list>
       <input matInput [placeholder]="formElement.label" [formControlName]="formElement.key" [id]="formElement.key"
         [type]="formElement.type" *ngSwitchCase="formElementControlType.Input" />
       <mat-select [placeholder]="formElement.label" [formControlName]="formElement.key" [id]="formElement.key"
