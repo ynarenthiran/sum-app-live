@@ -15,8 +15,6 @@ export interface Collaboration {
 }
 export interface Member {
   id: string;
-  validFrom: Date;
-  validTo: Date;
   user: User;
   roles: string[];
   tags: string[];
@@ -50,6 +48,18 @@ export interface FileExt extends File {
 export class CollaborationService {
 
   constructor(private db: AngularFirestore, private storage: AngularFireStorage, private config: AppConfigService, private auth: AuthService) { }
+
+  getUsers(): Observable<User[]> {
+    return this.db.collection<User>(`users`)
+      .snapshotChanges()
+      .pipe(
+        map(actions => actions.map(a => {
+          const user = a.payload.doc.data() as User;
+          const id = a.payload.doc.id;
+          return Object.assign(user, { id: id }) as User;
+        }))
+      );
+  }
 
   getCollaboration(id: string, onValue: (value: Collaboration) => void, onError: (error: any) => void): Subscription {
     return this.db.doc<Collaboration>(`accounts/${this.config.getConfig().accountId}/collaborations/${id}`)
@@ -106,10 +116,21 @@ export class CollaborationService {
       );
   }
 
+  getCurrentMember(id: string): Observable<Member> {
+    const accountId = this.config.getConfig().accountId;
+    const userId = this.auth.currentUserId;
+    return this.db.doc<Member>(`accounts/${accountId}/collaborations/${id}/members/${userId}`)
+      .snapshotChanges()
+      .pipe(
+        map(action => {
+          const member = action.payload.data() as Member;
+          return Object.assign(member, { id: action.payload.id }) as Member;
+        })
+      );
+  }
+
   postMember(id: string, member: Member) {
     const obj = {
-      validFrom: member.validFrom,
-      validTo: member.validTo,
       roles: member.roles,
       tags: member.tags
     }

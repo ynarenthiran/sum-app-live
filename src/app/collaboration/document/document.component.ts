@@ -1,11 +1,12 @@
 import { Component, OnInit, Input, Output, EventEmitter, ElementRef, Directive, HostListener, ViewChild, TemplateRef } from '@angular/core';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { CollaborationService, File, FileExt } from '../collaboration.service';
+import { CollaborationService, File, FileExt, Member } from '../collaboration.service';
 import { DialogService } from 'src/app/dialog/dialog.component';
-import { Observable, of } from 'rxjs';
+import { Observable, of, combineLatest } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PageService } from 'src/app/layout/page.component';
 import { MatChipInputEvent } from '@angular/material';
+import { map, flatMap } from 'rxjs/operators';
 
 @Directive({
   selector: '[appDocumentDropArea]'
@@ -67,13 +68,20 @@ export class DocumentComponent implements OnInit {
 
   set parent(value: File) {
     this._parent = value;
-    this.files$ = this.srv.getFiles(this.collaborationId,
-      this._parent == null ? "" : this._parent.id);
+    if (this.currentMember.tags && this.currentMember.tags.length > 0) {
+      this.files$ = this.srv.getFilesByTags(this.collaborationId, this.currentMember.tags,
+        this._parent == null ? "" : this._parent.id);
+    }
+    else {
+      this.files$ = this.srv.getFiles(this.collaborationId,
+        this._parent == null ? "" : this._parent.id);
+    }
     this.selectedFile = null;
   }
   private _parent: File;
 
   private collaborationId: string;
+  private currentMember: Member;
 
   @ViewChild('downloadLink')
   downloadLink: ElementRef;
@@ -96,14 +104,28 @@ export class DocumentComponent implements OnInit {
 
   constructor(private srv: CollaborationService, private dialog: DialogService, private router: Router,
     private route: ActivatedRoute, private pageSrv: PageService) {
-    route.parent.params.subscribe(params => {
-      this.collaborationId = params.id;
-      this.parent = null;
-      this.path = [];
-    });
   }
 
   ngOnInit() {
+    this.route.parent.params
+      .pipe(
+        map(params => {
+          const id = params.id;
+          return this.srv.getCurrentMember(id)
+            .pipe(
+              map(member => {
+                return { collaborationId: id, member: member };
+              })
+            );
+        }),
+        flatMap(member => member)
+      )
+      .subscribe(memberInfo => {
+        this.collaborationId = memberInfo.collaborationId;
+        this.currentMember = memberInfo.member;
+        this.parent = null;
+        this.path = [];
+      });
     setTimeout(() => {
       this.viewType = DocumentViewType.Icon;
     });

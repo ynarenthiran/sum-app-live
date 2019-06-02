@@ -1,15 +1,26 @@
 <form #form [formGroup]="formGroup" class="form-core">
-  <mat-form-field *ngFor="let formElement of formElements">
+  <mat-form-field *ngFor="let formElement of formElements"
+    [appearance]="formElement.controlType == formElementControlType.Chips ? 'outline' : 'standard'">
     <mat-label>{{formElement.label}}</mat-label>
     <ng-container [ngSwitch]="formElement.controlType">
       <mat-chip-list #chipList *ngSwitchCase="formElementControlType.Chips">
-        <mat-chip *ngFor="let chip of model[formElement.key]" removable="true" (removed)="removeChip(model[formElement.key], chip)">
+        <mat-chip *ngFor="let chip of model[formElement.key]" removable="true"
+          (removed)="removeChip(model[formElement.key], chip)">
           {{chip}}
           <mat-icon matChipRemove>cancel</mat-icon>
         </mat-chip>
         <input [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
           matChipInputAddOnBlur="true" (matChipInputTokenEnd)="addChip(model[formElement.key], $event)">
       </mat-chip-list>
+      <ng-container *ngSwitchCase="formElementControlType.Suggest">
+        <input matInput [placeholder]="formElement.label" [formControlName]="formElement.key" [id]="formElement.key"
+          [type]="formElement.type" [matAutocomplete]="auto" />
+        <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+          <mat-option *ngFor="let option of formElement.suggestOptions | async" [value]="option">
+            {{option.text}}
+          </mat-option>
+        </mat-autocomplete>
+      </ng-container>
       <input matInput [placeholder]="formElement.label" [formControlName]="formElement.key" [id]="formElement.key"
         [type]="formElement.type" *ngSwitchCase="formElementControlType.Input" />
       <mat-select [placeholder]="formElement.label" [formControlName]="formElement.key" [id]="formElement.key"

@@ -18,15 +18,27 @@
         <mat-header-cell *matHeaderCellDef>Email</mat-header-cell>
         <mat-cell *matCellDef="let element">{{element.user?.email}}</mat-cell>
       </ng-container>
-      <!-- Valid From Column -->
-      <ng-container matColumnDef="validFrom">
-        <mat-header-cell *matHeaderCellDef>From</mat-header-cell>
-        <mat-cell *matCellDef="let element">{{element.validFrom.toDate() | date}}</mat-cell>
+      <!-- Roles Column -->
+      <ng-container matColumnDef="roles">
+        <mat-header-cell *matHeaderCellDef>Roles</mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <mat-chip-list>
+            <mat-chip *ngFor="let role of element.roles">
+              {{role}}
+            </mat-chip>
+          </mat-chip-list>
+        </mat-cell>
       </ng-container>
-      <!-- Valid To Column -->
-      <ng-container matColumnDef="validTo">
-        <mat-header-cell *matHeaderCellDef>To</mat-header-cell>
-        <mat-cell *matCellDef="let element">{{element.validTo.toDate() | date}}</mat-cell>
+      <!-- Tags Column -->
+      <ng-container matColumnDef="tags">
+        <mat-header-cell *matHeaderCellDef>Tags</mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <mat-chip-list>
+            <mat-chip *ngFor="let tag of element.tags">
+              {{tag}}
+            </mat-chip>
+          </mat-chip-list>
+        </mat-cell>
       </ng-container>
       <!-- Actions Column -->
       <ng-container matColumnDef="actions" stickyEnd>

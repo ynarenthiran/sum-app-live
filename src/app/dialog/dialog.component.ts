@@ -8,6 +8,7 @@ export interface DialogOptions {
   width?: string;
   button: { ok?: string, cancel?: string };
   values?: any;
+  suggest?: any;
 }
 
 @Injectable({
@@ -69,12 +70,15 @@ export class InputDialogComponent implements OnInit {
 
   private values: any;
 
+  private suggest: any;
+
   constructor(
     private dialogRef: MatDialogRef<InputDialogComponent>,
     @Inject(MAT_DIALOG_DATA) private data: any) {
     this.options = data.options;
     this.model = data.input;
     this.values = this.options.values;
+    this.suggest = this.options.suggest;
   }
 
   ngOnInit() {

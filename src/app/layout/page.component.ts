@@ -4,7 +4,6 @@ import {
   Input,
   ViewChild,
   TemplateRef,
-  ChangeDetectorRef,
   OnInit,
   AfterContentInit,
   ContentChildren,
@@ -15,6 +14,7 @@ import {
 } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { AuthService } from '../authentication/auth.service';
 
 export interface DetailHeader {
   title?: string;
@@ -121,7 +121,7 @@ export class PageComponent implements OnInit, OnDestroy, AfterContentInit {
   private isLeftbarVisible: boolean = true;
   private sections: SectionInfo[] = [];
 
-  constructor(private cd: ChangeDetectorRef, private router: Router, private route: ActivatedRoute, private pageSrv: PageService) {
+  constructor(private auth: AuthService, private router: Router, private route: ActivatedRoute, private pageSrv: PageService) {
   }
 
   ngOnInit() {

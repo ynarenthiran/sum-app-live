@@ -10,6 +10,8 @@ import {
 import { FormGroup, Form, FormControl } from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material';
 import { ENTER, COMMA } from '@angular/cdk/keycodes';
+import { Observable, combineLatest } from 'rxjs';
+import { map, flatMap } from 'rxjs/operators';
 
 enum FormElementType {
   String = "text",
@@ -21,7 +23,8 @@ enum FormElementType {
 enum FormElementControlType {
   Input = "input",
   Select = "select",
-  Chips = "chips"
+  Chips = "chips",
+  Suggest = "suggest"
 }
 
 interface FormElement {
@@ -31,6 +34,7 @@ interface FormElement {
   controlType: FormElementControlType;
   values: any[];
   multi: boolean;
+  suggestOptions: Observable<any[]>;
 }
 
 @Component({
@@ -47,6 +51,9 @@ export class FormComponent implements OnInit, OnChanges, AfterViewInit {
 
   @Input()
   values: any;
+
+  @Input()
+  suggest: any;
 
   @Input()
   labels: any;
@@ -89,6 +96,7 @@ export class FormComponent implements OnInit, OnChanges, AfterViewInit {
         let type: FormElementType = FormElementType.Default;
         let controlType: FormElementControlType = FormElementControlType.Input;
         let values: any[] = [];
+        let suggestOptions: Observable<any[]>;
         let multi: boolean = false;
         const dataType = typeof this.model[k];
         if (dataType == "object") {
@@ -110,7 +118,19 @@ export class FormComponent implements OnInit, OnChanges, AfterViewInit {
           controlType = FormElementControlType.Select;
           values = this.values[k];
         }
-        this.formElements.push({ key: k, label: labels[k], type: type, controlType: controlType, values: values, multi: multi });
+        if (this.suggest && this.suggest[k]) {
+          var control: FormControl = controls[k];
+          controlType = FormElementControlType.Suggest;
+          suggestOptions = this.suggest[k];
+          /*suggestOptions = control.valueChanges.pipe(
+            map((value) => suggestFn(value)),
+            flatMap(values => combineLatest(values))
+          );*/
+        }
+        this.formElements.push({
+          key: k, label: labels[k], type: type, controlType: controlType, values: values, multi: multi,
+          suggestOptions: suggestOptions
+        });
       });
     }
     this.formGroup = new FormGroup(controls);
@@ -140,4 +160,7 @@ export class FormComponent implements OnInit, OnChanges, AfterViewInit {
     }
   }
 
+  displayFn(user?: any): string | undefined {
+    return user ? user.text : undefined;
+  }
 }

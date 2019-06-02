@@ -8,7 +8,8 @@ import {
   MatDialogModule,
   MatSelectModule,
   MatChipsModule,
-  MatIconModule
+  MatIconModule,
+  MatAutocompleteModule
 } from '@angular/material';
 
 import { FormComponent } from './form.component';
@@ -30,7 +31,8 @@ import { InputDialogComponent, ConfirmDialogComponent, DialogService } from './d
     MatDialogModule,
     MatSelectModule,
     MatChipsModule,
-    MatIconModule
+    MatIconModule,
+    MatAutocompleteModule
   ],
   exports: [
     FormComponent

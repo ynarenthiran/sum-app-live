@@ -1,6 +1,6 @@
 <h2 mat-dialog-title>{{options.title}}</h2>
 <mat-dialog-content>
-  <lib-form [model]="model" [values]="values"></lib-form>
+  <lib-form [model]="model" [values]="values" [suggest]="suggest"></lib-form>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button mat-button (click)="onOk()" cdkFocusInitial>{{options.button.ok}}</button>

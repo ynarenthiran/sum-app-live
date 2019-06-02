@@ -1,8 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { CollaborationService, Member } from '../collaboration.service';
 import { DialogService } from 'src/app/dialog/dialog.component';
 import { ActivatedRoute } from '@angular/router';
+import { map } from 'rxjs/operators';
+
+interface UserInfo {
+  value: string;
+  text: string;
+}
 
 @Component({
   selector: 'app-collaboration-member',
@@ -12,7 +18,7 @@ import { ActivatedRoute } from '@angular/router';
 export class MemberComponent implements OnInit {
   private collaborationId: string;
 
-  private displayedColumns: string[] = ['displayName', 'email', 'validFrom', 'validTo', 'actions'];
+  private displayedColumns: string[] = ['displayName', 'email', 'roles', 'tags', 'actions'];
   private members$: Observable<Member[]>;
 
   constructor(private srv: CollaborationService, private dialog: DialogService, private route: ActivatedRoute) {
@@ -29,10 +35,13 @@ export class MemberComponent implements OnInit {
     this.dialog.openDialog({ User: "", Roles: [], Tags: [] },
       {
         title: "Add Member",
-        width: "300px",
+        width: "400px",
         button: { ok: "Add", cancel: "Cancel" },
         values: {
           Roles: ['Administrator', 'Contributor', 'Reader']
+        },
+        suggest: {
+          User: this.srv.getUsers().pipe(map(users => users.map(user => Object.assign({ value: user.id, text: `${user.displayName} (${user.email})` }))))
         }
       })
       .subscribe((result) => {
@@ -41,7 +50,7 @@ export class MemberComponent implements OnInit {
   }
 
   onAddMember(memIn: any) {
-    const member: Member = Object.assign({} as Member, { id: memIn.User, roles: memIn.Roles });
+    const member: Member = Object.assign({} as Member, { id: memIn.User.value, roles: memIn.Roles, tags: memIn.Tags });
     this.srv.postMember(this.collaborationId, member);
   }
 }
