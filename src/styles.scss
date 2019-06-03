@@ -44,6 +44,7 @@ $color-gold: #ffd700;
 $color-disabled: #b0b0b0;
 $color-main: #ffffff;
 $color-secondary: #efebe9;
+$color-highlight: #cce8ff;
 
 .primary {
     color: $color-primary;
@@ -77,6 +78,9 @@ $color-secondary: #efebe9;
 }
 .secondary-bgcolor {
     background-color: $color-secondary;
+}
+.highlight-bgcolor {
+    background-color: $color-highlight;
 }
 
 /* Spacing classes */
