@@ -138,6 +138,11 @@ export class CollaborationService {
       .set(obj);
   }
 
+  deleteMember(id: string, memberId: string) {
+    return this.db.doc(`accounts/${this.config.getConfig().accountId}/collaborations/${id}/members/${memberId}`)
+      .delete();
+  }
+
   getFiles(id: string, parent: string): Observable<File[]> {
     return this.db.collection<File>(`accounts/${this.config.getConfig().accountId}/collaborations/${id}/documents`,
       ref => ref.where('parentId', '==', parent))

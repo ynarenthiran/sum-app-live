@@ -65,6 +65,7 @@ export enum DocumentViewType {
 })
 export class DocumentComponent implements OnInit {
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
+  private displayedColumns: string[] = ['icon', 'name', 'description', 'createdOn', 'changedOn'];
 
   set parent(value: File) {
     this._parent = value;
@@ -187,9 +188,9 @@ export class DocumentComponent implements OnInit {
   }
 
   removeTag(detailFile: File, tag: string): void {
-    const index = this.selectedFile.tags.indexOf(tag);
+    const index = detailFile.tags.indexOf(tag);
     if (index >= 0) {
-      this.selectedFile.tags.splice(index, 1);
+      detailFile.tags.splice(index, 1);
       this.srv.updateFileTags(this.collaborationId, detailFile);
     }
   }

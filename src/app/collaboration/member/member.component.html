@@ -44,8 +44,11 @@
       <ng-container matColumnDef="actions" stickyEnd>
         <mat-header-cell *matHeaderCellDef></mat-header-cell>
         <mat-cell *matCellDef="let element">
-          <button mat-icon-button>
+          <button mat-icon-button (click)="editMember(element)">
             <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="removeMember(element)">
+            <mat-icon>remove_circle</mat-icon>
           </button>
         </mat-cell>
       </ng-container>

@@ -52,10 +52,13 @@
   <div class="page-rightbar"
     [ngClass]="{'page-sidebar-visible': pageSrv.isDetailVisible, 'page-sidebar-invisible': !pageSrv.isDetailVisible}">
     <div class="page-sidebar-header main">
-      <div class="vbox">
+      <div class="vbox page-spacer">
         <span class="mat-headline no-margin"><strong>{{pageSrv.header?.title}}</strong></span>
         <span class="mat-subheading-1 no-margin">{{pageSrv.header?.subTitle}}</span>
       </div>
+      <button mat-icon-button (click)="closeDetail()">
+        <mat-icon>close</mat-icon>
+      </button>
     </div>
     <div class="page-sidebar-content">
       <!--Detail panel Here-->

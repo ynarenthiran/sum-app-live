@@ -160,4 +160,8 @@ export class PageComponent implements OnInit, OnDestroy, AfterContentInit {
     this.pageSrv.closeDetail();
     this.router.navigate([section.path], { relativeTo: this.route });
   }
+
+  closeDetail() {
+    this.pageSrv.closeDetail();
+  }
 }

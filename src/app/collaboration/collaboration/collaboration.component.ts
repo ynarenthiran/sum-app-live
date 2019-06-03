@@ -38,7 +38,7 @@ export class CollaborationComponent implements OnInit {
           this.collaboration = c;
         },
         (e) => {
-          console.log(e);
+          window.alert(e);
         })
     );
   }

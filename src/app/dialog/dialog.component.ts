@@ -43,7 +43,7 @@ export class DialogService {
       width = '250px';
     }
     return new Observable<void>((observer) => {
-      const dialogRef = dialog.open(InputDialogComponent, {
+      const dialogRef = dialog.open(ConfirmDialogComponent, {
         width: width,
         data: { options: options, message: message }
       });
