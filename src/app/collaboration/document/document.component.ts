@@ -87,6 +87,9 @@ export class DocumentComponent implements OnInit {
   @ViewChild('downloadLink')
   downloadLink: ElementRef;
 
+  @ViewChild('uploadInput')
+  uploadInputEl: ElementRef;
+
   @ViewChild('documentDetail')
   documentDetail: TemplateRef<any>;
 
@@ -159,6 +162,11 @@ export class DocumentComponent implements OnInit {
       const droppedFiles: any[] = event.files;
       this.srv.postFiles(this.collaborationId, this._parent, droppedFiles);
     }
+  }
+
+  onFileSelected() {
+    const uploadedFiles = this.uploadInputEl.nativeElement.files;
+    this.srv.postFiles(this.collaborationId, this._parent, uploadedFiles);
   }
 
   onSelectDocumentItem(file: File) {

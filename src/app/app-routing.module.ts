@@ -2,12 +2,18 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from './authentication/auth.guard';
 import { TestComponent } from './test/test.component';
+import { ShellComponent } from './shell/shell.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
   { path: 'auth', loadChildren: './authentication/authentication.module#AuthenticationModule' },
-  { path: 'dashboard', canActivate: [AuthGuard], loadChildren: './dashboard/dashboard.module#DashboardModule' },
-  { path: 'collaboration', canActivate: [AuthGuard], loadChildren: './collaboration/collaboration.module#CollaborationModule' },
+  {
+    path: '', component: ShellComponent, canActivate: [AuthGuard],
+    children: [
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      { path: 'dashboard', loadChildren: './dashboard/dashboard.module#DashboardModule' },
+      { path: 'collaboration', loadChildren: './collaboration/collaboration.module#CollaborationModule' },
+    ]
+  },
   { path: 'test', component: TestComponent }
 ];
 

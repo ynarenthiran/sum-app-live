@@ -60,12 +60,12 @@ export class TemplateComponent implements OnInit {
   }
 
   createCollaboration() {
-    //this.router.navigate(['collaboration', 'create']);
-    this.openInNewTab(['collaboration', 'create']);
+    this.router.navigate(['collaboration', 'create']);
+    //this.openInNewTab(['collaboration', 'create']);
   }
 
   openCollaboration(id: string) {
-    this.openInNewTab(['collaboration', id]);
+    this.router.navigate(['collaboration', id]);
   }
 
   openInNewTab(cmds: any[]) {

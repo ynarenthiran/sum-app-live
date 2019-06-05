@@ -1,7 +1,7 @@
 <lib-page-section>
   <lib-page-section-toolbar>
     <div class="toolbar-button-main secondary-bgcolor">
-      <button mat-fab color="accent" (click)="addFolder()">
+      <button mat-fab color="accent" (click)="uploadInput.click()">
         <mat-icon>add</mat-icon>
       </button>
     </div>
@@ -13,6 +13,9 @@
         <a (click)="onItemNavigate(i)">{{item.name}}</a>
       </li>
     </ul>
+    <button mat-icon-button (click)="addFolder()">
+      <mat-icon>create_new_folder</mat-icon>
+    </button>
     <mat-button-toggle-group name="viewStyle" [(value)]="viewType">
       <mat-button-toggle *ngFor="let type of viewTypes" [value]="type.value">
         <mat-icon>{{type.icon}}</mat-icon>
@@ -29,6 +32,7 @@
       </ng-container>
     </ng-container>
     <a #downloadLink download="file" class="document-download-link"></a>
+    <input #uploadInput hidden type="file" (change)="onFileSelected()" />
   </lib-page-section-content>
 </lib-page-section>
 <!-- Documents Icon View -->

@@ -12,14 +12,12 @@ export class AuthService {
   private user: firebase.User = null;
 
   constructor(private af: AngularFireAuth, private srv: AccountService) {
-    this.af.authState.subscribe((auth) => {
-      this.user = auth;
-    });
   }
 
   isAuthenticated(): Observable<boolean> {
     return this.af.authState.pipe(
       flatMap((user) => {
+        this.user = user;
         if (user)
           return this.srv.getUserRegistration(user.uid);
         else

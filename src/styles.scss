@@ -1,5 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
+@import "global";
 
 /* Toolbar classes */
 .toolbar-spacer {
@@ -37,15 +38,6 @@
 }
 
 /* Color classes */
-$color-primary: #3f51b5;
-$color-accent: #ff4081;
-$color-warn: #f44336;
-$color-gold: #ffd700;
-$color-disabled: #b0b0b0;
-$color-main: #ffffff;
-$color-secondary: #efebe9;
-$color-highlight: #cce8ff;
-
 .primary {
     color: $color-primary;
 }

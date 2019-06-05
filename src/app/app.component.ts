@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Title } from '@angular/platform-browser';
+import { Subscription } from 'rxjs';
+import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
+import { AuthService } from './authentication/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -7,9 +9,6 @@ import { Title } from '@angular/platform-browser';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  title = 'sum-app-live';
-
   ngOnInit() {
-    this.title = window.location.host;
   }
 }

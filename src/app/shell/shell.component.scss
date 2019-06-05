@@ -1,4 +1,4 @@
-@import "../global";
+@import "../../global";
 
 :host {
     display: flex;
@@ -15,8 +15,8 @@ mat-sidenav-container {
 }
 
 mat-sidenav {
-    background-color: $color-primary;
-    color: $color-primary-text;
+    background-color: $color-shell;
+    color: $color-shell-text;
     border: 0;
 }
 
@@ -24,11 +24,22 @@ mat-sidenav {
     display: flex;
     flex-direction: column;
     align-items: stretch;
+    background-color: rgba(0,0,0,0.5);
+    margin-bottom: 0;
 }
 .app-container {
     display: flex;
     flex-direction: column;
     align-items: stretch;
+}
+.app-user {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    background-color: rgba(0,0,0,0.5);
+    margin-bottom: 64px;
+    padding-bottom: 64px;
 }
 
 .app-item {
@@ -47,6 +58,13 @@ mat-sidenav {
 .app-item .right {
     padding: 20px 20px 20px 0px;
 }
+.app-user mat-icon {
+    position: absolute;
+    bottom: -32px;
+    background-color: $color-shell;
+    border-radius: 50%;
+    padding: 20px;
+}
 .app-item * {
     pointer-events: none;
     user-select: none;
@@ -55,11 +73,16 @@ mat-sidenav {
 .app-panel-min .app-item span {
     display: none;
 }
+.app-panel-min .app-user span {
+    display: none;
+}
 
 .app-item-active {
+    border-radius: 20px 0 0 20px;
     background-color: $color-main;
-    color: $color-primary;
+    color: $color-shell;
     z-index: 2;
+    overflow: visible;
 }
 .app-item-active::before,.app-item-active::after {
     content: "";
@@ -67,11 +90,23 @@ mat-sidenav {
     right: 0;
     width: 20px;
     height: 20px;
-    background-color: $color-main;
+    background-color: $color-shell;
+    z-index: 3;
 }
 .app-item-active::before {
     top: -20px;
+    border-radius: 0 0 20px 0;
 }
 .app-item-active::after {
     bottom: -20px;
+    border-radius: 0 20px 0 0;
+}
+.app-item-active .app-item-decorator {
+    background-color: $color-main;
+    position: absolute;
+    right: 0;
+    width: 20px;
+    top: -20px;
+    bottom: -20px;
+    z-index: 2;
 }
