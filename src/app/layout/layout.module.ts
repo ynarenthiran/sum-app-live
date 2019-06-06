@@ -12,6 +12,7 @@ import {
 
 import {
   PageComponent,
+  PageListComponent,
   PageSection,
   PageTitle,
   PageSubTitle,
@@ -35,6 +36,7 @@ import {
   ],
   declarations: [
     PageComponent,
+    PageListComponent,
     PageSection,
     PageTitle,
     PageSubTitle,
@@ -45,6 +47,7 @@ import {
   ],
   exports: [
     PageComponent,
+    PageListComponent,
     PageSection,
     PageTitle,
     PageSubTitle,

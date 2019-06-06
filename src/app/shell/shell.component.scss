@@ -20,6 +20,10 @@ mat-sidenav {
     border: 0;
 }
 
+mat-toolbar {
+    z-index: 5;
+}
+
 .app-header {
     display: flex;
     flex-direction: column;
@@ -79,7 +83,7 @@ mat-sidenav {
 
 .app-item-active {
     border-radius: 20px 0 0 20px;
-    background-color: $color-main;
+    background-color: $color-background;
     color: $color-shell;
     z-index: 2;
     overflow: visible;
@@ -102,11 +106,18 @@ mat-sidenav {
     border-radius: 0 20px 0 0;
 }
 .app-item-active .app-item-decorator {
-    background-color: $color-main;
+    background-color: $color-background;
     position: absolute;
     right: 0;
     width: 20px;
     top: -20px;
     bottom: -20px;
     z-index: 2;
+}
+
+.app-content {
+    display: flex;
+    flex-direction: column;
+    background-color: $color-background;
+    height: 100%;
 }

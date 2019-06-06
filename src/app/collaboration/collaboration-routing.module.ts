@@ -4,8 +4,11 @@ import { CreateComponent } from './create/create.component';
 import { CollaborationComponent } from './collaboration/collaboration.component';
 import { MemberComponent } from './member/member.component';
 import { DocumentComponent } from './document/document.component';
+import { ListComponent } from './list/list.component';
 
 const routes: Routes = [
+  { path: '', redirectTo: 'list', pathMatch: 'full' },
+  { path: 'list', component: ListComponent },
   { path: 'create', component: CreateComponent },
   {
     path: ':id', component: CollaborationComponent,

@@ -61,6 +61,27 @@ export class CollaborationService {
       );
   }
 
+  getCollaborations(): Observable<Collaboration[]> {
+    const accountId = this.config.getConfig().accountId;
+    const userId = this.auth.currentUserId;
+    return this.db.collection(`accounts/${accountId}/users/${userId}/collaborations`)
+      .snapshotChanges()
+      .pipe(
+        map(actions => actions.map(a => {
+          const id = a.payload.doc.id;
+          return this.db.doc(`accounts/${accountId}/collaborations/${id}`)
+            .snapshotChanges()
+            .pipe(
+              map(action => {
+                const coll = action.payload.data() as Collaboration;
+                return Object.assign(coll, { id: action.payload.id }) as Collaboration;
+              })
+            );
+        })),
+        flatMap(collaborations => combineLatest(collaborations))
+      );
+  }
+
   getCollaboration(id: string, onValue: (value: Collaboration) => void, onError: (error: any) => void): Subscription {
     return this.db.doc<Collaboration>(`accounts/${this.config.getConfig().accountId}/collaborations/${id}`)
       .snapshotChanges()

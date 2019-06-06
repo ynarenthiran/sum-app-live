@@ -165,3 +165,16 @@ export class PageComponent implements OnInit, OnDestroy, AfterContentInit {
     this.pageSrv.closeDetail();
   }
 }
+
+@Component({
+  selector: 'lib-page-list',
+  templateUrl: './page-list.html',
+  styleUrls: ['./page.component.1.scss']
+})
+export class PageListComponent implements OnInit {
+  constructor() {
+  }
+
+  ngOnInit() {
+  }
+}

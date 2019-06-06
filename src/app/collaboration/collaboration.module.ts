@@ -23,6 +23,7 @@ import {
   DocumentComponent,
   DocumentDropArea
 } from './document/document.component';
+import { ListComponent } from './list/list.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import {
     CollaborationComponent,
     MemberComponent,
     DocumentComponent,
-    DocumentDropArea
+    DocumentDropArea,
+    ListComponent
   ],
   imports: [
     CommonModule,
