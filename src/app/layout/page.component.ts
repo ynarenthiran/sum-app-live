@@ -71,6 +71,8 @@ export class PageSectionDefinition {
   title: string;
   @Input()
   path: string;
+  @Input()
+  icon: string;
 }
 
 @Component({
@@ -106,6 +108,7 @@ export class PageSection {
 interface SectionInfo {
   title: string;
   path: string;
+  icon: string;
   active: boolean;
 }
 @Component({
@@ -141,7 +144,7 @@ export class PageComponent implements OnInit, OnDestroy, AfterContentInit {
   ngAfterContentInit() {
     if (this.sectionDefinitions.length != this.sections.length) {
       this.sectionDefinitions.forEach(sectionDef => {
-        this.sections.push({ title: sectionDef.title, path: sectionDef.path, active: false });
+        this.sections.push({ title: sectionDef.title, path: sectionDef.path, icon: sectionDef.icon, active: false });
       })
       this.updateSectionStatus();
     }
@@ -169,7 +172,7 @@ export class PageComponent implements OnInit, OnDestroy, AfterContentInit {
 @Component({
   selector: 'lib-page-list',
   templateUrl: './page-list.html',
-  styleUrls: ['./page.component.1.scss']
+  styleUrls: ['./page.component.scss']
 })
 export class PageListComponent implements OnInit {
   constructor() {

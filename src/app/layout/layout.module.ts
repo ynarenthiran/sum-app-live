@@ -7,7 +7,8 @@ import {
   MatMenuModule,
   MatToolbarModule,
   MatCardModule,
-  MatListModule
+  MatListModule,
+  MatRippleModule
 } from '@angular/material';
 
 import {
@@ -32,7 +33,8 @@ import {
     MatMenuModule,
     MatToolbarModule,
     MatCardModule,
-    MatListModule
+    MatListModule,
+    MatRippleModule
   ],
   declarations: [
     PageComponent,

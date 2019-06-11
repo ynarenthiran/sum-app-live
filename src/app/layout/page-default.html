@@ -1,23 +1,19 @@
-<div class="page-header-bg primary-bgcolor">
+<div class="page-header-bg">
 </div>
 <div class="page-sidebar-container">
+  <!--
   <div class="page-leftbar"
     [ngClass]="{'page-sidebar-visible': isLeftbarVisible, 'page-sidebar-invisible': !isLeftbarVisible}">
-    <div class="page-sidebar-header main">
+    <div class="page-sidebar-header">
     </div>
     <div class="page-sidebar-content">
-      <!--Section Selection List Here-->
-      <mat-nav-list>
-        <mat-list-item *ngFor="let section of sections" (click)="selectSection(section)"
-          [ngClass]="{'sidebar-nav-list-item': true, 'primary-bgcolor': section.active, 'main': section.active}">
-          <a matLine>{{ section.title }}</a>
-        </mat-list-item>
-      </mat-nav-list>
     </div>
   </div>
+  -->
   <div class="page-sidebar-content page">
-    <div class="page-header main">
+    <div class="page-header">
       <!--Application Header Here-->
+      <!--
       <div class="page-header-inner mat-title page-spacer">
         <button mat-icon-button (click)="isLeftbarVisible = !isLeftbarVisible;">
           <mat-icon>menu</mat-icon>
@@ -30,28 +26,30 @@
             <ng-content select="lib-page-sub-title"></ng-content>
           </span>
         </div>
-        <button mat-icon-button [matMenuTriggerFor]="accountMenu">
-          <mat-icon>account_circle</mat-icon>
-        </button>
-        <mat-menu #accountMenu="matMenu">
-          <div class="vbox mat-body">
-            <span>Signed in as</span>
-            <span>{{auth.currentUserData.displayName}}</span>
-            <span>{{auth.currentUserData.email}}</span>
+      </div>
+      -->
+      <div class="page-header-tabs mat-caption">
+        <div *ngFor="let section of sections" (click)="selectSection(section)"
+          [ngClass]="{'tab': true, 'active': section.active}">
+          <div class="inner">
+            <svg width="52" height="32" class="left">
+              <path d="m0 0c24 0 24 32 52 32v-32z" /></svg>
+            <span class="mat-subheading-1">{{section.title}}</span>
+            <mat-icon>{{section.icon}}</mat-icon>
+            <svg width="52" height="32" class="right">
+              <path d="m52 0c-24 0-24 32-52 32v-32z" /></svg>
           </div>
-          <mat-divider></mat-divider>
-          <button mat-menu-item (click)="onLogoff()">Logoff</button>
-        </mat-menu>
+        </div>
       </div>
     </div>
-    <div class="page-content main-bgcolor mat-elevation-z4">
+    <div class="page-content mat-elevation-z4">
       <!--Section Content Here-->
       <router-outlet></router-outlet>
     </div>
   </div>
   <div class="page-rightbar"
     [ngClass]="{'page-sidebar-visible': pageSrv.isDetailVisible, 'page-sidebar-invisible': !pageSrv.isDetailVisible}">
-    <div class="page-sidebar-header main">
+    <div class="page-sidebar-header">
       <div class="vbox page-spacer">
         <span class="mat-headline no-margin"><strong>{{pageSrv.header?.title}}</strong></span>
         <span class="mat-subheading-1 no-margin">{{pageSrv.header?.subTitle}}</span>
