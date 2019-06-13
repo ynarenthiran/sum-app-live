@@ -171,8 +171,6 @@
     top: 0;
     bottom: 0;
     right: -32px;
-    background-color: $color-secondary;
-    color: $color-main-text;
 }
 .page-sidebar-tabs .header {
     align-self: stretch;
@@ -197,16 +195,15 @@
     height: 48px;
     font-size: 48px;
 }
-.page-sidebar-tabs .tab:hover::before {
+.page-sidebar-tabs .tab:hover::before,.active::before {
     content: "";
     position: absolute;
     width: 5px;
-    left: 0;
+    right: 0;
     top: 0;
     bottom: 0;
-    border-left: solid $color-primary 5px;
+    border-right: solid $color-primary 5px;
 }
-.page-sidebar-tabs .active {
-    background-color: $color-primary;
-    color: $color-primary-text;
+.page-sidebar-tabs .tab:hover,.active {
+    color: $color-primary;
 }
