@@ -120,7 +120,8 @@
     text-align: center;
     position: absolute;
     top: 0px;
-    transition: top 0.5s ease-in-out;
+    transition: top 0.5s;
+    transition-delay: 1s;
 }
 .page-header-tabs span {
     display: none;
@@ -134,6 +135,7 @@
     text-align: center;
     border-radius: 28px;
     transition: background-color 0.5s, color 0.5s;
+    transition-delay: 0s;
 }
 .page-header-tabs svg {
     fill: $color-primary;
@@ -154,24 +156,57 @@
 }
 .page-header-tabs .active span {
     display: inline-block;
+    transition: display 0.25s;
+    transition-delay: 1.5s;
 }
-/*.page-header-tabs .active .inner::before {
-    content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='52' height='32'%3E%3Cpath d='m0 0c24 0 24 32 52 32v-32z'/%3E%3C/svg%3E");
-    position: absolute;
-    height: 32px;
-    left: 0px;
-    bottom: 0px;
-    z-index: -1;
-}
-.page-header-tabs .active .inner::after {
-    content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='52' height='32'%3E%3Cpath d='m52 0c-24 0-24 32-52 32v-32z'/%3E%3C/svg%3E");
-    position: absolute;
-    height: 32px;
-    right: 0px;
-    bottom: 0px;
-    z-index: -1;
-}*/
 .page-header-tabs .active mat-icon {
     background-color: $color-secondary;
     color: $color-primary;
+}
+
+.page-sidebar-tabs {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: -32px;
+    background-color: $color-secondary;
+    color: $color-main-text;
+}
+.page-sidebar-tabs .header {
+    align-self: stretch;
+    padding: 15px;
+}
+.page-sidebar-tabs .header button {
+    width: 100%;
+}
+.page-sidebar-tabs .tab {
+    position: relative;
+    width: 128px;
+    height: 128px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    user-select: none;
+}
+.page-sidebar-tabs .tab mat-icon {
+    width: 48px;
+    height: 48px;
+    font-size: 48px;
+}
+.page-sidebar-tabs .tab:hover::before {
+    content: "";
+    position: absolute;
+    width: 5px;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    border-left: solid $color-primary 5px;
+}
+.page-sidebar-tabs .active {
+    background-color: $color-primary;
+    color: $color-primary-text;
 }
