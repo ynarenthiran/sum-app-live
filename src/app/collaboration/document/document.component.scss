@@ -1,30 +1,25 @@
 .document-breadcrumbs {
     display: flex;
-    list-style: none;
-    padding-left: 100px;
+    align-items: stretch;
+    margin: 0;
+    padding-left: 8px;
 }
-.document-breadcrumbs li {
-    float: left;
+.document-breadcrumbs div {
+    display: flex;
 }
-.document-breadcrumbs li a {
+.document-breadcrumbs div a {
     text-decoration: none;
     cursor: pointer;
     padding: 0 5px 0 5px;
 }
-.document-breadcrumbs li:last-child a {
+.document-breadcrumbs div a:hover {
+    text-decoration: underline;
+}
+.document-breadcrumbs div:last-child a:hover {
+    text-decoration: none;
+}
+.document-breadcrumbs div:last-child a {
     cursor: default;
-}
-.document-breadcrumbs li a::after {
-    content: "/";
-    padding-left: 10px;
-}
-.document-breadcrumbs li a::after {
-    content: "/";
-    padding-left: 10px;
-}
-.document-breadcrumbs li:last-child a::after { 
-    content: "";
-    padding-left: 0;
 }
 .document-drop-target {
     border: 2px dashed black;

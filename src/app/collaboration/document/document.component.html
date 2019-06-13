@@ -1,18 +1,19 @@
 <lib-page-section>
   <lib-page-section-toolbar>
-    <div class="toolbar-button-main secondary-bgcolor">
-      <button mat-fab color="accent" (click)="uploadInput.click()">
-        <mat-icon>add</mat-icon>
-      </button>
-    </div>
-    <ul class="document-breadcrumbs toolbar-spacer">
-      <li><a (click)="onItemNavigate(-1)">
+    <button mat-fab color="accent" class="toolbar-button-main" (click)="uploadInput.click()">
+      <mat-icon>add</mat-icon>
+    </button>
+    <div class="document-breadcrumbs toolbar-spacer mat-subheading-2">
+      <div>
+        <a (click)="onItemNavigate(-1)">
           <mat-icon>home</mat-icon>
-        </a></li>
-      <li *ngFor="let item of path; index as i">
+        </a>
+      </div>
+      <div *ngFor="let item of path; index as i">
+        <mat-icon>keyboard_arrow_right</mat-icon>
         <a (click)="onItemNavigate(i)">{{item.name}}</a>
-      </li>
-    </ul>
+      </div>
+    </div>
     <button mat-icon-button (click)="addFolder()">
       <mat-icon>create_new_folder</mat-icon>
     </button>

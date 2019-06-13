@@ -1,10 +1,8 @@
 <lib-page-section>
   <lib-page-section-toolbar>
-    <div class="toolbar-button-main secondary-bgcolor">
-      <button mat-fab color="accent" (click)="addMember()">
-        <mat-icon>add</mat-icon>
-      </button>
-    </div>
+    <button mat-fab color="accent" class="toolbar-button-main" (click)="addMember()">
+      <mat-icon>add</mat-icon>
+    </button>
   </lib-page-section-toolbar>
   <lib-page-section-content>
     <mat-table [dataSource]="members$">
