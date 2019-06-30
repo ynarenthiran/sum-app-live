@@ -8,7 +8,8 @@ import {
   MatToolbarModule,
   MatCardModule,
   MatListModule,
-  MatRippleModule
+  MatRippleModule,
+  MatTreeModule
 } from '@angular/material';
 
 import {
@@ -21,7 +22,9 @@ import {
   PageSectionToolbar,
   PageSectionDetail,
   PageSectionDefinition,
-  PageService
+  PageService,
+  PageTreeComponent,
+  PageNode
 } from './page.component';
 
 @NgModule({
@@ -34,29 +37,34 @@ import {
     MatToolbarModule,
     MatCardModule,
     MatListModule,
-    MatRippleModule
+    MatRippleModule,
+    MatTreeModule
   ],
   declarations: [
     PageComponent,
     PageListComponent,
+    PageTreeComponent,
     PageSection,
     PageTitle,
     PageSubTitle,
     PageSectionDefinition,
     PageSectionContent,
     PageSectionToolbar,
-    PageSectionDetail
+    PageSectionDetail,
+    PageNode
   ],
   exports: [
     PageComponent,
     PageListComponent,
+    PageTreeComponent,
     PageSection,
     PageTitle,
     PageSubTitle,
     PageSectionDefinition,
     PageSectionContent,
     PageSectionToolbar,
-    PageSectionDetail
+    PageSectionDetail,
+    PageNode
   ],
   providers: [
     PageService

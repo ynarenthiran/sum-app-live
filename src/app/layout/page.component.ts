@@ -13,8 +13,10 @@ import {
   OnDestroy
 } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Subscription, Observable, of } from 'rxjs';
 import { AuthService } from '../authentication/auth.service';
+import { MatTreeFlatDataSource, MatTreeNestedDataSource } from '@angular/material';
+import { NestedTreeControl } from '@angular/cdk/tree';
 
 export interface DetailHeader {
   title?: string;
@@ -179,5 +181,66 @@ export class PageListComponent implements OnInit {
   }
 
   ngOnInit() {
+  }
+}
+
+@Component({
+  selector: 'lib-page-node',
+  templateUrl: './page-node.html'
+})
+export class PageNode {
+  @Input()
+  title: string;
+
+  @ViewChild(TemplateRef)
+  content: TemplateRef<any>;
+}
+
+interface PageDataNode {
+  title: string;
+  node: PageNode;
+}
+
+@Component({
+  selector: 'lib-page-tree',
+  templateUrl: './page-tree.html',
+  styleUrls: ['./page.component.scss']
+})
+export class PageTreeComponent implements OnInit, AfterContentInit {
+  private treeControl = new NestedTreeControl<PageDataNode>(this.getChildren);
+  private dataSource = new MatTreeNestedDataSource<PageDataNode>();
+
+  private dataNodes: PageDataNode[] = [];
+
+  @ContentChildren(PageNode)
+  nodes: QueryList<PageNode>;
+
+  private view: TemplateRef<any> = null;
+
+  constructor() {
+  }
+
+  ngOnInit() {
+    this.dataSource.data = this.dataNodes;
+  }
+
+  ngAfterContentInit() {
+    if (this.nodes.length != this.dataNodes.length) {
+      this.nodes.forEach(node => {
+        this.dataNodes.push({ title: node.title, node: node });
+      })
+    }
+  }
+
+  getChildren(node: PageDataNode): Observable<PageDataNode[]> {
+    return of([]);
+  }
+
+  hasChild(index: number, node: PageDataNode): boolean {
+    return true;
+  }
+
+  onSelect(node: PageDataNode) {
+    this.view = node.node.content;
   }
 }

@@ -18,7 +18,8 @@ interface AppEntry {
 export class ShellComponent implements OnInit {
   private apps: AppEntry[] = [
     { icon: 'dashboard', path: 'dashboard', label: 'Dashboards' },
-    { icon: 'question_answer', path: 'collaboration', label: 'Collaborations' }
+    { icon: 'question_answer', path: 'collaboration', label: 'Collaborations' },
+    { icon: 'settings', path: 'configuration', label: 'Configuration' }
   ];
   private isPanelMin: boolean = true;
 

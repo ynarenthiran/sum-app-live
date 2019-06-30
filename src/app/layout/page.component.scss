@@ -213,3 +213,19 @@
 .page-sidebar-tabs .tab:hover,.active {
     color: $color-primary;
 }
+
+.page-tree {
+    background: none;
+}
+.page-tree-link {
+    cursor: pointer;
+}
+.page-tree-invisible {
+    display: none;
+}  
+.page-tree ul,
+.page-tree li {
+    margin-top: 0;
+    margin-bottom: 0;
+    list-style-type: none;
+}
