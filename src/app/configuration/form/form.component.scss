@@ -1,0 +1,24 @@
+@import "../../../global";
+
+:host {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+.form-button-main {
+    position: absolute;
+    top: -28px;
+    right: 28px;
+    z-index: 2;
+}
+.form-toolbar {
+    background-color: $color-secondary;
+    height: 64px;
+    border-radius: 8px 8px 0 0;
+}
+.form-main {  
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}

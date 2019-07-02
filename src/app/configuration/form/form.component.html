@@ -1,0 +1,7 @@
+<mat-toolbar class="form-toolbar">
+</mat-toolbar>
+<form #form [formGroup]="formGroup" class="form-main">
+  <mat-form-field *ngFor="let formElement of formElements">
+    <input matInput [placeholder]="formElement.label" [formControlName]="formElement.key" [id]="formElement.key" />
+  </mat-form-field>
+</form>

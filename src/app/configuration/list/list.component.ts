@@ -35,6 +35,7 @@ export class ListComponent implements OnInit {
       this.columns.push({ field: key, label: this.fields[key] });
       this.displayedColumns.push(key);
     });
+    this.displayedColumns.push('actions');
     this.records$ = this.srv.getRecords(this.path);
   }
 }

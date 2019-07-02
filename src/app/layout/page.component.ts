@@ -15,8 +15,8 @@ import {
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { Subscription, Observable, of } from 'rxjs';
 import { AuthService } from '../authentication/auth.service';
-import { MatTreeFlatDataSource, MatTreeNestedDataSource } from '@angular/material';
-import { NestedTreeControl } from '@angular/cdk/tree';
+import { MatTreeFlatDataSource, MatTreeNestedDataSource, MatTreeFlattener } from '@angular/material';
+import { NestedTreeControl, FlatTreeControl } from '@angular/cdk/tree';
 
 export interface DetailHeader {
   title?: string;
@@ -184,6 +184,11 @@ export class PageListComponent implements OnInit {
   }
 }
 
+@Directive({
+  selector: 'lib-page-node-view'
+})
+export class PageNodeView { }
+
 @Component({
   selector: 'lib-page-node',
   templateUrl: './page-node.html'
@@ -194,11 +199,9 @@ export class PageNode {
 
   @ViewChild(TemplateRef)
   content: TemplateRef<any>;
-}
 
-interface PageDataNode {
-  title: string;
-  node: PageNode;
+  @ContentChildren(PageNode)
+  nodes: QueryList<PageNode>;
 }
 
 @Component({
@@ -207,10 +210,10 @@ interface PageDataNode {
   styleUrls: ['./page.component.scss']
 })
 export class PageTreeComponent implements OnInit, AfterContentInit {
-  private treeControl = new NestedTreeControl<PageDataNode>(this.getChildren);
-  private dataSource = new MatTreeNestedDataSource<PageDataNode>();
 
-  private dataNodes: PageDataNode[] = [];
+  treeControl = new NestedTreeControl<PageNode>(node => node.nodes.filter((_, i) => i > 0));
+  dataSource = new MatTreeNestedDataSource<PageNode>();
+  hasChild = (_: number, node: PageNode) => node.nodes.length > 1;
 
   @ContentChildren(PageNode)
   nodes: QueryList<PageNode>;
@@ -221,26 +224,16 @@ export class PageTreeComponent implements OnInit, AfterContentInit {
   }
 
   ngOnInit() {
-    this.dataSource.data = this.dataNodes;
   }
 
   ngAfterContentInit() {
-    if (this.nodes.length != this.dataNodes.length) {
-      this.nodes.forEach(node => {
-        this.dataNodes.push({ title: node.title, node: node });
-      })
-    }
+    this.dataSource.data = this.nodes.toArray();
+    this.nodes.changes.subscribe(data => {
+      console.log(data);
+    });
   }
 
-  getChildren(node: PageDataNode): Observable<PageDataNode[]> {
-    return of([]);
-  }
-
-  hasChild(index: number, node: PageDataNode): boolean {
-    return true;
-  }
-
-  onSelect(node: PageDataNode) {
-    this.view = node.node.content;
+  onSelect(node: PageNode) {
+    this.view = node.content;
   }
 }
