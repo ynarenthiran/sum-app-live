@@ -1,16 +1,28 @@
-<lib-page-tree>
+<lib-page-tree (nodeSelected)="OnNodeSelected($event)">
+    <lib-page-title>
+        <div class="cfg-list mat-subheading-2">
+            <div *ngFor="let item of path; index as i">
+                <mat-icon *ngIf="i > 0">keyboard_arrow_right</mat-icon>
+                <a (click)="onItemNavigate(i)" class="cfg-link">{{item}}</a>
+            </div>
+        </div>
+    </lib-page-title>
     <lib-page-node title="Collaboration Types">
-        <lib-page-node-view>
-            <cfg-list path="collaborationTypes" [fields]="{name: 'Name', description: 'Description'}">
-            </cfg-list>
-            <!--<cfg-form path="collaborationTypes" [fields]="{name: 'Name', description: 'Description'}">
-            </cfg-form>-->
+        <lib-page-node-view [ngTemplateOutlet]="configView"
+            [ngTemplateOutletContext]="{path: 'collaborationTypes', fields: {name: 'Name', description: 'Description'}}">
         </lib-page-node-view>
         <lib-page-node title="Case Models">
-            <lib-page-node-view>
-                <cfg-list path="caseModels" [fields]="{name: 'Name', description: 'Description'}">
-                </cfg-list>
+            <lib-page-node-view [ngTemplateOutlet]="configView"
+                [ngTemplateOutletContext]="{path: 'caseModels', fields: {name: 'Name', description: 'Description'}}">
             </lib-page-node-view>
         </lib-page-node>
     </lib-page-node>
 </lib-page-tree>
+<ng-template #configView let-path="path" let-fields="fields">
+    <ng-container [ngSwitch]="isViewList">
+        <cfg-list *ngSwitchCase="true" [path]="path" [fields]="fields" (detailClicked)="onDetailClicked($event)">
+        </cfg-list>
+        <cfg-form *ngSwitchDefault [path]="path" [fields]="fields">
+        </cfg-form>
+    </ng-container>
+</ng-template>

@@ -10,7 +10,9 @@ import {
   QueryList,
   ContentChild,
   Injectable,
-  OnDestroy
+  OnDestroy,
+  Output,
+  EventEmitter
 } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { Subscription, Observable, of } from 'rxjs';
@@ -211,6 +213,9 @@ export class PageNode {
 })
 export class PageTreeComponent implements OnInit, AfterContentInit {
 
+  @Output()
+  nodeSelected: EventEmitter<any> = new EventEmitter<any>();
+
   treeControl = new NestedTreeControl<PageNode>(node => node.nodes.filter((_, i) => i > 0));
   dataSource = new MatTreeNestedDataSource<PageNode>();
   hasChild = (_: number, node: PageNode) => node.nodes.length > 1;
@@ -228,12 +233,10 @@ export class PageTreeComponent implements OnInit, AfterContentInit {
 
   ngAfterContentInit() {
     this.dataSource.data = this.nodes.toArray();
-    this.nodes.changes.subscribe(data => {
-      console.log(data);
-    });
   }
 
   onSelect(node: PageNode) {
     this.view = node.content;
+    this.nodeSelected.emit(node);
   }
 }

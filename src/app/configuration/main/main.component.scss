@@ -2,3 +2,16 @@
     flex: 1 1 auto;
     display: flex;
 }
+.cfg-list {
+    display: flex;
+    flex-direction: row;
+    line-height: 64px;
+}
+.cfg-list div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.cfg-link {
+    cursor: pointer;
+}

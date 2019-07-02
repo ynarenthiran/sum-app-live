@@ -4,18 +4,8 @@
 <mat-table [dataSource]="records$">
     <ng-container *ngFor="let column of columns" matColumnDef="{{column.field}}">
         <mat-header-cell *matHeaderCellDef>{{column.label}}</mat-header-cell>
-        <mat-cell *matCellDef="let element">{{element[column.field]}}</mat-cell>
-    </ng-container>
-    <!-- Actions Column -->
-    <ng-container matColumnDef="actions" stickyEnd>
-        <mat-header-cell *matHeaderCellDef></mat-header-cell>
         <mat-cell *matCellDef="let element">
-            <button mat-icon-button (click)="editRecord(element)">
-                <mat-icon>edit</mat-icon>
-            </button>
-            <button mat-icon-button color="warn" (click)="removeRecord(element)">
-                <mat-icon>remove_circle</mat-icon>
-            </button>
+            <a (click)="onDetailClick(element)" class="list-item-link">{{element[column.field]}}</a>
         </mat-cell>
     </ng-container>
     <mat-header-row mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

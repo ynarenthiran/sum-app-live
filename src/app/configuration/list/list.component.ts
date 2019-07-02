@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ConfigurationService } from '../configuration.service';
 
@@ -19,6 +19,9 @@ export class ListComponent implements OnInit {
   @Input()
   fields: any;
 
+  @Output()
+  detailClicked: EventEmitter<any> = new EventEmitter<any>();
+
   private columns: ListColumn[];
   private displayedColumns: string[] = [];
   private records$: Observable<any[]>;
@@ -35,7 +38,11 @@ export class ListComponent implements OnInit {
       this.columns.push({ field: key, label: this.fields[key] });
       this.displayedColumns.push(key);
     });
-    this.displayedColumns.push('actions');
     this.records$ = this.srv.getRecords(this.path);
+  }
+
+  onDetailClick(item: any) {
+    let firstField = Object.keys(this.fields)[0];
+    this.detailClicked.emit(item[firstField]);
   }
 }
