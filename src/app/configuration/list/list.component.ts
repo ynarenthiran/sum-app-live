@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { ConfigurationService } from '../configuration.service';
 
 interface ListColumn {
@@ -14,9 +14,6 @@ interface ListColumn {
 })
 export class ListComponent implements OnInit {
   @Input()
-  path: string;
-
-  @Input()
   fields: any;
 
   @Output()
@@ -24,11 +21,14 @@ export class ListComponent implements OnInit {
 
   private columns: ListColumn[];
   private displayedColumns: string[] = [];
-  private records$: Observable<any[]>;
+  private records$: Observable<any[]> = of([]);
 
   constructor(private srv: ConfigurationService) { }
 
   ngOnInit() {
+    this.srv.dbPath.subscribe((dbPath) => {
+      this.records$ = this.srv.getRecords(dbPath);
+    });
   }
 
   ngOnChanges() {
@@ -38,11 +38,10 @@ export class ListComponent implements OnInit {
       this.columns.push({ field: key, label: this.fields[key] });
       this.displayedColumns.push(key);
     });
-    this.records$ = this.srv.getRecords(this.path);
   }
 
   onDetailClick(item: any) {
     let firstField = Object.keys(this.fields)[0];
-    this.detailClicked.emit(item[firstField]);
+    this.detailClicked.emit({ id: item.id, title: item[firstField] });
   }
 }

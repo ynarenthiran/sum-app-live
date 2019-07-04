@@ -1,5 +1,7 @@
 import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { Form, FormGroup, FormControl } from '@angular/forms';
+import { Observable, of } from 'rxjs';
+import { ConfigurationService } from '../configuration.service';
 
 interface FormElement {
   key: string;
@@ -13,9 +15,6 @@ interface FormElement {
 })
 export class FormComponent implements OnInit {
   @Input()
-  path: string;
-
-  @Input()
   fields: any;
 
   @ViewChild('form')
@@ -26,13 +25,15 @@ export class FormComponent implements OnInit {
 
   private record: any = {};
 
-  constructor() { }
+  constructor(private srv: ConfigurationService) { }
 
   ngOnInit() {
-  }
-
-  ngOnChanges() {
-    this.buildForm();
+    this.srv.dbPath.subscribe((dbPath) => {
+      this.srv.getRecord(dbPath).subscribe((data) => {
+        this.record = data;
+        this.buildForm();
+      });
+    });
   }
 
   private buildForm() {

@@ -197,6 +197,9 @@ export class PageNodeView { }
 })
 export class PageNode {
   @Input()
+  path: string;
+
+  @Input()
   title: string;
 
   @ViewChild(TemplateRef)
@@ -236,7 +239,10 @@ export class PageTreeComponent implements OnInit, AfterContentInit {
   }
 
   onSelect(node: PageNode) {
-    this.view = node.content;
     this.nodeSelected.emit(node);
+  }
+
+  selectNodeContent(node: PageNode) {
+    this.view = node.content;
   }
 }

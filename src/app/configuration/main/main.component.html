@@ -1,28 +1,28 @@
-<lib-page-tree (nodeSelected)="OnNodeSelected($event)">
+<lib-page-tree #page (nodeSelected)="onNodeSelected($event)">
     <lib-page-title>
         <div class="cfg-list mat-subheading-2">
-            <div *ngFor="let item of path; index as i">
+            <div *ngFor="let item of srv.path; index as i">
                 <mat-icon *ngIf="i > 0">keyboard_arrow_right</mat-icon>
-                <a (click)="onItemNavigate(i)" class="cfg-link">{{item}}</a>
+                <a (click)="onStateNavigate(i)" class="cfg-link">{{item.title}}</a>
             </div>
         </div>
     </lib-page-title>
-    <lib-page-node title="Collaboration Types">
+    <lib-page-node title="Collaboration Types" path="collaborationTypes">
         <lib-page-node-view [ngTemplateOutlet]="configView"
-            [ngTemplateOutletContext]="{path: 'collaborationTypes', fields: {name: 'Name', description: 'Description'}}">
+            [ngTemplateOutletContext]="{fields: {name: 'Name', description: 'Description'}}">
         </lib-page-node-view>
-        <lib-page-node title="Case Models">
+        <lib-page-node title="Case Models" path="caseModels">
             <lib-page-node-view [ngTemplateOutlet]="configView"
-                [ngTemplateOutletContext]="{path: 'caseModels', fields: {name: 'Name', description: 'Description'}}">
+                [ngTemplateOutletContext]="{fields: {name: 'Name', description: 'Description'}}">
             </lib-page-node-view>
         </lib-page-node>
     </lib-page-node>
 </lib-page-tree>
-<ng-template #configView let-path="path" let-fields="fields">
+<ng-template #configView let-fields="fields">
     <ng-container [ngSwitch]="isViewList">
-        <cfg-list *ngSwitchCase="true" [path]="path" [fields]="fields" (detailClicked)="onDetailClicked($event)">
+        <cfg-list *ngSwitchCase="true" [fields]="fields" (detailClicked)="onDetailClicked($event)">
         </cfg-list>
-        <cfg-form *ngSwitchDefault [path]="path" [fields]="fields">
+        <cfg-form *ngSwitchDefault [fields]="fields">
         </cfg-form>
     </ng-container>
 </ng-template>
