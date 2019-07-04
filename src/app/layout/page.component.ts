@@ -186,24 +186,16 @@ export class PageListComponent implements OnInit {
   }
 }
 
-@Directive({
-  selector: 'lib-page-node-view'
-})
-export class PageNodeView { }
-
 @Component({
   selector: 'lib-page-node',
   templateUrl: './page-node.html'
 })
 export class PageNode {
   @Input()
-  path: string;
+  data: any;
 
   @Input()
   title: string;
-
-  @ViewChild(TemplateRef)
-  content: TemplateRef<any>;
 
   @ContentChildren(PageNode)
   nodes: QueryList<PageNode>;
@@ -226,8 +218,6 @@ export class PageTreeComponent implements OnInit, AfterContentInit {
   @ContentChildren(PageNode)
   nodes: QueryList<PageNode>;
 
-  private view: TemplateRef<any> = null;
-
   constructor() {
   }
 
@@ -243,6 +233,6 @@ export class PageTreeComponent implements OnInit, AfterContentInit {
   }
 
   selectNodeContent(node: PageNode) {
-    this.view = node.content;
+    //this.view = node.content;
   }
 }

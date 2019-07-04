@@ -1,6 +1,8 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { ConfigurationService } from '../configuration.service';
+import { ActivatedRoute } from '@angular/router';
+import { filter } from 'rxjs/operators';
 
 interface ListColumn {
   field: string;
@@ -13,25 +15,28 @@ interface ListColumn {
   styleUrls: ['./list.component.scss']
 })
 export class ListComponent implements OnInit {
-  @Input()
-  fields: any;
-
-  @Output()
-  detailClicked: EventEmitter<any> = new EventEmitter<any>();
+  private fields: any;
 
   private columns: ListColumn[];
   private displayedColumns: string[] = [];
+
+  private path: string;
   private records$: Observable<any[]> = of([]);
 
-  constructor(private srv: ConfigurationService) { }
+  constructor(private srv: ConfigurationService, private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.srv.dbPath.subscribe((dbPath) => {
-      this.records$ = this.srv.getRecords(dbPath);
+    this.route.queryParams.pipe(
+      filter(params => params.path)
+    ).subscribe(params => {
+      this.path = params.path;
+      this.records$ = this.srv.getRecords(this.path);
+      this.initialize();
     });
   }
 
-  ngOnChanges() {
+  initialize() {
+    this.fields = this.srv.getState().node.data.fields;
     this.columns = [];
     this.displayedColumns = [];
     Object.keys(this.fields).forEach((key) => {
@@ -42,6 +47,6 @@ export class ListComponent implements OnInit {
 
   onDetailClick(item: any) {
     let firstField = Object.keys(this.fields)[0];
-    this.detailClicked.emit({ id: item.id, title: item[firstField] });
+    this.srv.detailClicked.emit({ id: item.id, title: item[firstField] });
   }
 }

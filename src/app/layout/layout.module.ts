@@ -24,8 +24,7 @@ import {
   PageSectionDefinition,
   PageService,
   PageTreeComponent,
-  PageNode,
-  PageNodeView
+  PageNode
 } from './page.component';
 
 @NgModule({
@@ -52,8 +51,7 @@ import {
     PageSectionContent,
     PageSectionToolbar,
     PageSectionDetail,
-    PageNode,
-    PageNodeView
+    PageNode
   ],
   exports: [
     PageComponent,
@@ -66,8 +64,7 @@ import {
     PageSectionContent,
     PageSectionToolbar,
     PageSectionDetail,
-    PageNode,
-    PageNodeView
+    PageNode
   ],
   providers: [
     PageService

@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { PageNode, PageTreeComponent } from 'src/app/layout/page.component';
 import { ConfigurationService } from '../configuration.service';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'cfg-main',
@@ -11,11 +12,12 @@ export class MainComponent implements OnInit {
   @ViewChild('page')
   page: PageTreeComponent;
 
-  private isViewList: boolean = true;
-
-  constructor(private srv: ConfigurationService) { }
+  constructor(private srv: ConfigurationService, private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit() {
+    this.srv.detailClicked.subscribe((item) => {
+      this.onDetailClicked(item);
+    });
   }
 
   onNodeSelected(node) {
@@ -42,11 +44,15 @@ export class MainComponent implements OnInit {
     this.srv.path.forEach((s, i, a) => {
       if (i > 0)
         dbPath += "/";
-      dbPath += (s.id) ? s.id : s.node.path;
+      dbPath += (s.id) ? s.id : s.node.data.path;
     });
-    this.srv.dbPath.next(dbPath);
     let state = this.srv.getState();
-    this.isViewList = (state.id) ? false : true;
+    if (state.id) {
+      this.router.navigate(['form'], { relativeTo: this.route, queryParams: { path: dbPath } });
+    }
+    else {
+      this.router.navigate(['list'], { relativeTo: this.route, queryParams: { path: dbPath } });
+    }
     this.page.selectNodeContent(state.node);
   }
 

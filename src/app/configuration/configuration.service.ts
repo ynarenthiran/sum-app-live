@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import { AppConfigService } from '../services/app.config';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable, BehaviorSubject } from 'rxjs';
@@ -15,7 +15,7 @@ interface ConfigState {
   providedIn: 'root'
 })
 export class ConfigurationService {
-  dbPath: BehaviorSubject<string> = new BehaviorSubject<string>(undefined);
+  detailClicked: EventEmitter<any> = new EventEmitter<any>();
 
   path: ConfigState[] = [];
 
