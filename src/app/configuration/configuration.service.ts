@@ -47,6 +47,20 @@ export class ConfigurationService {
       );
   }
 
+  setRecord(path: string, data: any) {
+    const accountId = this.config.getConfig().accountId;
+    return this.db.doc(`accounts/${accountId}/${path}`).set(this.getDataFromRecord(data));
+  }
+
+  private getDataFromRecord(data: any): any {
+    var dataObj = {};
+    Object.keys(data).forEach(key => {
+      if (key != 'id')
+        dataObj[key] = data[key];
+    });
+    return dataObj;
+  }
+
   addState(node: PageNode, id?: any, title?: any) {
     let state: ConfigState = { node: node, title: node.title };
     if (id)

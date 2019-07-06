@@ -197,6 +197,8 @@ export class PageNode {
   @Input()
   title: string;
 
+  active: boolean;
+
   @ContentChildren(PageNode)
   nodes: QueryList<PageNode>;
 }
@@ -229,7 +231,9 @@ export class PageTreeComponent implements OnInit, AfterContentInit {
   }
 
   onSelect(node: PageNode) {
-    this.nodeSelected.emit(node);
+    if(node.active) {
+      this.nodeSelected.emit(node);
+    }
   }
 
   selectNodeContent(node: PageNode) {

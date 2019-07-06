@@ -1,4 +1,13 @@
 <mat-toolbar class="form-toolbar">
+  <button mat-icon-button *ngIf="!edit" (click)="edit = true;">
+    <mat-icon>edit</mat-icon>
+  </button>
+  <button mat-icon-button *ngIf="edit" (click)="save()">
+    <mat-icon>check_circle</mat-icon>
+  </button>
+  <button mat-icon-button *ngIf="edit" (click)="cancel()">
+    <mat-icon>cancel</mat-icon>
+  </button>
 </mat-toolbar>
 <form *ngIf="formGroup" #form [formGroup]="formGroup" class="form-main">
   <mat-form-field *ngFor="let formElement of formElements">

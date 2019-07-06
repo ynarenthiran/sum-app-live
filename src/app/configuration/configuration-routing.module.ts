@@ -11,6 +11,41 @@ const routes: Routes = [
       { path: 'form', component: FormComponent },
       { path: 'list', component: ListComponent }
     ]
+  },
+  {
+    path: 'test',
+    children: [
+      {
+        path: 'collaborationTypes',
+        children: [
+          { path: 'list', component: ListComponent },
+          {
+            path: ':id',
+            children: [
+              { path: 'form', component: FormComponent },
+              {
+                path: 'caseModels',
+                children: [
+                  { path: 'list', component: ListComponent }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        path: 'caseModels',
+        children: [
+          { path: 'list', component: ListComponent },
+          {
+            path: ':id',
+            children: [
+              { path: 'form', component: FormComponent }
+            ]
+          }
+        ]
+      }
+    ]
   }
 ];
 

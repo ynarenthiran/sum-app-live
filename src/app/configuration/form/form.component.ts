@@ -21,6 +21,18 @@ export class FormComponent implements OnInit {
 
   private fields: any;
 
+  private get edit(): boolean {
+    return this._edit;
+  }
+  private set edit(value: boolean) {
+    this._edit = value;
+    if (this.formGroup) {
+      if (this._edit) this.formGroup.enable();
+      else this.formGroup.disable();
+    }
+  }
+  private _edit: boolean;
+
   private formGroup: FormGroup = null;
   private formElements: FormElement[] = [];
 
@@ -34,11 +46,16 @@ export class FormComponent implements OnInit {
       filter(params => params.path)
     ).subscribe(params => {
       this.path = params.path;
-      this.record$ = this.srv.getRecord(this.path);
-      this.record$.subscribe((data) => {
-        this.initialize(data);
-      });
+      this.refresh();
     });
+  }
+
+  save() {
+    this.srv.setRecord(this.path, this.formGroup.value);
+  }
+
+  cancel() {
+    this.refresh();
   }
 
   private initialize(data: any) {
@@ -53,5 +70,15 @@ export class FormComponent implements OnInit {
       });
     });
     this.formGroup = new FormGroup(controls);
+    if (this._edit) this.formGroup.enable();
+    else this.formGroup.disable();
+  }
+
+  private refresh() {
+    this.edit = false;
+    this.record$ = this.srv.getRecord(this.path);
+    this.record$.subscribe((data) => {
+      this.initialize(data);
+    });
   }
 }
