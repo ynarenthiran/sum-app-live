@@ -5,9 +5,18 @@
     <ng-container *ngFor="let column of columns" matColumnDef="{{column.field}}">
         <mat-header-cell *matHeaderCellDef>{{column.label}}</mat-header-cell>
         <mat-cell *matCellDef="let element">
-            <a (click)="onDetailClick(element)" class="list-item-link">{{element[column.field]}}</a>
+            {{element[column.field]}}
+        </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="chevron">
+        <mat-header-cell *matHeaderCellDef></mat-header-cell>
+        <mat-cell *matCellDef="let element" class="list-column-actions">
+            <mat-icon>chevron_right</mat-icon>
         </mat-cell>
     </ng-container>
     <mat-header-row mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    <mat-row mat-row *matRowDef="let row; columns: displayedColumns;" matRipple (click)="onDetailClick(row)"
+        class="list-row">
+        <mat-icon>chevron_right</mat-icon>
+    </mat-row>
 </mat-table>

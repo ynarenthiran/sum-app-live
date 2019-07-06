@@ -3,27 +3,23 @@ import { AppConfigService } from '../services/app.config';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { PageNode } from '../layout/page.component';
-
-interface ConfigState {
-  node: PageNode;
-  id?: any;
-  title: any;
-}
+import { Route, RunGuardsAndResolvers } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ConfigurationService {
-  detailClicked: EventEmitter<any> = new EventEmitter<any>();
+  nodes:Route[] = [];
 
-  path: ConfigState[] = [];
+  nodeSelected:EventEmitter<Route> = new EventEmitter<Route>();
+
+  path: BehaviorSubject<string> = new BehaviorSubject("");
 
   constructor(private db: AngularFirestore, private config: AppConfigService) { }
 
-  getRecords(path: string): Observable<any[]> {
+  getRecords(): Observable<any[]> {
     const accountId = this.config.getConfig().accountId;
-    return this.db.collection(`accounts/${accountId}/${path}`)
+    return this.db.collection(`accounts/${accountId}/${this.path.value}`)
       .snapshotChanges()
       .pipe(
         map(actions => actions.map(a => {
@@ -34,9 +30,9 @@ export class ConfigurationService {
       );
   }
 
-  getRecord(path: string): Observable<any> {
+  getRecord(): Observable<any> {
     const accountId = this.config.getConfig().accountId;
-    return this.db.doc(`accounts/${accountId}/${path}`)
+    return this.db.doc(`accounts/${accountId}/${this.path.value}`)
       .snapshotChanges()
       .pipe(
         map(a => {
@@ -47,9 +43,9 @@ export class ConfigurationService {
       );
   }
 
-  setRecord(path: string, data: any) {
+  setRecord(data: any) {
     const accountId = this.config.getConfig().accountId;
-    return this.db.doc(`accounts/${accountId}/${path}`).set(this.getDataFromRecord(data));
+    return this.db.doc(`accounts/${accountId}/${this.path.value}`).set(this.getDataFromRecord(data));
   }
 
   private getDataFromRecord(data: any): any {
@@ -59,20 +55,5 @@ export class ConfigurationService {
         dataObj[key] = data[key];
     });
     return dataObj;
-  }
-
-  addState(node: PageNode, id?: any, title?: any) {
-    let state: ConfigState = { node: node, title: node.title };
-    if (id)
-      state.id = id;
-    if (title)
-      state.title = title;
-    this.path.push(state);
-  }
-  getState(): ConfigState {
-    return this.path[this.path.length - 1];
-  }
-  setState(index: number) {
-    this.path = this.path.slice(0, index + 1);
   }
 }

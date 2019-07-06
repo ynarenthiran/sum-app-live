@@ -1,3 +1,5 @@
+@import "../../../global";
+
 :host {
     flex: 1 1 auto;
     display: flex;
@@ -10,6 +12,10 @@
     right: 28px;
     z-index: 2;
 }
-.list-item-link {
+.list-row:hover {
+    background: $color-highlight;
     cursor: pointer;
+}
+.list-column-actions {
+    justify-content: flex-end;
 }

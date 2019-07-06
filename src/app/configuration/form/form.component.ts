@@ -3,7 +3,7 @@ import { Form, FormGroup, FormControl } from '@angular/forms';
 import { Observable, of } from 'rxjs';
 import { ConfigurationService } from '../configuration.service';
 import { filter } from 'rxjs/operators';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 interface FormElement {
   key: string;
@@ -15,7 +15,7 @@ interface FormElement {
   templateUrl: './form.component.html',
   styleUrls: ['./form.component.scss']
 })
-export class FormComponent implements OnInit {
+export class FormComponent {
   @ViewChild('form')
   form: Form;
 
@@ -39,19 +39,20 @@ export class FormComponent implements OnInit {
   private path: string;
   private record$: any = {};
 
-  constructor(private srv: ConfigurationService, private route: ActivatedRoute) { }
+  constructor(private srv: ConfigurationService, private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.route.queryParams.pipe(
-      filter(params => params.path)
-    ).subscribe(params => {
-      this.path = params.path;
-      this.refresh();
-    });
+    this.refresh();
   }
 
   save() {
-    this.srv.setRecord(this.path, this.formGroup.value);
+    this.srv.setRecord(this.formGroup.value)
+      .then(() => {
+        this.refresh();
+      })
+      .catch(error => {
+        alert(error);
+      });
   }
 
   cancel() {
@@ -59,7 +60,7 @@ export class FormComponent implements OnInit {
   }
 
   private initialize(data: any) {
-    this.fields = this.srv.getState().node.data.fields;
+    this.fields = this.getRouteData().fields;
     this.formElements = [];
     let controls: any = {};
     // Build form elements
@@ -74,11 +75,29 @@ export class FormComponent implements OnInit {
     else this.formGroup.disable();
   }
 
+  private getRouteData(): any {
+    return this.route.parent.parent.routeConfig.data;
+  }
+
+  private buildNodes() {
+    var nodes = [];
+    this.route.parent.routeConfig.children.forEach(route => {
+      if (route.data) {
+        nodes.push(route);
+      }
+    });
+    this.srv.nodes = nodes;
+    this.srv.nodeSelected.subscribe((route) => {
+      this.router.navigate([route.path], { relativeTo: this.route.parent });
+    });
+  }
+
   private refresh() {
     this.edit = false;
-    this.record$ = this.srv.getRecord(this.path);
+    this.record$ = this.srv.getRecord();
     this.record$.subscribe((data) => {
       this.initialize(data);
     });
+    this.buildNodes();
   }
 }

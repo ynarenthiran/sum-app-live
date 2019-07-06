@@ -8,25 +8,27 @@ const routes: Routes = [
   {
     path: '', component: MainComponent,
     children: [
-      { path: 'form', component: FormComponent },
-      { path: 'list', component: ListComponent }
-    ]
-  },
-  {
-    path: 'test',
-    children: [
+      { path: '', redirectTo: 'collaborationTypes', pathMatch: 'full' },
       {
         path: 'collaborationTypes',
+        data: { title: 'Collaboration Types', fields: { name: 'Name', description: 'Description' } },
         children: [
-          { path: 'list', component: ListComponent },
+          { path: '', component: ListComponent, pathMatch: 'full' },
           {
-            path: ':id',
+            path: ':typeId',
             children: [
-              { path: 'form', component: FormComponent },
+              { path: '', component: FormComponent, pathMatch: 'full' },
               {
                 path: 'caseModels',
+                data: { title: 'Case Models', fields: { name: 'Name', description: 'Description' } },
                 children: [
-                  { path: 'list', component: ListComponent }
+                  { path: '', component: ListComponent, pathMatch: 'full' },
+                  {
+                    path: ':modelId',
+                    children: [
+                      { path: '', component: FormComponent, pathMatch: 'full' }
+                    ]
+                  }
                 ]
               }
             ]
@@ -35,12 +37,13 @@ const routes: Routes = [
       },
       {
         path: 'caseModels',
+        data: { title: 'Case Models', fields: { name: 'Name', description: 'Description' } },
         children: [
-          { path: 'list', component: ListComponent },
+          { path: '', component: ListComponent, pathMatch: 'full' },
           {
-            path: ':id',
+            path: ':modelId',
             children: [
-              { path: 'form', component: FormComponent }
+              { path: '', component: FormComponent, pathMatch: 'full' }
             ]
           }
         ]

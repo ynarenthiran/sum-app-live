@@ -1,16 +1,12 @@
-<lib-page-tree #page (nodeSelected)="onNodeSelected($event)">
+<lib-page-tree>
     <lib-page-title>
         <div class="cfg-list mat-subheading-2">
-            <div *ngFor="let item of srv.path; index as i">
+            <div *ngFor="let step of steps; index as i">
                 <mat-icon *ngIf="i > 0">keyboard_arrow_right</mat-icon>
-                <a (click)="onStateNavigate(i)" class="cfg-link">{{item.title}}</a>
+                <a (click)="onStepNavigate(i)" class="cfg-link">{{step.data.title}}</a>
             </div>
         </div>
     </lib-page-title>
-    <lib-page-node title="Collaboration Types"
-        [data]="{path: 'collaborationTypes', fields: {name: 'Name', description: 'Description'}}">
-        <lib-page-node title="Case Models"
-            [data]="{path: 'caseModels', fields: {name: 'Name', description: 'Description'}}">
-        </lib-page-node>
+    <lib-page-node *ngFor="let node of srv.nodes" title="{{node.data.title}}" (selected)="onNodeSelected(node)">
     </lib-page-node>
 </lib-page-tree>

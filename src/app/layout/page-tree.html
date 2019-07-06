@@ -7,13 +7,13 @@
     <div class="page-sidebar-content">
       <!-- Tree Structure -->
       <mat-tree [dataSource]="dataSource" [treeControl]="treeControl" class="page-tree">
-        <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
+        <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle matRipple>
           <li class="mat-tree-node">
             <button mat-icon-button disabled></button>
-            <a [ngClass]="{'page-tree-link': true, 'page-tree-inactive': !node.active}" (click)="onSelect(node)">{{node.title}}</a>
+            <a class="page-tree-link" (click)="node.selected.emit()">{{node.title}}</a>
           </li>
         </mat-tree-node>
-        <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
+        <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild" matRipple>
           <li>
             <div class="mat-tree-node">
               <button mat-icon-button matTreeNodeToggle>
@@ -21,7 +21,7 @@
                   {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
                 </mat-icon>
               </button>
-              <a [ngClass]="{'page-tree-link': true, 'page-tree-inactive': !node.active}" (click)="onSelect(node)">{{node.title}}</a>
+              <a class="page-tree-link" (click)="node.selected.emit()">{{node.title}}</a>
             </div>
             <ul [class.page-tree-invisible]="!treeControl.isExpanded(node)">
               <ng-container matTreeNodeOutlet></ng-container>

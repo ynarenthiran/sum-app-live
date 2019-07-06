@@ -12,7 +12,8 @@ import {
   Injectable,
   OnDestroy,
   Output,
-  EventEmitter
+  EventEmitter,
+  AfterContentChecked
 } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { Subscription, Observable, of } from 'rxjs';
@@ -197,7 +198,8 @@ export class PageNode {
   @Input()
   title: string;
 
-  active: boolean;
+  @Output()
+  selected: EventEmitter<void> = new EventEmitter<void>();
 
   @ContentChildren(PageNode)
   nodes: QueryList<PageNode>;
@@ -208,10 +210,7 @@ export class PageNode {
   templateUrl: './page-tree.html',
   styleUrls: ['./page.component.scss']
 })
-export class PageTreeComponent implements OnInit, AfterContentInit {
-
-  @Output()
-  nodeSelected: EventEmitter<any> = new EventEmitter<any>();
+export class PageTreeComponent implements OnInit, AfterContentChecked {
 
   treeControl = new NestedTreeControl<PageNode>(node => node.nodes.filter((_, i) => i > 0));
   dataSource = new MatTreeNestedDataSource<PageNode>();
@@ -226,17 +225,7 @@ export class PageTreeComponent implements OnInit, AfterContentInit {
   ngOnInit() {
   }
 
-  ngAfterContentInit() {
+  ngAfterContentChecked() {
     this.dataSource.data = this.nodes.toArray();
-  }
-
-  onSelect(node: PageNode) {
-    if(node.active) {
-      this.nodeSelected.emit(node);
-    }
-  }
-
-  selectNodeContent(node: PageNode) {
-    //this.view = node.content;
   }
 }

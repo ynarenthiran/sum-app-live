@@ -1,75 +1,58 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
-import { PageNode, PageTreeComponent } from 'src/app/layout/page.component';
+import { Component, OnInit } from '@angular/core';
 import { ConfigurationService } from '../configuration.service';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, NavigationEnd, UrlSegment, Route } from '@angular/router';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'cfg-main',
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.scss']
 })
-export class MainComponent implements OnInit, AfterViewInit {
-  @ViewChild('page')
-  page: PageTreeComponent;
+export class MainComponent implements OnInit {
+  steps: Route[] = [];
 
-  constructor(private srv: ConfigurationService, private router: Router, private route: ActivatedRoute) { }
+  constructor(private srv: ConfigurationService, private router: Router, private route: ActivatedRoute) {
+    router.events
+      .pipe(
+        filter(e => e instanceof NavigationEnd)
+      )
+      .forEach(e => {
+        this.onNavigationEnd();
+      });
+  }
 
   ngOnInit() {
-    this.srv.detailClicked.subscribe((item) => {
-      this.onDetailClicked(item);
+  }
+
+  onNodeSelected(node: Route) {
+    this.srv.nodeSelected.emit(node);
+  }
+
+  onStepNavigate(index: number) {
+    let path = this.srv.path.value.split("/").slice(0, index * 2 + 1).join("/");
+    this.router.navigate([path], { relativeTo: this.route });
+  }
+
+  private onNavigationEnd() {
+    let path = this.getPath(this.route).map((url) => url.path).join("/");
+    this.srv.path.next(path);
+    this.steps = this.getSteps(this.route);
+  }
+  private getPath(route: ActivatedRoute): UrlSegment[] {
+    var url = route.snapshot.url;
+    route.children.forEach((r) => {
+      url = url.concat(this.getPath(r));
     });
+    return url;
   }
-
-  ngAfterViewInit() {
-    this.refreshStateContent();
-  }
-
-  onNodeSelected(node) {
-    var index = this.srv.path.findIndex((value, i, a) => value.node === node);
-    if (index == -1)
-      this.srv.addState(node);
-    else
-      this.srv.setState(index);
-    this.refreshStateContent();
-  }
-
-  onDetailClicked(item) {
-    this.srv.addState(this.srv.getState().node, item.id, item.title);
-    this.refreshStateContent();
-  }
-
-  onStateNavigate(index: number) {
-    this.srv.setState(index);
-    this.refreshStateContent();
-  }
-
-  private refreshStateContent() {
-    // Inactivate all nodes
-    this.page.nodes.forEach((item, i, a) => { this.setNodeActive(item, false); item.active = true; });
-    var dbPath = "";
-    this.srv.path.forEach((s, i, a) => {
-      if (i > 0)
-        dbPath += "/";
-      dbPath += (s.id) ? s.id : s.node.data.path;
-      if (s.id) {
-        // Activate nodes whose parent have id
-        s.node.nodes.filter((_, i) => i > 0).forEach((item, i, a) => { item.active = true; });
-      }
-    });
-    let state = this.srv.getState();
-    if (state) {
-      if (state.id) {
-        this.router.navigate(['form'], { relativeTo: this.route, queryParams: { path: dbPath } });
-      }
-      else {
-        this.router.navigate(['list'], { relativeTo: this.route, queryParams: { path: dbPath } });
-      }
-      this.page.selectNodeContent(state.node);
+  private getSteps(route: ActivatedRoute): Route[] {
+    var steps = [];
+    if (route.routeConfig.data) {
+      steps.push(route.routeConfig);
     }
-  }
-
-  private setNodeActive(node: PageNode, active: boolean) {
-    node.active = active;
-    node.nodes.filter((_, i) => i > 0).forEach((item, i, a) => { this.setNodeActive(item, active); });
+    route.children.forEach((r) => {
+      steps = steps.concat(this.getSteps(r));
+    });
+    return steps;
   }
 }

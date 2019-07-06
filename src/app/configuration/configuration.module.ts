@@ -7,7 +7,8 @@ import {
   MatButtonModule,
   MatFormFieldModule,
   MatInputModule,
-  MatToolbarModule
+  MatToolbarModule,
+  MatRippleModule
 } from '@angular/material';
 
 import { ConfigurationRoutingModule } from './configuration-routing.module';
@@ -30,7 +31,8 @@ import { FormComponent } from './form/form.component';
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
-    MatToolbarModule
+    MatToolbarModule,
+    MatRippleModule
   ],
   providers: [
     ConfigurationService

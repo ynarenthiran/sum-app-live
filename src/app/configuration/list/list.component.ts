@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { ConfigurationService } from '../configuration.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
 
 interface ListColumn {
@@ -20,33 +20,45 @@ export class ListComponent implements OnInit {
   private columns: ListColumn[];
   private displayedColumns: string[] = [];
 
-  private path: string;
   private records$: Observable<any[]> = of([]);
 
-  constructor(private srv: ConfigurationService, private route: ActivatedRoute) { }
+  constructor(private srv: ConfigurationService, private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.route.queryParams.pipe(
-      filter(params => params.path)
-    ).subscribe(params => {
-      this.path = params.path;
-      this.records$ = this.srv.getRecords(this.path);
-      this.initialize();
-    });
+    this.records$ = this.srv.getRecords();
+    this.initialize();
+    this.buildNodes();
   }
 
-  initialize() {
-    this.fields = this.srv.getState().node.data.fields;
+  onDetailClick(item: any) {
+    this.router.navigate([item.id], { relativeTo: this.route.parent });
+  }
+
+  private initialize() {
+    this.fields = this.getRouteData().fields;
     this.columns = [];
     this.displayedColumns = [];
     Object.keys(this.fields).forEach((key) => {
       this.columns.push({ field: key, label: this.fields[key] });
       this.displayedColumns.push(key);
     });
+    this.displayedColumns.push("chevron");
   }
 
-  onDetailClick(item: any) {
-    let firstField = Object.keys(this.fields)[0];
-    this.srv.detailClicked.emit({ id: item.id, title: item[firstField] });
+  private getRouteData(): any {
+    return this.route.parent.routeConfig.data;
+  }
+
+  private buildNodes() {
+    var nodes = [];
+    this.route.parent.parent.routeConfig.children.forEach(route => {
+      if (route.data) {
+        nodes.push(route);
+      }
+    });
+    this.srv.nodes = nodes;
+    this.srv.nodeSelected.subscribe((route) => {
+      this.router.navigate([route.path], { relativeTo: this.route.parent.parent });
+    });
   }
 }
