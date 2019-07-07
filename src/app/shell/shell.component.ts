@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Injectable } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { AuthService } from '../authentication/auth.service';
@@ -8,6 +8,17 @@ interface AppEntry {
   path: string;
   label: string;
   active?: boolean;
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ShellService {
+  title: string;
+
+  subtitle: string;
+
+  constructor() { }
 }
 
 @Component({
@@ -25,10 +36,12 @@ export class ShellComponent implements OnInit {
 
   private subscriptions: Subscription = new Subscription();
 
-  constructor(private router: Router, private route: ActivatedRoute, private auth: AuthService) {
+  constructor(private router: Router, private route: ActivatedRoute, private auth: AuthService, private srv: ShellService) {
     this.subscriptions.add(
       this.router.events.subscribe(event => {
         if (event instanceof NavigationEnd) {
+          this.srv.title = "";
+          this.srv.subtitle = "";
           this.updateAppStatus();
         }
       })

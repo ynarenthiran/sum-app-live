@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from './authentication/auth.guard';
-import { TestComponent } from './test/test.component';
 import { ShellComponent } from './shell/shell.component';
 
 const routes: Routes = [
@@ -14,8 +13,7 @@ const routes: Routes = [
       { path: 'collaboration', loadChildren: './collaboration/collaboration.module#CollaborationModule' },
       { path: 'configuration', loadChildren: './configuration/configuration.module#ConfigurationModule' }
     ]
-  },
-  { path: 'test', component: TestComponent }
+  }
 ];
 
 @NgModule({

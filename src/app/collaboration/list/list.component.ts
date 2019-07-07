@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Collaboration, CollaborationService } from '../collaboration.service';
 import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-collaboration-list',
@@ -8,13 +9,16 @@ import { Observable } from 'rxjs';
   styleUrls: ['./list.component.scss']
 })
 export class ListComponent implements OnInit {
-  private displayedColumns: string[] = ['name', 'description'];
+  private displayedColumns: string[] = ['name', 'description', 'actions'];
   private collaborations$: Observable<Collaboration[]>;
 
-  constructor(private srv: CollaborationService) { }
+  constructor(private router: Router, private srv: CollaborationService) { }
 
   ngOnInit() {
     this.collaborations$ = this.srv.getCollaborations();
   }
 
+  onDetailClick(collaboration: Collaboration) {
+    this.router.navigate(['collaboration', collaboration.id]);
+  }
 }

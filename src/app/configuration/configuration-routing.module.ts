@@ -19,31 +19,31 @@ const routes: Routes = [
             children: [
               { path: '', component: FormComponent, pathMatch: 'full' },
               {
-                path: 'caseModels',
-                data: { title: 'Case Models', fields: { name: 'Name', description: 'Description' } },
+                path: 'statuses',
+                data: { title: 'Statuses', fields: { name: 'Name', description: 'Description' } },
                 children: [
                   { path: '', component: ListComponent, pathMatch: 'full' },
                   {
-                    path: ':modelId',
+                    path: ':statusId',
                     children: [
-                      { path: '', component: FormComponent, pathMatch: 'full' }
+                      { path: '', component: FormComponent, pathMatch: 'full' },
+                      {
+                        path: 'caseModels',
+                        data: { title: 'Case Models', fields: { name: 'Name', description: 'Description' } },
+                        children: [
+                          { path: '', component: ListComponent, pathMatch: 'full' },
+                          {
+                            path: ':modelId',
+                            children: [
+                              { path: '', component: FormComponent, pathMatch: 'full' }
+                            ]
+                          }
+                        ]
+                      }
                     ]
                   }
                 ]
               }
-            ]
-          }
-        ]
-      },
-      {
-        path: 'caseModels',
-        data: { title: 'Case Models', fields: { name: 'Name', description: 'Description' } },
-        children: [
-          { path: '', component: ListComponent, pathMatch: 'full' },
-          {
-            path: ':modelId',
-            children: [
-              { path: '', component: FormComponent, pathMatch: 'full' }
             ]
           }
         ]

@@ -32,7 +32,8 @@ interface FormElement {
   label: string;
   type: FormElementType;
   controlType: FormElementControlType;
-  values: any[];
+  values: any[] | Observable<any[]>;
+  valuesObservable: boolean;
   multi: boolean;
   suggestOptions: Observable<any[]>;
 }
@@ -95,7 +96,8 @@ export class FormComponent implements OnInit, OnChanges, AfterViewInit {
         controls[k] = new FormControl(this.model[k]);
         let type: FormElementType = FormElementType.Default;
         let controlType: FormElementControlType = FormElementControlType.Input;
-        let values: any[] = [];
+        var values: any[] | Observable<any[]> = [];
+        var valuesObservable: boolean = false;
         let suggestOptions: Observable<any[]>;
         let multi: boolean = false;
         const dataType = typeof this.model[k];
@@ -117,6 +119,7 @@ export class FormComponent implements OnInit, OnChanges, AfterViewInit {
         if (this.values && this.values[k]) {
           controlType = FormElementControlType.Select;
           values = this.values[k];
+          valuesObservable = (this.values[k] instanceof Observable);
         }
         if (this.suggest && this.suggest[k]) {
           var control: FormControl = controls[k];
@@ -128,8 +131,8 @@ export class FormComponent implements OnInit, OnChanges, AfterViewInit {
           );*/
         }
         this.formElements.push({
-          key: k, label: labels[k], type: type, controlType: controlType, values: values, multi: multi,
-          suggestOptions: suggestOptions
+          key: k, label: labels[k], type: type, controlType: controlType, values: values, valuesObservable: valuesObservable,
+          multi: multi, suggestOptions: suggestOptions
         });
       });
     }

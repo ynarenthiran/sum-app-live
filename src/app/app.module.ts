@@ -19,9 +19,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { environment } from '../environments/environment';
 import { AppConfigService } from './services/app.config';
-import { TestComponent } from './test/test.component';
 import { LayoutModule } from './layout/layout.module';
-import { ShellComponent } from './shell/shell.component';
+import { ShellComponent, ShellService } from './shell/shell.component';
 
 const appInitializerFn = (appConfig: AppConfigService) => {
   return () => {
@@ -32,7 +31,6 @@ const appInitializerFn = (appConfig: AppConfigService) => {
 @NgModule({
   declarations: [
     AppComponent,
-    TestComponent,
     ShellComponent
   ],
   imports: [
@@ -59,7 +57,8 @@ const appInitializerFn = (appConfig: AppConfigService) => {
       useFactory: appInitializerFn,
       multi: true,
       deps: [AppConfigService]
-    }
+    },
+    ShellService
   ],
   bootstrap: [AppComponent]
 })

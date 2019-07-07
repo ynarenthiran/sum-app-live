@@ -13,13 +13,16 @@ import {
   OnDestroy,
   Output,
   EventEmitter,
-  AfterContentChecked
+  AfterContentChecked,
+  OnChanges,
+  DoCheck
 } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { Subscription, Observable, of } from 'rxjs';
 import { AuthService } from '../authentication/auth.service';
 import { MatTreeFlatDataSource, MatTreeNestedDataSource, MatTreeFlattener } from '@angular/material';
 import { NestedTreeControl, FlatTreeControl } from '@angular/cdk/tree';
+import { ShellService } from '../shell/shell.component';
 
 export interface DetailHeader {
   title?: string;
@@ -57,16 +60,6 @@ export class PageService {
     this._header = null;
   }
 }
-
-@Directive({
-  selector: 'lib-page-title'
-})
-export class PageTitle { }
-
-@Directive({
-  selector: 'lib-page-sub-title'
-})
-export class PageSubTitle { }
 
 @Directive({
   selector: 'lib-page-section-definition'
@@ -110,6 +103,11 @@ export class PageSection {
   @ContentChild(PageSectionToolbar) toolbar: PageSectionToolbar;
 }
 
+@Directive({
+  selector: 'lib-page-header'
+})
+export class PageHeader { }
+
 interface SectionInfo {
   title: string;
   path: string;
@@ -121,7 +119,13 @@ interface SectionInfo {
   templateUrl: './page-default.html',
   styleUrls: ['./page.component.scss']
 })
-export class PageComponent implements OnInit, OnDestroy, AfterContentInit {
+export class PageComponent implements OnInit, OnDestroy, AfterContentInit, OnChanges {
+  @Input()
+  title: string;
+
+  @Input()
+  subTitle: string;
+
   @ContentChildren(PageSectionDefinition)
   sectionDefinitions: QueryList<PageSectionDefinition>;
 
@@ -129,8 +133,8 @@ export class PageComponent implements OnInit, OnDestroy, AfterContentInit {
   private isLeftbarVisible: boolean = true;
   private sections: SectionInfo[] = [];
 
-  constructor(private auth: AuthService, private router: Router, private route: ActivatedRoute, private pageSrv: PageService) {
-  }
+  constructor(private auth: AuthService, private router: Router, private route: ActivatedRoute, private pageSrv: PageService,
+    private shellSrv: ShellService) { }
 
   ngOnInit() {
     this.subscriptions.add(
@@ -153,6 +157,11 @@ export class PageComponent implements OnInit, OnDestroy, AfterContentInit {
       })
       this.updateSectionStatus();
     }
+  }
+
+  ngDoCheck() {
+    this.shellSrv.title = this.title;
+    this.shellSrv.subtitle = this.subTitle;
   }
 
   updateSectionStatus() {
@@ -210,7 +219,12 @@ export class PageNode {
   templateUrl: './page-tree.html',
   styleUrls: ['./page.component.scss']
 })
-export class PageTreeComponent implements OnInit, AfterContentChecked {
+export class PageTreeComponent implements OnInit, AfterContentChecked, DoCheck {
+  @Input()
+  title: string;
+
+  @Input()
+  subTitle: string;
 
   treeControl = new NestedTreeControl<PageNode>(node => node.nodes.filter((_, i) => i > 0));
   dataSource = new MatTreeNestedDataSource<PageNode>();
@@ -219,7 +233,7 @@ export class PageTreeComponent implements OnInit, AfterContentChecked {
   @ContentChildren(PageNode)
   nodes: QueryList<PageNode>;
 
-  constructor() {
+  constructor(private shellSrv: ShellService) {
   }
 
   ngOnInit() {
@@ -227,5 +241,10 @@ export class PageTreeComponent implements OnInit, AfterContentChecked {
 
   ngAfterContentChecked() {
     this.dataSource.data = this.nodes.toArray();
+  }
+
+  ngDoCheck() {
+    this.shellSrv.title = this.title;
+    this.shellSrv.subtitle = this.subTitle;
   }
 }

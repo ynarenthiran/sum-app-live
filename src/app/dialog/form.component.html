@@ -25,7 +25,12 @@
         [type]="formElement.type" *ngSwitchCase="formElementControlType.Input" />
       <mat-select [placeholder]="formElement.label" [formControlName]="formElement.key" [id]="formElement.key"
         [multiple]="formElement.multi" *ngSwitchCase="formElementControlType.Select">
-        <mat-option *ngFor="let value of formElement.values" [value]="value">{{value}}</mat-option>
+        <ng-container *ngIf="formElement.valuesObservable">
+          <mat-option *ngFor="let value of formElement.values | async" [value]="value">{{value}}</mat-option>
+        </ng-container>
+        <ng-container *ngIf="!formElement.valuesObservable">
+          <mat-option *ngFor="let value of formElement.values" [value]="value">{{value}}</mat-option>
+        </ng-container>
       </mat-select>
     </ng-container>
   </mat-form-field>

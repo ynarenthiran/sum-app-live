@@ -13,26 +13,7 @@ export class CreateComponent implements OnInit {
 
   ngOnInit() {
     setTimeout(() => {
-      this.dialog.openDialog({ Name: "", Description: "" },
-        {
-          title: "Create Collaboration",
-          width: "300px",
-          button: { ok: "Create", cancel: "Cancel" }
-        })
-        .subscribe((result) => {
-          this.onCreateCollaboration(result);
-        });
+      this.srv.createCollaborationDialog();
     });
-  }
-
-  onCreateCollaboration(collIn: any) {
-    const collaboration: Collaboration = Object.assign({} as Collaboration, { name: collIn.Name, description: collIn.Description });
-    this.srv.postCollaboration(collaboration,
-      (id) => {
-        this.router.navigate(['collaboration', id]);
-      },
-      (e) => {
-        window.alert("Does not exist");
-      });
   }
 }

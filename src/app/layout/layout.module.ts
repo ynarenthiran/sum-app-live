@@ -16,15 +16,14 @@ import {
   PageComponent,
   PageListComponent,
   PageSection,
-  PageTitle,
-  PageSubTitle,
   PageSectionContent,
   PageSectionToolbar,
   PageSectionDetail,
   PageSectionDefinition,
   PageService,
   PageTreeComponent,
-  PageNode
+  PageNode,
+  PageHeader
 } from './page.component';
 
 @NgModule({
@@ -44,9 +43,8 @@ import {
     PageComponent,
     PageListComponent,
     PageTreeComponent,
+    PageHeader,
     PageSection,
-    PageTitle,
-    PageSubTitle,
     PageSectionDefinition,
     PageSectionContent,
     PageSectionToolbar,
@@ -57,9 +55,8 @@ import {
     PageComponent,
     PageListComponent,
     PageTreeComponent,
+    PageHeader,
     PageSection,
-    PageTitle,
-    PageSubTitle,
     PageSectionDefinition,
     PageSectionContent,
     PageSectionToolbar,

@@ -1,12 +1,12 @@
-<lib-page-tree>
-    <lib-page-title>
+<lib-page-tree title="Configuration">
+    <lib-page-header>
         <div class="cfg-list mat-subheading-2">
             <div *ngFor="let step of steps; index as i">
                 <mat-icon *ngIf="i > 0">keyboard_arrow_right</mat-icon>
                 <a (click)="onStepNavigate(i)" class="cfg-link">{{step.data.title}}</a>
             </div>
         </div>
-    </lib-page-title>
+    </lib-page-header>
     <lib-page-node *ngFor="let node of srv.nodes" title="{{node.data.title}}" (selected)="onNodeSelected(node)">
     </lib-page-node>
 </lib-page-tree>

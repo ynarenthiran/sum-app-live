@@ -1,6 +1,13 @@
-<lib-page>
-  <lib-page-title>{{collaboration?.name}}</lib-page-title>
-  <lib-page-sub-title>{{collaboration?.description}}</lib-page-sub-title>
-  <lib-page-section-definition title="Members" path="members" icon="person"></lib-page-section-definition>
-  <lib-page-section-definition title="Documents" path="documents" icon="insert_drive_file"></lib-page-section-definition>
+<lib-page title="{{collaboration?.name}}" subTitle="{{collaboration?.description}}">
+  <lib-page-header>
+    <div *ngIf="statusValues$" class="status-list mat-subheading-2">
+      <span *ngFor="let statusVal of statusValues$ | async" class="status-item">
+        {{statusVal.description}}: {{statusVal.value}}
+      </span>
+    </div>
+  </lib-page-header>
+  <lib-page-section-definition title="Members" path="members" icon="person">
+  </lib-page-section-definition>
+  <lib-page-section-definition title="Documents" path="documents" icon="insert_drive_file">
+  </lib-page-section-definition>
 </lib-page>

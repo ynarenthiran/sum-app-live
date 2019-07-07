@@ -23,7 +23,10 @@
     </mat-sidenav>
     <div class="app-content">
         <mat-toolbar class="mat-elevation-z2">
-            <span class="toolbar-spacer">Application Title</span>
+            <div class="app-conent-header toolbar-spacer">
+                <span class="mat-headline no-margin">{{this.srv.title}}</span>
+                <span class="mat-subheading-1 no-margin">{{this.srv.subtitle}}</span>
+            </div>
             <button mat-icon-button [matMenuTriggerFor]="accountMenu">
                 <mat-icon>account_circle</mat-icon>
             </button>

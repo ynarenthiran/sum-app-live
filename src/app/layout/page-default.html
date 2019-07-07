@@ -24,20 +24,11 @@
   </div>
   <div class="page-sidebar-content page">
     <div class="page-header">
+      <!--<button mat-icon-button (click)="isLeftbarVisible = !isLeftbarVisible;">
+        <mat-icon>menu</mat-icon>
+      </button>-->
       <!--Application Header Here-->
-      <div class="page-header-inner mat-title page-spacer">
-        <button mat-icon-button (click)="isLeftbarVisible = !isLeftbarVisible;">
-          <mat-icon>menu</mat-icon>
-        </button>
-        <div class="vbox page-spacer">
-          <span class="mat-headline no-margin"><strong>
-              <ng-content select="lib-page-title"></ng-content>
-            </strong></span>
-          <span class="mat-subheading-1 no-margin">
-            <ng-content select="lib-page-sub-title"></ng-content>
-          </span>
-        </div>
-      </div>
+      <ng-content select="lib-page-header"></ng-content>
     </div>
     <div class="page-content mat-elevation-z4">
       <!--Section Content Here-->

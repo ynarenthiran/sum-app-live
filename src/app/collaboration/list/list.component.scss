@@ -1,4 +1,13 @@
+@import "../../../global";
+
 :host {
     flex: 1 1 auto;
     display: flex;
+}
+.list-row:hover {
+    background: $color-highlight;
+    cursor: pointer;
+}
+.list-column-actions {
+    justify-content: flex-end;
 }

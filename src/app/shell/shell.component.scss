@@ -115,6 +115,11 @@ mat-toolbar {
     z-index: 2;
 }
 
+.app-conent-header {
+    display: flex;
+    flex-direction: column;
+}
+
 .app-content {
     display: flex;
     flex-direction: column;
