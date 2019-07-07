@@ -119,7 +119,7 @@ interface SectionInfo {
   templateUrl: './page-default.html',
   styleUrls: ['./page.component.scss']
 })
-export class PageComponent implements OnInit, OnDestroy, AfterContentInit, OnChanges {
+export class PageComponent implements OnInit, OnDestroy, AfterContentInit, DoCheck {
   @Input()
   title: string;
 
