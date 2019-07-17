@@ -1,9 +1,12 @@
 <lib-page title="{{collaboration?.name}}" subTitle="{{collaboration?.description}}">
-  <lib-page-header>
+  <lib-page-header class="collaboration-header">
     <div *ngIf="statusValues$" class="status-list mat-subheading-2">
-      <span *ngFor="let statusVal of statusValues$ | async" class="status-item">
+      <span *ngFor="let statusVal of statusValues$ | async">
         {{statusVal.description}}: {{statusVal.value}}
       </span>
+    </div>
+    <div *ngIf="actions.length > 0" class="action-list">
+      <button mat-raised-button *ngFor="let action of actions">{{action.name}}</button>
     </div>
   </lib-page-header>
   <lib-page-section-definition title="Members" path="members" icon="person">

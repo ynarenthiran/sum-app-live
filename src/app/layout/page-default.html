@@ -8,11 +8,11 @@
     <div class="page-sidebar-content">
       <!--Section Selection List Here-->
       <div class="page-sidebar-tabs">
-        <div class="header">
+        <!--<div class="header">
           <button mat-raised-button>
             <mat-icon>add_circle</mat-icon>
           </button>
-        </div>
+        </div>-->
         <div matRipple *ngFor="let section of sections" (click)="selectSection(section)"
           [ngClass]="{'tab': true, 'active': section.active}">
           <mat-divider [inset]="true"></mat-divider>

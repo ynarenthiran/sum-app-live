@@ -8,6 +8,11 @@ interface StatusValue extends Status {
   value: string;
 }
 
+interface ActionValue {
+  id: string;
+  name: string;
+}
+
 @Component({
   selector: 'app-collaboration',
   templateUrl: './collaboration.component.html',
@@ -18,6 +23,7 @@ export class CollaborationComponent implements OnInit {
   private collaborationId: string;
   private collaboration: Collaboration;
   private statusValues$: Observable<StatusValue[]>;
+  private actions: ActionValue[] = [];
 
   constructor(private route: ActivatedRoute, private srv: CollaborationService) { }
 
@@ -42,6 +48,7 @@ export class CollaborationComponent implements OnInit {
             window.alert("Does not exist");
           this.collaboration = c;
           this.loadStatus(this.collaboration.typeId);
+          this.loadAction();
         },
         (e) => {
           window.alert(e);
@@ -59,5 +66,9 @@ export class CollaborationComponent implements OnInit {
         return Object.assign(status, { value: value });
       }))
     );
+  }
+
+  loadAction() {
+    this.actions = Object.keys(this.collaboration.action).map(key => { return { id: this.collaboration.action[key], name: key }; });
   }
 }

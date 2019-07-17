@@ -41,6 +41,7 @@ export interface Collaboration {
   createdByUid: string;
   createdOn: Date;
   status?: object;
+  action?: object;
 }
 export interface Member {
   id: string;
