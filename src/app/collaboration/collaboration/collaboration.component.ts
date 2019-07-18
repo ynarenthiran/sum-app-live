@@ -39,7 +39,11 @@ export class CollaborationComponent implements OnInit {
     this.subs.unsubscribe();
   }
 
-  loadCollaboration(id: string) {
+  completeAction(action: ActionValue) {
+    this.srv.triggerAction(this.collaborationId, action.id);
+  }
+
+  private loadCollaboration(id: string) {
     this.collaborationId = id;
     this.subs.add(
       this.srv.getCollaboration(id,
@@ -56,7 +60,7 @@ export class CollaborationComponent implements OnInit {
     );
   }
 
-  loadStatus(typeId: string) {
+  private loadStatus(typeId: string) {
     this.statusValues$ = this.srv.getStatuses(typeId).pipe(
       map(statuses => statuses.map(status => {
         var value = "";
@@ -68,7 +72,7 @@ export class CollaborationComponent implements OnInit {
     );
   }
 
-  loadAction() {
+  private loadAction() {
     this.actions = Object.keys(this.collaboration.action).map(key => { return { id: this.collaboration.action[key], name: key }; });
   }
 }

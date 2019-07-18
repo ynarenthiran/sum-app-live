@@ -6,7 +6,7 @@
       </span>
     </div>
     <div *ngIf="actions.length > 0" class="action-list">
-      <button mat-raised-button *ngFor="let action of actions">{{action.name}}</button>
+      <button mat-raised-button *ngFor="let action of actions" (click)="completeAction(action)">{{action.name}}</button>
     </div>
   </lib-page-header>
   <lib-page-section-definition title="Members" path="members" icon="person">

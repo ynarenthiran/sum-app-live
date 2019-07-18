@@ -5,6 +5,7 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireStorage, AngularFireStorageModule } from '@angular/fire/storage';
+import { AngularFireFunctionsModule } from '@angular/fire/functions';
 import {
   MatSidenavModule,
   MatButtonModule,
@@ -38,6 +39,7 @@ const appInitializerFn = (appConfig: AppConfigService) => {
     BrowserAnimationsModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireStorageModule,
+    AngularFireFunctionsModule,
     LayoutModule,
     MatSidenavModule,
     MatButtonModule,

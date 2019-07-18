@@ -7,6 +7,7 @@ import { AuthService } from '../authentication/auth.service';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { DialogService } from '../dialog/dialog.component';
 import { Router } from '@angular/router';
+import { AngularFireFunctions } from '@angular/fire/functions';
 
 export interface CollaborationType {
   id: string;
@@ -76,8 +77,8 @@ export interface FileExt extends File {
   providedIn: 'root'
 })
 export class CollaborationService {
-  constructor(private db: AngularFirestore, private storage: AngularFireStorage, private config: AppConfigService,
-    private auth: AuthService, private dialog: DialogService, private router: Router) { }
+  constructor(private db: AngularFirestore, private storage: AngularFireStorage, private func: AngularFireFunctions,
+    private config: AppConfigService, private auth: AuthService, private dialog: DialogService, private router: Router) { }
 
   getUsers(): Observable<User[]> {
     return this.db.collection<User>(`users`)
@@ -397,5 +398,14 @@ export class CollaborationService {
     const accountId = this.config.getConfig().accountId;
     const path = `accounts/${accountId}/collaborations/${id}/documents/${file.path}`;
     return this.storage.ref(path).getDownloadURL();
+  }
+
+  triggerAction(id: string, actionId: string) {
+    const callable = this.func.httpsCallable('onCompleteCollaborationAction');
+    const accountId = this.config.getConfig().accountId;
+    const result$ = callable({ accountId: accountId, collaborationId: id, actionId: actionId });
+    result$.subscribe(() => {
+      alert("Action completed");
+    })
   }
 }
