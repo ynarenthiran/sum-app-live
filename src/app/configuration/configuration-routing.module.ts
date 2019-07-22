@@ -11,7 +11,7 @@ const routes: Routes = [
       { path: '', redirectTo: 'collaborationTypes', pathMatch: 'full' },
       {
         path: 'collaborationTypes',
-        data: { title: 'Collaboration Types', fields: { name: 'Name', description: 'Description' } },
+        data: { title: 'Collaboration Types', fields: { name: 'Name', description: 'Description', objectTypeId: 'Object Type' } },
         children: [
           { path: '', component: ListComponent, pathMatch: 'full' },
           {
@@ -44,6 +44,19 @@ const routes: Routes = [
                   }
                 ]
               }
+            ]
+          }
+        ]
+      },
+      {
+        path: 'objectTypes',
+        data: { title: 'Object Types', fields: { name: 'Name', description: 'Description', definition: 'Definition (*.json)' } },
+        children: [
+          { path: '', component: ListComponent, pathMatch: 'full' },
+          {
+            path: ':objectTypeId',
+            children: [
+              { path: '', component: FormComponent, pathMatch: 'full' }
             ]
           }
         ]

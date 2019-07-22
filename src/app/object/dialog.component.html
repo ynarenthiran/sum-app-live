@@ -1,0 +1,8 @@
+<h2 mat-dialog-title>{{options.title}}</h2>
+<mat-dialog-content>
+  <lib-object [typeId]="typeId"></lib-object>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onOk()" cdkFocusInitial>{{options.button.ok}}</button>
+  <button mat-button mat-dialog-close>{{options.button.cancel}}</button>
+</mat-dialog-actions>

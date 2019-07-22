@@ -24,6 +24,7 @@ import {
   DocumentDropArea
 } from './document/document.component';
 import { ListComponent } from './list/list.component';
+import { ObjectModule } from '../object/object.module';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { ListComponent } from './list/list.component';
     CollaborationRoutingModule,
     LayoutModule,
     DialogModule,
+    ObjectModule,
     MatIconModule,
     MatTableModule,
     MatButtonModule,

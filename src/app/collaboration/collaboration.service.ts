@@ -1,18 +1,20 @@
 import { Injectable } from '@angular/core';
 import { AppConfigService } from '../services/app.config';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { Subscription, Observable, combineLatest } from 'rxjs';
+import { Subscription, Observable, combineLatest, BehaviorSubject } from 'rxjs';
 import { map, flatMap, concatAll, distinct } from 'rxjs/operators';
 import { AuthService } from '../authentication/auth.service';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { DialogService } from '../dialog/dialog.component';
 import { Router } from '@angular/router';
 import { AngularFireFunctions } from '@angular/fire/functions';
+import { ObjectDialogService } from '../object/object.component';
 
 export interface CollaborationType {
   id: string;
   name: string;
   description: string;
+  objectTypeId: string;
 }
 class CollaborationTypeClass {
   id: string;
@@ -43,6 +45,7 @@ export interface Collaboration {
   createdOn: Date;
   status?: object;
   action?: object;
+  attributes?: object;
 }
 export interface Member {
   id: string;
@@ -78,7 +81,8 @@ export interface FileExt extends File {
 })
 export class CollaborationService {
   constructor(private db: AngularFirestore, private storage: AngularFireStorage, private func: AngularFireFunctions,
-    private config: AppConfigService, private auth: AuthService, private dialog: DialogService, private router: Router) { }
+    private config: AppConfigService, private auth: AuthService, private dialog: DialogService, private objectSrv: ObjectDialogService,
+    private router: Router) { }
 
   getUsers(): Observable<User[]> {
     return this.db.collection<User>(`users`)
@@ -102,6 +106,19 @@ export class CollaborationService {
           const id = a.payload.doc.id;
           return Object.assign(type, { id: id }) as CollaborationType;
         }))
+      );
+  }
+
+  getCollaborationType(typeId: string): Observable<CollaborationType> {
+    const accountId = this.config.getConfig().accountId;
+    return this.db.doc<CollaborationType>(`accounts/${accountId}/collaborationTypes/${typeId}`)
+      .snapshotChanges()
+      .pipe(
+        map(a => {
+          const type = a.payload.data() as CollaborationType;
+          const id = a.payload.id;
+          return Object.assign(type, { id: id }) as CollaborationType;
+        })
       );
   }
 
@@ -164,6 +181,7 @@ export class CollaborationService {
       typeId: collaboration.typeId,
       createdByUid: this.auth.currentUserId,
       createdOn: new Date(),
+      attributes: collaboration.attributes
     };
     return this.db.collection(`accounts/${this.config.getConfig().accountId}/collaborations`)
       .add(obj)
@@ -187,15 +205,36 @@ export class CollaborationService {
         values: { Type: collaborationTypes$ }
       })
       .subscribe((result) => {
-        const collaboration: Collaboration = Object.assign({} as Collaboration,
-          { name: result.Name, description: result.Description, typeId: result.Type.id });
-        this.postCollaboration(collaboration,
-          (id) => {
-            this.router.navigate(['collaboration', id]);
-          },
-          (e) => {
-            window.alert("Does not exist");
-          });
+        this.getCollaborationType(result.Type.id).subscribe((type) => {
+          if (type.objectTypeId) {
+            this.objectSrv.openObjectDialog(type.objectTypeId,
+              {
+                title: "Create Collaboration",
+                width: "400px",
+                button: { ok: "Create", cancel: "Cancel" }
+              })
+              .subscribe((attributes) => {
+                this.createCollaborationWithData({
+                  name: result.Name, description: result.Description, typeId: result.Type.id, attributes: attributes
+                });
+              });
+          }
+          else {
+            this.createCollaborationWithData({
+              name: result.Name, description: result.Description, typeId: result.Type.id
+            });
+          }
+        })
+      });
+  }
+  createCollaborationWithData(data: any) {
+    const collaboration: Collaboration = Object.assign({} as Collaboration, data);
+    this.postCollaboration(collaboration,
+      (id) => {
+        this.router.navigate(['collaboration', id]);
+      },
+      (e) => {
+        window.alert("Does not exist");
       });
   }
 
