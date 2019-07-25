@@ -23,7 +23,7 @@
       </mat-button-toggle>
     </mat-button-toggle-group>
   </lib-page-section-toolbar>
-  <lib-page-section-content>
+  <lib-page-section-content class="document-content">
     <ng-container [ngSwitch]="viewType">
       <ng-container *ngSwitchCase="documentViewType.Icon">
         <ng-container *ngTemplateOutlet="iconView"></ng-container>
@@ -38,7 +38,7 @@
 </lib-page-section>
 <!-- Documents Icon View -->
 <ng-template #iconView>
-  <div appDocumentDropArea (fileDropped)="onFileDropped($event)" class="document-view-icon mat-body">
+  <div appDocumentDropArea (fileDropped)="onFileDropped($event)" class="document-content document-view-icon mat-body">
     <div *ngFor="let file of files$ | async" matRipple matRippleCentered="true" [matTooltip]="file.name"
       (click)="onSelectDocumentItem(file)" (dblclick)="onOpenDocumentItem(file)"
       [ngClass]="{'document-item': true, 'highlight-bgcolor': file.id == selectedFile?.id, 'document-selected': file.id == selectedFile?.id}">

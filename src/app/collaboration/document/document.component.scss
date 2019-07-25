@@ -1,3 +1,11 @@
+:host {
+    flex: 1 1 auto;
+    display: flex;
+}
+.document-content {
+    flex: 1 1 auto;
+    display: flex;
+}
 .document-breadcrumbs {
     display: flex;
     align-items: stretch;
