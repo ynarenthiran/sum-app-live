@@ -75,6 +75,14 @@ export interface FileExt extends File {
   createdBy: User;
   changedBy: User;
 }
+export interface Post {
+  id: string;
+  text: string;
+  authorUid: string;
+  postedOn: Date;
+  // Transient fields
+  postedBySelf: boolean;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -447,4 +455,30 @@ export class CollaborationService {
       alert("Action completed");
     })
   }
+
+  getPosts(id: string): Observable<Post[]> {
+    const accountId = this.config.getConfig().accountId;
+    return this.db.collection<Post>(`accounts/${accountId}/collaborations/${id}/posts`,
+      ref => ref.orderBy('postedOn'))
+      .snapshotChanges()
+      .pipe(
+        map(actions => actions.map(a => {
+          const col = a.payload.doc.data() as Post;
+          return Object.assign(col, {
+            id: a.payload.doc.id,
+            postedBySelf: (col.authorUid == this.auth.currentUserId) ? true : false
+          });
+        }))
+      );
+  }
+  createPost(id: string, p: Post) {
+    const accountId = this.config.getConfig().accountId;
+    const obj = {
+      text: p.text,
+      authorUid: this.auth.currentUserId,
+      postedOn: new Date()
+    };
+    this.db.collection(`accounts/${accountId}/collaborations/${id}/posts`).add(obj);
+  }
+
 }

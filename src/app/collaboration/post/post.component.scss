@@ -1,0 +1,84 @@
+:host {
+    flex: 1 0 auto;
+    display: flex;
+}
+.post-content {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+}
+.post-area {
+    flex: 1 1 100px;
+    overflow-y: auto;
+}
+.post-area-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.post-entry-other {
+    align-self: flex-start;
+    background-color: #FFC107;
+}
+.post-entry-self {
+    align-self: flex-end;
+    background-color: #3F51B5;
+    color: #FFFFFF;
+}
+.post-entry-other,.post-entry-self {
+    position: relative;
+    padding: 10px;
+    border-radius: 5px;
+    margin: 10px;
+}
+.post-entry-other .post-time,.post-entry-self .post-time {
+    opacity: 0.4;
+    border-top: solid 0.5px;
+    margin: 0;
+}
+.post-entry-other .post-time {
+    text-align: left;
+}
+.post-entry-self .post-time {
+    text-align: right;
+}
+.post-entry-self:after {
+    content: '';
+	position: absolute;
+	right: 0;
+	bottom: 10px;
+	width: 0;
+	height: 0;
+    border: 10px solid transparent;
+    border-left-color: #3F51B5;
+	border-right: 0;
+	border-bottom: 0;
+	margin-top: -5px;
+	margin-right: -10px;
+}
+.post-entry-other:after {
+    content: '';
+	position: absolute;
+	left: 0;
+	top: 15px;
+	width: 0;
+	height: 0;
+	border: 10px solid transparent;
+	border-right-color: #FFC107;
+	border-left: 0;
+	border-top: 0;
+	margin-top: -5px;
+	margin-left: -10px;
+}
+.post-input-bar {
+    display: flex;
+    flex-direction: row;
+    padding: 10px;
+    background-color: #EFEBE9;
+}
+.post-input-bar .mat-form-field {
+    flex: 1 1 auto;
+}
+.post-input-bar .mat-form-field .mat-icon {
+    cursor: pointer;
+}

@@ -1,0 +1,21 @@
+<lib-page-section>
+  <lib-page-section-toolbar>
+  </lib-page-section-toolbar>
+  <lib-page-section-content class="post-content">
+    <div class="post-area">
+      <div class="post-area-inner mat-typography">
+        <div *ngFor="let post of posts$ | async" [ngClass]="post.postedBySelf ? 'post-entry-self':'post-entry-other'">
+          <p>{{post.text}}</p>
+          <p class="post-time">{{post.postedOn.toDate() | amTimeAgo}}</p> <!-- https://github.com/urish/ngx-moment -->
+        </div>
+      </div>
+    </div>
+    <div class="post-input-bar">
+      <mat-form-field appearance="outline" class="field-nohint">
+        <textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1"
+          cdkAutosizeMaxRows="5" placeholder="Enter message" [(ngModel)]="postInput"></textarea>
+        <mat-icon matSuffix color="primary" (click)="postText()">send</mat-icon>
+      </mat-form-field>
+    </div>
+  </lib-page-section-content>
+</lib-page-section>

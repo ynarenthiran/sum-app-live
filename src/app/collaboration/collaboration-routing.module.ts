@@ -5,6 +5,7 @@ import { CollaborationComponent } from './collaboration/collaboration.component'
 import { MemberComponent } from './member/member.component';
 import { DocumentComponent } from './document/document.component';
 import { ListComponent } from './list/list.component';
+import { PostComponent } from './post/post.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'list', pathMatch: 'full' },
@@ -14,7 +15,8 @@ const routes: Routes = [
     path: ':id', component: CollaborationComponent,
     children: [
       { path: 'members', component: MemberComponent },
-      { path: 'documents', component: DocumentComponent }
+      { path: 'documents', component: DocumentComponent },
+      { path: 'posts', component: PostComponent }
     ]
   }
 ];

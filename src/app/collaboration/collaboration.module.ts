@@ -9,7 +9,8 @@ import {
   MatTooltipModule,
   MatChipsModule,
   MatRippleModule,
-  MatFormFieldModule
+  MatFormFieldModule,
+  MatInputModule
 } from '@angular/material';
 
 import { CollaborationRoutingModule } from './collaboration-routing.module';
@@ -25,6 +26,10 @@ import {
 } from './document/document.component';
 import { ListComponent } from './list/list.component';
 import { ObjectModule } from '../object/object.module';
+import { PostComponent } from './post/post.component';
+import { MomentModule } from 'ngx-moment';
+import { TextFieldModule } from '@angular/cdk/text-field';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -33,7 +38,8 @@ import { ObjectModule } from '../object/object.module';
     MemberComponent,
     DocumentComponent,
     DocumentDropArea,
-    ListComponent
+    ListComponent,
+    PostComponent
   ],
   imports: [
     CommonModule,
@@ -49,7 +55,11 @@ import { ObjectModule } from '../object/object.module';
     MatTooltipModule,
     MatRippleModule,
     MatChipsModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    MatInputModule,
+    TextFieldModule,
+    FormsModule,
+    MomentModule
   ],
   providers: [
     CollaborationService
