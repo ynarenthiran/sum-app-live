@@ -187,8 +187,8 @@ export class CollaborationService {
       name: collaboration.name,
       description: collaboration.description,
       typeId: collaboration.typeId,
-      createdByUid: this.auth.currentUserId,
-      createdOn: new Date(),
+      //createdByUid: this.auth.currentUserId,
+      //createdOn: new Date(),
       attributes: collaboration.attributes
     };
     return this.db.collection(`accounts/${this.config.getConfig().accountId}/collaborations`)
