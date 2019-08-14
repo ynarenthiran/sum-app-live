@@ -183,20 +183,20 @@ export class CollaborationService {
   }
 
   postCollaboration(collaboration: Collaboration, onSuccess: (id: string) => void, onError: (error: any) => void) {
-    const obj = {
+    const callable = this.func.httpsCallable('onCompleteCollaborationAction');
+    const accountId = this.config.getConfig().accountId;
+    const result$ = callable({
+      accountId: accountId,
       name: collaboration.name,
       description: collaboration.description,
-      typeId: collaboration.typeId,
-      //createdByUid: this.auth.currentUserId,
-      //createdOn: new Date(),
-      attributes: collaboration.attributes
-    };
-    return this.db.collection(`accounts/${this.config.getConfig().accountId}/collaborations`)
-      .add(obj)
-      .then((d) => {
-        onSuccess(d.id);
-      })
-      .catch((e) => {
+      typeId: collaboration.typeId, attributes:
+        collaboration.attributes
+    });
+    result$.subscribe(
+      (collaborationId) => {
+        onSuccess(collaborationId);
+      },
+      (e) => {
         onError(e);
       });
   }
