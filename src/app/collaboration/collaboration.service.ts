@@ -183,7 +183,7 @@ export class CollaborationService {
   }
 
   postCollaboration(collaboration: Collaboration, onSuccess: (id: string) => void, onError: (error: any) => void) {
-    const callable = this.func.httpsCallable('onCompleteCollaborationAction');
+    const callable = this.func.httpsCallable('onCreateCollaboration');
     const accountId = this.config.getConfig().accountId;
     const result$ = callable({
       accountId: accountId,
@@ -242,7 +242,7 @@ export class CollaborationService {
         this.router.navigate(['collaboration', id]);
       },
       (e) => {
-        window.alert("Does not exist");
+        window.alert("Error: " + e);
       });
   }
 
