@@ -413,7 +413,7 @@ export class CollaborationService {
   triggerAction(id: string, actionId: string) {
     const callable = this.func.httpsCallable('onCompleteCollaborationAction');
     const accountId = this.config.getConfig().accountId;
-    const result$ = callable({ accountId: accountId, collaborationId: id, actionId: actionId });
+    const result$ = callable({ accountId: accountId, objectId: id, actionId: actionId });
     result$.subscribe(() => {
       alert("Action completed");
     })
