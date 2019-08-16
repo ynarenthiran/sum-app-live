@@ -52,28 +52,36 @@ export class MemberComponent implements OnInit {
         }
       })
       .subscribe((result) => {
-        this.objSrv.getObjectType('memberTypes', result.Type.id).subscribe((type) => {
-          if (type.objectTypeId) {
-            this.objDialogSrv.openObjectDialog(type.objectTypeId,
-              {
-                title: "Add Member",
-                width: "400px",
-                button: { ok: "Add", cancel: "Cancel" }
-              })
-              .subscribe((attributes) => {
-                const member: Member = Object.assign({} as Member, {
-                  id: result.User.value, roles: result.Roles, tags: result.Tags, typeId: result.Type.id, attributes: attributes
+        if (result.Type.id) {
+          this.objSrv.getObjectType('memberTypes', result.Type.id).subscribe((type) => {
+            if (type.objectTypeId) {
+              this.objDialogSrv.openObjectDialog(type.objectTypeId,
+                {
+                  title: "Add Member",
+                  width: "400px",
+                  button: { ok: "Add", cancel: "Cancel" }
+                })
+                .subscribe((attributes) => {
+                  const member: Member = Object.assign({} as Member, {
+                    id: result.User.value, roles: result.Roles, tags: result.Tags, typeId: result.Type.id, attributes: attributes
+                  });
+                  this.srv.postMember(this.collaborationId, member);
                 });
-                this.srv.postMember(this.collaborationId, member);
+            }
+            else {
+              const member: Member = Object.assign({} as Member, {
+                id: result.User.value, roles: result.Roles, tags: result.Tags, typeId: result.Type.id
               });
-          }
-          else {
-            const member: Member = Object.assign({} as Member, {
-              id: result.User.value, roles: result.Roles, tags: result.Tags, typeId: result.Type.id
-            });
-            this.srv.postMember(this.collaborationId, member);
-          }
-        })
+              this.srv.postMember(this.collaborationId, member);
+            }
+          });
+        }
+        else {
+          const member: Member = Object.assign({} as Member, {
+            id: result.User.value, roles: result.Roles, tags: result.Tags
+          });
+          this.srv.postMember(this.collaborationId, member);
+        }
       });
   }
 

@@ -18,6 +18,7 @@ export interface Status {
 }
 
 export interface AbstractObject {
+  typeId?: string;
   status?: object;
   action?: object;
   attributes?: object;
@@ -26,7 +27,6 @@ export interface Collaboration extends AbstractObject {
   id: string;
   name: string;
   description: string;
-  typeId: string;
   createdByUid: string;
   createdOn: Date;
 }
@@ -240,6 +240,7 @@ export class CollaborationService {
     const obj = {
       roles: member.roles,
       tags: member.tags,
+      typeId: (member.typeId) ? member.typeId : "",
       attributes: (member.attributes) ? member.attributes : {}
     }
     return this.db.doc(`accounts/${this.config.getConfig().accountId}/collaborations/${id}/members/${member.id}`)
@@ -362,13 +363,14 @@ export class CollaborationService {
       parentId: file.parentId,
       isFolder: true,
       tags: [],
+      typeId: (file.typeId) ? file.typeId : "",
       attributes: (file.attributes) ? file.attributes : {}
     }
     return this.db.collection(`accounts/${accountId}/collaborations/${id}/documents`)
       .add(obj);
   }
 
-  postFiles(id: string, folder: File, files: any[], attributes? : any) {
+  postFiles(id: string, folder: File, files: any[], typeId?: string, attributes?: any) {
     const accountId = this.config.getConfig().accountId;
     for (var file of files) {
       const filePath = folder == null ? file.name : folder.path + "/" + file.name;
@@ -385,6 +387,7 @@ export class CollaborationService {
         parentId: folder == null ? "" : folder.id,
         isFolder: false,
         tags: [],
+        typeId: (typeId) ? typeId : "",
         attributes: (attributes) ? attributes : {}
       };
       this.db.collection(`accounts/${accountId}/collaborations/${id}/documents`).add(obj);
@@ -437,6 +440,7 @@ export class CollaborationService {
       text: p.text,
       authorUid: this.auth.currentUserId,
       postedOn: new Date(),
+      typeId: (p.typeId) ? p.typeId : "",
       attributes: (p.attributes) ? p.attributes : {}
     };
     this.db.collection(`accounts/${accountId}/collaborations/${id}/posts`).add(obj);

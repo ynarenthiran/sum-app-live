@@ -153,31 +153,37 @@ export class DocumentComponent implements OnInit {
         }
       })
       .subscribe((result) => {
-        this.objSrv.getObjectType('documentTypes', result.Type.id).subscribe((type) => {
-          if (type.objectTypeId) {
-            this.objDialogSrv.openObjectDialog(type.objectTypeId,
-              {
-                title: "Create Folder",
-                width: "300px",
-                button: { ok: "Create", cancel: "Cancel" }
-              })
-              .subscribe((attributes) => {
-                this.onAddFolder(result, attributes);
-              });
-          }
-          else {
-            this.onAddFolder(result);
-          }
-        })
+        if (result.Type.id) {
+          this.objSrv.getObjectType('documentTypes', result.Type.id).subscribe((type) => {
+            if (type.objectTypeId) {
+              this.objDialogSrv.openObjectDialog(type.objectTypeId,
+                {
+                  title: "Create Folder",
+                  width: "300px",
+                  button: { ok: "Create", cancel: "Cancel" }
+                })
+                .subscribe((attributes) => {
+                  this.onAddFolder(result, result.Type.id, attributes);
+                });
+            }
+            else {
+              this.onAddFolder(result, result.Type.id);
+            }
+          });
+        }
+        else {
+          this.onAddFolder(result);
+        }
       });
   }
 
-  onAddFolder(folderIn: any, attributes?: any) {
+  onAddFolder(folderIn: any, typeId?: string, attributes?: any) {
     const folder: File = Object.assign({} as File, {
       name: folderIn.Name,
       description: folderIn.Name,
       path: this._parent == null ? "" : this._parent.path,
       parentId: this._parent == null ? "" : this._parent.id,
+      typeId: typeId,
       attributes: attributes
     });
     this.srv.postFolder(this.collaborationId, folder);
@@ -209,22 +215,27 @@ export class DocumentComponent implements OnInit {
         }
       })
       .subscribe((result) => {
-        this.objSrv.getObjectType('documentTypes', result.Type.id).subscribe((type) => {
-          if (type.objectTypeId) {
-            this.objDialogSrv.openObjectDialog(type.objectTypeId,
-              {
-                title: "Upload File",
-                width: "300px",
-                button: { ok: "Upload", cancel: "Cancel" }
-              })
-              .subscribe((attributes) => {
-                this.srv.postFiles(this.collaborationId, this._parent, files, attributes);
-              });
-          }
-          else {
-            this.srv.postFiles(this.collaborationId, this._parent, files);
-          }
-        })
+        if (result.Type.id) {
+          this.objSrv.getObjectType('documentTypes', result.Type.id).subscribe((type) => {
+            if (type.objectTypeId) {
+              this.objDialogSrv.openObjectDialog(type.objectTypeId,
+                {
+                  title: "Upload File",
+                  width: "300px",
+                  button: { ok: "Upload", cancel: "Cancel" }
+                })
+                .subscribe((attributes) => {
+                  this.srv.postFiles(this.collaborationId, this._parent, files, result.Type.id, attributes);
+                });
+            }
+            else {
+              this.srv.postFiles(this.collaborationId, this._parent, files, result.Type.id);
+            }
+          });
+        }
+        else {
+          this.srv.postFiles(this.collaborationId, this._parent, files);
+        }
       });
   }
 

@@ -30,6 +30,8 @@ export class PostComponent implements OnInit {
   }
 
   postText() {
+    var postInput = this.postInput;
+    this.postInput = "";
     var postType$ =
       this.objSrv.getObjectTypes('postTypes')
         .pipe(map(types => types.map(type => new ObjectTypeClass(type))));
@@ -43,24 +45,27 @@ export class PostComponent implements OnInit {
         }
       })
       .subscribe((result) => {
-        this.objSrv.getObjectType('postTypes', result.Type.id).subscribe((type) => {
-          if (type.objectTypeId) {
-            this.objDialogSrv.openObjectDialog(type.objectTypeId,
-              {
-                title: "Post",
-                width: "400px",
-                button: { ok: "Post", cancel: "Cancel" }
-              })
-              .subscribe((attributes) => {
-                this.srv.createPost(this.collaborationId, { text: this.postInput, attributes: attributes } as Post);
-                this.postInput = "";
-              });
-          }
-          else {
-            this.srv.createPost(this.collaborationId, { text: this.postInput } as Post);
-            this.postInput = "";
-          }
-        })
+        if (result.Type.id) {
+          this.objSrv.getObjectType('postTypes', result.Type.id).subscribe((type) => {
+            if (type.objectTypeId) {
+              this.objDialogSrv.openObjectDialog(type.objectTypeId,
+                {
+                  title: "Post",
+                  width: "400px",
+                  button: { ok: "Post", cancel: "Cancel" }
+                })
+                .subscribe((attributes) => {
+                  this.srv.createPost(this.collaborationId, { text: postInput, typeId: result.Type.id, attributes: attributes } as Post);
+                });
+            }
+            else {
+              this.srv.createPost(this.collaborationId, { text: postInput, typeId: result.Type.id } as Post);
+            }
+          });
+        }
+        else {
+          this.srv.createPost(this.collaborationId, { text: postInput } as Post);
+        }
       });
   }
 }
