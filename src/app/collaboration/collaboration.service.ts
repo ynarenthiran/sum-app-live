@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AppConfigService } from '../services/app.config';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { Subscription, Observable, combineLatest, BehaviorSubject } from 'rxjs';
+import { Subscription, Observable, combineLatest } from 'rxjs';
 import { map, flatMap, concatAll, distinct } from 'rxjs/operators';
 import { AuthService } from '../authentication/auth.service';
 import { AngularFireStorage } from '@angular/fire/storage';
@@ -9,26 +9,7 @@ import { DialogService } from '../dialog/dialog.component';
 import { Router } from '@angular/router';
 import { AngularFireFunctions } from '@angular/fire/functions';
 import { ObjectDialogService } from '../object/object.component';
-
-export interface CollaborationType {
-  id: string;
-  name: string;
-  description: string;
-  objectTypeId: string;
-}
-class CollaborationTypeClass {
-  id: string;
-  name: string;
-  description: string;
-  constructor(type: CollaborationType) {
-    this.id = type.id;
-    this.name = type.name;
-    this.description = type.description;
-  }
-  toString(): string {
-    return this.name;
-  }
-}
+import { ObjectService, ObjectTypeClass } from '../object/object.service';
 
 export interface Status {
   id: string;
@@ -36,18 +17,20 @@ export interface Status {
   description: string;
 }
 
-export interface Collaboration {
+export interface AbstractObject {
+  status?: object;
+  action?: object;
+  attributes?: object;
+}
+export interface Collaboration extends AbstractObject {
   id: string;
   name: string;
   description: string;
   typeId: string;
   createdByUid: string;
   createdOn: Date;
-  status?: object;
-  action?: object;
-  attributes?: object;
 }
-export interface Member {
+export interface Member extends AbstractObject {
   id: string;
   user: User;
   roles: string[];
@@ -58,7 +41,7 @@ export interface User {
   displayName: string;
   email: string;
 }
-export interface File {
+export interface File extends AbstractObject {
   id: string;
   name: string;
   description: string;
@@ -75,7 +58,7 @@ export interface FileExt extends File {
   createdBy: User;
   changedBy: User;
 }
-export interface Post {
+export interface Post extends AbstractObject {
   id: string;
   text: string;
   authorUid: string;
@@ -89,8 +72,8 @@ export interface Post {
 })
 export class CollaborationService {
   constructor(private db: AngularFirestore, private storage: AngularFireStorage, private func: AngularFireFunctions,
-    private config: AppConfigService, private auth: AuthService, private dialog: DialogService, private objectSrv: ObjectDialogService,
-    private router: Router) { }
+    private config: AppConfigService, private auth: AuthService, private dialog: DialogService, private objDialogSrv: ObjectDialogService,
+    private objSrv: ObjectService, private router: Router) { }
 
   getUsers(): Observable<User[]> {
     return this.db.collection<User>(`users`)
@@ -101,32 +84,6 @@ export class CollaborationService {
           const id = a.payload.doc.id;
           return Object.assign(user, { id: id }) as User;
         }))
-      );
-  }
-
-  getCollaborationTypes(): Observable<CollaborationType[]> {
-    const accountId = this.config.getConfig().accountId;
-    return this.db.collection<CollaborationType>(`accounts/${accountId}/collaborationTypes`)
-      .snapshotChanges()
-      .pipe(
-        map(actions => actions.map(a => {
-          const type = a.payload.doc.data() as CollaborationType;
-          const id = a.payload.doc.id;
-          return Object.assign(type, { id: id }) as CollaborationType;
-        }))
-      );
-  }
-
-  getCollaborationType(typeId: string): Observable<CollaborationType> {
-    const accountId = this.config.getConfig().accountId;
-    return this.db.doc<CollaborationType>(`accounts/${accountId}/collaborationTypes/${typeId}`)
-      .snapshotChanges()
-      .pipe(
-        map(a => {
-          const type = a.payload.data() as CollaborationType;
-          const id = a.payload.id;
-          return Object.assign(type, { id: id }) as CollaborationType;
-        })
       );
   }
 
@@ -189,8 +146,8 @@ export class CollaborationService {
       accountId: accountId,
       name: collaboration.name,
       description: collaboration.description,
-      typeId: collaboration.typeId, attributes:
-        collaboration.attributes
+      typeId: collaboration.typeId,
+      attributes: collaboration.attributes
     });
     result$.subscribe(
       (collaborationId) => {
@@ -203,8 +160,8 @@ export class CollaborationService {
 
   createCollaborationDialog() {
     var collaborationTypes$ =
-      this.getCollaborationTypes()
-        .pipe(map(types => types.map(type => new CollaborationTypeClass(type))));
+      this.objSrv.getObjectTypes('collaborationTypes')
+        .pipe(map(types => types.map(type => new ObjectTypeClass(type))));
     this.dialog.openDialog({ Name: "", Description: "", Type: "" },
       {
         title: "Create Collaboration",
@@ -213,9 +170,9 @@ export class CollaborationService {
         values: { Type: collaborationTypes$ }
       })
       .subscribe((result) => {
-        this.getCollaborationType(result.Type.id).subscribe((type) => {
+        this.objSrv.getObjectType('collaborationTypes', result.Type.id).subscribe((type) => {
           if (type.objectTypeId) {
-            this.objectSrv.openObjectDialog(type.objectTypeId,
+            this.objDialogSrv.openObjectDialog(type.objectTypeId,
               {
                 title: "Create Collaboration",
                 width: "400px",
@@ -282,7 +239,8 @@ export class CollaborationService {
   postMember(id: string, member: Member) {
     const obj = {
       roles: member.roles,
-      tags: member.tags
+      tags: member.tags,
+      attributes: (member.attributes) ? member.attributes : {}
     }
     return this.db.doc(`accounts/${this.config.getConfig().accountId}/collaborations/${id}/members/${member.id}`)
       .set(obj);
@@ -403,13 +361,14 @@ export class CollaborationService {
       changedOn: new Date(),
       parentId: file.parentId,
       isFolder: true,
-      tags: []
+      tags: [],
+      attributes: (file.attributes) ? file.attributes : {}
     }
     return this.db.collection(`accounts/${accountId}/collaborations/${id}/documents`)
       .add(obj);
   }
 
-  postFiles(id: string, folder: File, files: any[]) {
+  postFiles(id: string, folder: File, files: any[], attributes? : any) {
     const accountId = this.config.getConfig().accountId;
     for (var file of files) {
       const filePath = folder == null ? file.name : folder.path + "/" + file.name;
@@ -425,7 +384,8 @@ export class CollaborationService {
         changedOn: new Date(),
         parentId: folder == null ? "" : folder.id,
         isFolder: false,
-        tags: []
+        tags: [],
+        attributes: (attributes) ? attributes : {}
       };
       this.db.collection(`accounts/${accountId}/collaborations/${id}/documents`).add(obj);
     }
@@ -476,7 +436,8 @@ export class CollaborationService {
     const obj = {
       text: p.text,
       authorUid: this.auth.currentUserId,
-      postedOn: new Date()
+      postedOn: new Date(),
+      attributes: (p.attributes) ? p.attributes : {}
     };
     this.db.collection(`accounts/${accountId}/collaborations/${id}/posts`).add(obj);
   }

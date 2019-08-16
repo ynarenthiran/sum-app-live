@@ -7,6 +7,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { PageService } from 'src/app/layout/page.component';
 import { MatChipInputEvent } from '@angular/material';
 import { map, flatMap } from 'rxjs/operators';
+import { ObjectDialogService } from 'src/app/object/object.component';
+import { ObjectService, ObjectTypeClass } from 'src/app/object/object.service';
 
 @Directive({
   selector: '[appDocumentDropArea]'
@@ -107,7 +109,8 @@ export class DocumentComponent implements OnInit {
   private files$: Observable<File[]>;
 
   constructor(private srv: CollaborationService, private dialog: DialogService, private router: Router,
-    private route: ActivatedRoute, private pageSrv: PageService) {
+    private route: ActivatedRoute, private pageSrv: PageService, private objSrv: ObjectService,
+    private objDialogSrv: ObjectDialogService) {
   }
 
   ngOnInit() {
@@ -136,23 +139,46 @@ export class DocumentComponent implements OnInit {
   }
 
   addFolder() {
-    this.dialog.openDialog({ Name: "" },
+    var documentType$ =
+      this.objSrv.getObjectTypes('documentTypes')
+        .pipe(map(types => types.map(type => new ObjectTypeClass(type))));
+    this.dialog.openDialog({ Name: "", Type: "" },
       {
         title: "Create Folder",
         width: "300px",
-        button: { ok: "Create", cancel: "Cancel" }
+        button: { ok: "Create", cancel: "Cancel" },
+        values: {
+          Roles: ['Administrator', 'Contributor', 'Reader'],
+          Type: documentType$
+        }
       })
       .subscribe((result) => {
-        this.onAddFolder(result);
+        this.objSrv.getObjectType('documentTypes', result.Type.id).subscribe((type) => {
+          if (type.objectTypeId) {
+            this.objDialogSrv.openObjectDialog(type.objectTypeId,
+              {
+                title: "Create Folder",
+                width: "300px",
+                button: { ok: "Create", cancel: "Cancel" }
+              })
+              .subscribe((attributes) => {
+                this.onAddFolder(result, attributes);
+              });
+          }
+          else {
+            this.onAddFolder(result);
+          }
+        })
       });
   }
 
-  onAddFolder(folderIn: any) {
+  onAddFolder(folderIn: any, attributes?: any) {
     const folder: File = Object.assign({} as File, {
       name: folderIn.Name,
       description: folderIn.Name,
       path: this._parent == null ? "" : this._parent.path,
-      parentId: this._parent == null ? "" : this._parent.id
+      parentId: this._parent == null ? "" : this._parent.id,
+      attributes: attributes
     });
     this.srv.postFolder(this.collaborationId, folder);
   }
@@ -160,13 +186,46 @@ export class DocumentComponent implements OnInit {
   onFileDropped(event: any) {
     if (event.files) {
       const droppedFiles: any[] = event.files;
-      this.srv.postFiles(this.collaborationId, this._parent, droppedFiles);
+      this.uploadFiles(droppedFiles);
     }
   }
 
   onFileSelected() {
     const uploadedFiles = this.uploadInputEl.nativeElement.files;
-    this.srv.postFiles(this.collaborationId, this._parent, uploadedFiles);
+    this.uploadFiles(uploadedFiles);
+  }
+
+  private uploadFiles(files: any[]) {
+    var documentType$ =
+      this.objSrv.getObjectTypes('documentTypes')
+        .pipe(map(types => types.map(type => new ObjectTypeClass(type))));
+    this.dialog.openDialog({ Type: "" },
+      {
+        title: "Upload File",
+        width: "300px",
+        button: { ok: "Upload", cancel: "Cancel" },
+        values: {
+          Type: documentType$
+        }
+      })
+      .subscribe((result) => {
+        this.objSrv.getObjectType('documentTypes', result.Type.id).subscribe((type) => {
+          if (type.objectTypeId) {
+            this.objDialogSrv.openObjectDialog(type.objectTypeId,
+              {
+                title: "Upload File",
+                width: "300px",
+                button: { ok: "Upload", cancel: "Cancel" }
+              })
+              .subscribe((attributes) => {
+                this.srv.postFiles(this.collaborationId, this._parent, files, attributes);
+              });
+          }
+          else {
+            this.srv.postFiles(this.collaborationId, this._parent, files);
+          }
+        })
+      });
   }
 
   onSelectDocumentItem(file: File) {

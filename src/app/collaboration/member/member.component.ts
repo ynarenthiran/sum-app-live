@@ -4,6 +4,8 @@ import { CollaborationService, Member } from '../collaboration.service';
 import { DialogService } from 'src/app/dialog/dialog.component';
 import { ActivatedRoute } from '@angular/router';
 import { map } from 'rxjs/operators';
+import { ObjectService, ObjectTypeClass } from 'src/app/object/object.service';
+import { ObjectDialogService } from 'src/app/object/object.component';
 
 interface UserInfo {
   value: string;
@@ -21,7 +23,8 @@ export class MemberComponent implements OnInit {
   private displayedColumns: string[] = ['displayName', 'email', 'roles', 'tags', 'actions'];
   private members$: Observable<Member[]>;
 
-  constructor(private srv: CollaborationService, private dialog: DialogService, private route: ActivatedRoute) {
+  constructor(private srv: CollaborationService, private dialog: DialogService, private objSrv: ObjectService,
+    private objDialogSrv: ObjectDialogService, private route: ActivatedRoute) {
     route.parent.params.subscribe(params => {
       this.collaborationId = params.id;
       this.members$ = this.srv.getMembers(this.collaborationId);
@@ -32,20 +35,45 @@ export class MemberComponent implements OnInit {
   }
 
   addMember() {
-    this.dialog.openDialog({ User: "", Roles: [], Tags: [] },
+    var memberType$ =
+      this.objSrv.getObjectTypes('memberTypes')
+        .pipe(map(types => types.map(type => new ObjectTypeClass(type))));
+    this.dialog.openDialog({ User: "", Roles: [], Tags: [], Type: "" },
       {
         title: "Add Member",
         width: "400px",
         button: { ok: "Add", cancel: "Cancel" },
         values: {
-          Roles: ['Administrator', 'Contributor', 'Reader']
+          Roles: ['Administrator', 'Contributor', 'Reader'],
+          Type: memberType$
         },
         suggest: {
           User: this.srv.getUsers().pipe(map(users => users.map(user => Object.assign({ value: user.id, text: `${user.displayName} (${user.email})` }))))
         }
       })
       .subscribe((result) => {
-        this.onAddMember(result);
+        this.objSrv.getObjectType('memberTypes', result.Type.id).subscribe((type) => {
+          if (type.objectTypeId) {
+            this.objDialogSrv.openObjectDialog(type.objectTypeId,
+              {
+                title: "Add Member",
+                width: "400px",
+                button: { ok: "Add", cancel: "Cancel" }
+              })
+              .subscribe((attributes) => {
+                const member: Member = Object.assign({} as Member, {
+                  id: result.User.value, roles: result.Roles, tags: result.Tags, typeId: result.Type.id, attributes: attributes
+                });
+                this.srv.postMember(this.collaborationId, member);
+              });
+          }
+          else {
+            const member: Member = Object.assign({} as Member, {
+              id: result.User.value, roles: result.Roles, tags: result.Tags, typeId: result.Type.id
+            });
+            this.srv.postMember(this.collaborationId, member);
+          }
+        })
       });
   }
 
