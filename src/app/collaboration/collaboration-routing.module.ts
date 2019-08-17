@@ -6,11 +6,13 @@ import { MemberComponent } from './member/member.component';
 import { DocumentComponent } from './document/document.component';
 import { ListComponent } from './list/list.component';
 import { PostComponent } from './post/post.component';
+import { TestComponent } from './test/test.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'list', pathMatch: 'full' },
   { path: 'list', component: ListComponent },
   { path: 'create', component: CreateComponent },
+  { path: 'test', component: TestComponent },
   {
     path: ':id', component: CollaborationComponent,
     children: [

@@ -11,6 +11,7 @@ import {
   MatRippleModule,
   MatTreeModule
 } from '@angular/material';
+import { AngularDraggableModule } from 'angular2-draggable';
 
 import {
   PageComponent,
@@ -25,6 +26,7 @@ import {
   PageNode,
   PageHeader
 } from './page.component';
+import { FlexiblePageComponent, FlexiblePageSection } from './page2.component';
 
 @NgModule({
   imports: [
@@ -37,14 +39,17 @@ import {
     MatCardModule,
     MatListModule,
     MatRippleModule,
-    MatTreeModule
+    MatTreeModule,
+    AngularDraggableModule
   ],
   declarations: [
     PageComponent,
+    FlexiblePageComponent,
     PageListComponent,
     PageTreeComponent,
     PageHeader,
     PageSection,
+    FlexiblePageSection,
     PageSectionDefinition,
     PageSectionContent,
     PageSectionToolbar,
@@ -55,8 +60,10 @@ import {
     PageComponent,
     PageListComponent,
     PageTreeComponent,
+    FlexiblePageComponent,
     PageHeader,
     PageSection,
+    FlexiblePageSection,
     PageSectionDefinition,
     PageSectionContent,
     PageSectionToolbar,

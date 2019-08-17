@@ -1,0 +1,20 @@
+<div class="page-header-bg">
+</div>
+<div class="page-sidebar-container">
+  <div class="page-sidebar-content page">
+    <div class="page-header">
+      <!--Application Header Here-->
+      <ng-content select="lib-page-header"></ng-content>
+    </div>
+    <div #bounds class="page-content2">
+      <!--Sections Rendered Here-->
+      <mat-card ngDraggable [handle]="handle" [bounds]="bounds" [inBounds]="true" 
+        ngResizable [rzContainment]="bounds" rzHandles="all" *ngFor="let sectionDef of sectionDefinitions">
+        <mat-card-title #handle>{{sectionDef.title}}</mat-card-title>
+        <mat-card-content>
+          <ng-container *ngTemplateOutlet="sectionDef.content"></ng-container>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

@@ -30,6 +30,7 @@ import { PostComponent } from './post/post.component';
 import { MomentModule } from 'ngx-moment';
 import { TextFieldModule } from '@angular/cdk/text-field';
 import { FormsModule } from '@angular/forms';
+import { TestComponent } from './test/test.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { FormsModule } from '@angular/forms';
     DocumentComponent,
     DocumentDropArea,
     ListComponent,
-    PostComponent
+    PostComponent,
+    TestComponent
   ],
   imports: [
     CommonModule,
