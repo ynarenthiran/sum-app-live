@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
   selector: 'app-logout',
@@ -9,7 +10,7 @@ import { Router } from '@angular/router';
 })
 export class LogoutComponent implements OnInit {
 
-  constructor(private afAuth: AngularFireAuth, private router: Router) { }
+  constructor(private afAuth: AngularFireAuth, private router: Router, private snackBar: MatSnackBar) { }
 
   ngOnInit() {
     this.signIn();
@@ -18,10 +19,17 @@ export class LogoutComponent implements OnInit {
   signIn() {
     this.afAuth.auth.signOut()
       .catch((error) => {
-        window.alert(error.message);
+        this.snackBar.open(error.message, undefined, {
+          duration: 5000,
+        });
       })
       .then(() => {
-        window.alert("You are logged out");
+        this.snackBar.open('You are logged out', 'Login', {
+          duration: 5000,
+        }).afterDismissed().subscribe((dismiss) => {
+          if (dismiss.dismissedByAction)
+            this.router.navigate(['/']);
+        })
       });
   }
 

@@ -4,7 +4,8 @@ import {
   MatFormFieldModule,
   MatInputModule,
   MatIconModule,
-  MatButtonModule
+  MatButtonModule,
+  MatSnackBarModule
 } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AngularFireAuthModule } from '@angular/fire/auth';
@@ -28,6 +29,7 @@ import { LogoutComponent } from './logout/logout.component';
     MatInputModule,
     MatIconModule,
     MatButtonModule,
+    MatSnackBarModule,
     AngularFireAuthModule,
     AuthenticationRoutingModule
   ],

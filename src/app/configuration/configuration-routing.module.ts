@@ -8,10 +8,23 @@ const routes: Routes = [
   {
     path: '', component: MainComponent,
     children: [
-      { path: '', redirectTo: 'collaborationTypes', pathMatch: 'full' },
+      { path: '', redirectTo: 'objectTypes', pathMatch: 'full' },
       {
-        path: 'collaborationTypes',
-        data: { title: 'Collaboration Types', fields: { name: 'Name', description: 'Description', objectTypeId: 'Object Type' } },
+        path: 'objectTypes',
+        data: { title: 'Object Types', fields: { name: 'Name', description: 'Description', definition: 'Definition (*.json)' } },
+        children: [
+          { path: '', component: ListComponent, pathMatch: 'full' },
+          {
+            path: ':objectTypeId',
+            children: [
+              { path: '', component: FormComponent, pathMatch: 'full' }
+            ]
+          }
+        ]
+      },
+      {
+        path: 'memberTypes',
+        data: { title: 'Member Types', fields: { name: 'Name', description: 'Description', objectTypeId: 'Object Type' } },
         children: [
           { path: '', component: ListComponent, pathMatch: 'full' },
           {
@@ -49,14 +62,118 @@ const routes: Routes = [
         ]
       },
       {
-        path: 'objectTypes',
-        data: { title: 'Object Types', fields: { name: 'Name', description: 'Description', definition: 'Definition (*.json)' } },
+        path: 'documentTypes',
+        data: { title: 'Document Types', fields: { name: 'Name', description: 'Description', objectTypeId: 'Object Type' } },
         children: [
           { path: '', component: ListComponent, pathMatch: 'full' },
           {
-            path: ':objectTypeId',
+            path: ':typeId',
             children: [
-              { path: '', component: FormComponent, pathMatch: 'full' }
+              { path: '', component: FormComponent, pathMatch: 'full' },
+              {
+                path: 'statuses',
+                data: { title: 'Statuses', fields: { name: 'Name', description: 'Description' } },
+                children: [
+                  { path: '', component: ListComponent, pathMatch: 'full' },
+                  {
+                    path: ':statusId',
+                    children: [
+                      { path: '', component: FormComponent, pathMatch: 'full' },
+                      {
+                        path: 'caseModels',
+                        data: { title: 'Case Models', fields: { name: 'Name', description: 'Description' } },
+                        children: [
+                          { path: '', component: ListComponent, pathMatch: 'full' },
+                          {
+                            path: ':modelId',
+                            children: [
+                              { path: '', component: FormComponent, pathMatch: 'full' }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        path: 'postTypes',
+        data: { title: 'Post Types', fields: { name: 'Name', description: 'Description', objectTypeId: 'Object Type' } },
+        children: [
+          { path: '', component: ListComponent, pathMatch: 'full' },
+          {
+            path: ':typeId',
+            children: [
+              { path: '', component: FormComponent, pathMatch: 'full' },
+              {
+                path: 'statuses',
+                data: { title: 'Statuses', fields: { name: 'Name', description: 'Description' } },
+                children: [
+                  { path: '', component: ListComponent, pathMatch: 'full' },
+                  {
+                    path: ':statusId',
+                    children: [
+                      { path: '', component: FormComponent, pathMatch: 'full' },
+                      {
+                        path: 'caseModels',
+                        data: { title: 'Case Models', fields: { name: 'Name', description: 'Description' } },
+                        children: [
+                          { path: '', component: ListComponent, pathMatch: 'full' },
+                          {
+                            path: ':modelId',
+                            children: [
+                              { path: '', component: FormComponent, pathMatch: 'full' }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        path: 'collaborationTypes',
+        data: { title: 'Collaboration Types', fields: { name: 'Name', description: 'Description', objectTypeId: 'Object Type' } },
+        children: [
+          { path: '', component: ListComponent, pathMatch: 'full' },
+          {
+            path: ':typeId',
+            children: [
+              { path: '', component: FormComponent, pathMatch: 'full' },
+              {
+                path: 'statuses',
+                data: { title: 'Statuses', fields: { name: 'Name', description: 'Description' } },
+                children: [
+                  { path: '', component: ListComponent, pathMatch: 'full' },
+                  {
+                    path: ':statusId',
+                    children: [
+                      { path: '', component: FormComponent, pathMatch: 'full' },
+                      {
+                        path: 'caseModels',
+                        data: { title: 'Case Models', fields: { name: 'Name', description: 'Description' } },
+                        children: [
+                          { path: '', component: ListComponent, pathMatch: 'full' },
+                          {
+                            path: ':modelId',
+                            children: [
+                              { path: '', component: FormComponent, pathMatch: 'full' }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
             ]
           }
         ]

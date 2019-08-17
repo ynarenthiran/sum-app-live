@@ -1,9 +1,10 @@
 import { Component, OnInit, NgZone } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { auth } from 'firebase';
 import { AccountService } from 'src/app/services/account.service';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
   selector: 'lib-auth-login',
@@ -18,7 +19,8 @@ export class LoginComponent implements OnInit {
   ]);
   private passwordFormControl = new FormControl('', []);
 
-  constructor(private auth: AngularFireAuth, private router: Router, private zone: NgZone, private srv: AccountService) { }
+  constructor(private auth: AngularFireAuth, private router: Router, private zone: NgZone,
+    private srv: AccountService, private snackBar: MatSnackBar, private route: ActivatedRoute) { }
 
   ngOnInit() {
   }
@@ -52,13 +54,22 @@ export class LoginComponent implements OnInit {
   onSignIn(promise: Promise<auth.UserCredential>) {
     promise
       .catch((error) => {
-        window.alert(error.message);
+        this.snackBar.open(error.message, undefined, {
+          duration: 5000,
+        });
       })
       .then((credential) => {
         if (credential)
           this.srv.setUserRegistration(credential.user.uid);
         this.zone.run(() => {
-          this.router.navigate(['/']);
+          // Navigate to the redirectUrl or '/'
+          const redirectUrl = this.route.snapshot.queryParams.redirectUrl;
+          if (redirectUrl) {
+            this.router.navigateByUrl(decodeURI(redirectUrl));
+          }
+          else {
+            this.router.navigate(['/']);
+          }
         });
       });
   }
