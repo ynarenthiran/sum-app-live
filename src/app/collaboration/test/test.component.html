@@ -1,9 +1,19 @@
 <lib-flexible-page>
   <lib-page-header>Hello World</lib-page-header>
-  <lib-flexible-page-section title="Section 1">
-    Section content 1
+  <lib-flexible-page-section title="Members">
+    <app-collaboration-table [collaborationId]="collaborationId" [reader]="memberReader" [mapper]="memberMapper"
+      [fields]="Fields_Members">
+    </app-collaboration-table>
   </lib-flexible-page-section>
-  <lib-flexible-page-section title="Section 2">
-    Section content 2
+  <lib-flexible-page-section title="Posts">
+    <app-collaboration-table [collaborationId]="collaborationId" path="posts" [mapper]="postMapper"
+      [fields]="Fields_Posts">
+    </app-collaboration-table>
+  </lib-flexible-page-section>
+  <lib-flexible-page-section title="Documents">
+    <app-collaboration-table [collaborationId]="collaborationId" path="documents" [mapper]="documentMapper"
+      [fields]="Fields_Documents">
+    </app-collaboration-table>
   </lib-flexible-page-section>
 </lib-flexible-page>
+<!--[path]="{path: 'members', joinScope: 'R', join: {id: 'users'}}" [mapper]="memberMapper"-->

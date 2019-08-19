@@ -11,7 +11,7 @@ import {
   MatRippleModule,
   MatTreeModule
 } from '@angular/material';
-import { AngularDraggableModule } from 'angular2-draggable';
+import { GridsterModule } from 'angular2gridster';
 
 import {
   PageComponent,
@@ -40,7 +40,7 @@ import { FlexiblePageComponent, FlexiblePageSection } from './page2.component';
     MatListModule,
     MatRippleModule,
     MatTreeModule,
-    AngularDraggableModule
+    GridsterModule
   ],
   declarations: [
     PageComponent,

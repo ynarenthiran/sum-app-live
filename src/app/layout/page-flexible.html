@@ -8,13 +8,23 @@
     </div>
     <div #bounds class="page-content2">
       <!--Sections Rendered Here-->
-      <mat-card ngDraggable [handle]="handle" [bounds]="bounds" [inBounds]="true" 
-        ngResizable [rzContainment]="bounds" rzHandles="all" *ngFor="let sectionDef of sectionDefinitions">
-        <mat-card-title #handle>{{sectionDef.title}}</mat-card-title>
-        <mat-card-content>
-          <ng-container *ngTemplateOutlet="sectionDef.content"></ng-container>
-        </mat-card-content>
-      </mat-card>
+      <ngx-gridster [options]="gridsterOptions" [draggableOptions]="{ handlerClass: 'panel-section-header2' }">
+        <ngx-gridster-item *ngFor="let section of sectionInstances" [(x)]="section.x" [(y)]="section.y"
+          [(w)]="section.w" [(h)]="section.h">
+          <mat-card class="page-section2">
+            <mat-card-title #handle class="panel-section-header2">{{section.definition.title}}</mat-card-title>
+            <mat-card-content>
+              <ng-container *ngTemplateOutlet="section.definition.content"></ng-container>
+            </mat-card-content>
+          </mat-card>
+        </ngx-gridster-item>
+      </ngx-gridster>
+      <div class="page-floating-button">
+        <!--Floating Buttons Here-->
+        <button mat-fab color="accent" (click)="customize()">
+          <mat-icon>settings</mat-icon>
+        </button>
+      </div>
     </div>
   </div>
 </div>

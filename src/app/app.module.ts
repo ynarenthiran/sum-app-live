@@ -14,7 +14,7 @@ import {
   MatToolbarModule,
   MatMenuModule
 } from '@angular/material';
-
+import { GridsterModule } from 'angular2gridster';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -47,6 +47,7 @@ const appInitializerFn = (appConfig: AppConfigService) => {
     MatRippleModule,
     MatToolbarModule,
     MatMenuModule,
+    GridsterModule.forRoot(),
     AppRoutingModule
   ],
   providers: [

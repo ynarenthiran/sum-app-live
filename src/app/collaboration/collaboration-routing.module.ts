@@ -12,7 +12,7 @@ const routes: Routes = [
   { path: '', redirectTo: 'list', pathMatch: 'full' },
   { path: 'list', component: ListComponent },
   { path: 'create', component: CreateComponent },
-  { path: 'test', component: TestComponent },
+  { path: 'test/:id', component: TestComponent },
   {
     path: ':id', component: CollaborationComponent,
     children: [

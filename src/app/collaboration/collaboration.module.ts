@@ -30,7 +30,8 @@ import { PostComponent } from './post/post.component';
 import { MomentModule } from 'ngx-moment';
 import { TextFieldModule } from '@angular/cdk/text-field';
 import { FormsModule } from '@angular/forms';
-import { TestComponent } from './test/test.component';
+import { TestComponent, ComponentTableComponent } from './test/test.component';
+import { GenericDataReader } from './test/test-common';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { TestComponent } from './test/test.component';
     DocumentDropArea,
     ListComponent,
     PostComponent,
-    TestComponent
+    TestComponent,
+    ComponentTableComponent
   ],
   imports: [
     CommonModule,
@@ -64,7 +66,8 @@ import { TestComponent } from './test/test.component';
     MomentModule
   ],
   providers: [
-    CollaborationService
+    CollaborationService,
+    GenericDataReader
   ]
 })
 export class CollaborationModule { }
