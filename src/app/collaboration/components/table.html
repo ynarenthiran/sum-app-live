@@ -11,6 +11,15 @@
             <span *ngSwitchDefault>{{element[column.field]}}</span>
         </mat-cell>
     </ng-container>
+    <!-- Actions Column -->
+    <ng-container matColumnDef="actions" stickyEnd>
+        <mat-header-cell *matHeaderCellDef></mat-header-cell>
+        <mat-cell *matCellDef="let element">
+            <button *ngFor="let column of actionColumns" mat-button (click)="onAction(column.action, element)">
+                <mat-icon *ngIf="column.icon">{{column.icon}}</mat-icon> {{column.label}}
+            </button>
+        </mat-cell>
+    </ng-container>
     <mat-header-row mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row mat-row *matRowDef="let row; columns: displayedColumns;" class="list-row">
     </mat-row>

@@ -10,12 +10,12 @@ import {
   MatChipsModule,
   MatRippleModule,
   MatFormFieldModule,
-  MatInputModule
+  MatInputModule,
+  MatSnackBarModule
 } from '@angular/material';
 
 import { CollaborationRoutingModule } from './collaboration-routing.module';
 import { CreateComponent } from './create/create.component';
-import { CollaborationComponent } from './collaboration/collaboration.component';
 import { LayoutModule } from '../layout/layout.module';
 import { DialogModule } from '../dialog/dialog.module';
 import { CollaborationService } from './collaboration.service';
@@ -30,8 +30,9 @@ import { PostComponent } from './post/post.component';
 import { MomentModule } from 'ngx-moment';
 import { TextFieldModule } from '@angular/cdk/text-field';
 import { FormsModule } from '@angular/forms';
-import { TestComponent, ComponentTableComponent } from './test/test.component';
-import { GenericDataReader } from './test/test-common';
+import { CollaborationComponent } from './collaboration.component';
+import { GenericDataReader } from './util/common';
+import { ComponentTable } from './components/component';
 
 @NgModule({
   declarations: [
@@ -42,8 +43,7 @@ import { GenericDataReader } from './test/test-common';
     DocumentDropArea,
     ListComponent,
     PostComponent,
-    TestComponent,
-    ComponentTableComponent
+    ComponentTable
   ],
   imports: [
     CommonModule,
@@ -61,6 +61,7 @@ import { GenericDataReader } from './test/test-common';
     MatChipsModule,
     MatFormFieldModule,
     MatInputModule,
+    MatSnackBarModule,
     TextFieldModule,
     FormsModule,
     MomentModule

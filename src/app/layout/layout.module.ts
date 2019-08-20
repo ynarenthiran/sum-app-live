@@ -9,7 +9,8 @@ import {
   MatCardModule,
   MatListModule,
   MatRippleModule,
-  MatTreeModule
+  MatTreeModule,
+  MatExpansionModule
 } from '@angular/material';
 import { GridsterModule } from 'angular2gridster';
 
@@ -26,7 +27,7 @@ import {
   PageNode,
   PageHeader
 } from './page.component';
-import { FlexiblePageComponent, FlexiblePageSection } from './page2.component';
+import { FlexiblePageComponent, FlexiblePageSection, FlexiblePageSectionAction, FlexiblePageSectionFab } from './page2.component';
 
 @NgModule({
   imports: [
@@ -40,6 +41,7 @@ import { FlexiblePageComponent, FlexiblePageSection } from './page2.component';
     MatListModule,
     MatRippleModule,
     MatTreeModule,
+    MatExpansionModule,
     GridsterModule
   ],
   declarations: [
@@ -54,7 +56,9 @@ import { FlexiblePageComponent, FlexiblePageSection } from './page2.component';
     PageSectionContent,
     PageSectionToolbar,
     PageSectionDetail,
-    PageNode
+    PageNode,
+    FlexiblePageSectionAction,
+    FlexiblePageSectionFab
   ],
   exports: [
     PageComponent,
@@ -68,7 +72,9 @@ import { FlexiblePageComponent, FlexiblePageSection } from './page2.component';
     PageSectionContent,
     PageSectionToolbar,
     PageSectionDetail,
-    PageNode
+    PageNode,
+    FlexiblePageSectionAction,
+    FlexiblePageSectionFab
   ],
   providers: [
     PageService

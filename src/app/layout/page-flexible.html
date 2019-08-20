@@ -11,12 +11,28 @@
       <ngx-gridster [options]="gridsterOptions" [draggableOptions]="{ handlerClass: 'panel-section-header2' }">
         <ngx-gridster-item *ngFor="let section of sectionInstances" [(x)]="section.x" [(y)]="section.y"
           [(w)]="section.w" [(h)]="section.h">
-          <mat-card class="page-section2">
-            <mat-card-title #handle class="panel-section-header2">{{section.definition.title}}</mat-card-title>
-            <mat-card-content>
-              <ng-container *ngTemplateOutlet="section.definition.content"></ng-container>
-            </mat-card-content>
-          </mat-card>
+          <mat-expansion-panel class="page-section2" expanded>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                {{section.definition.title}}
+              </mat-panel-title>
+              <mat-panel-description>
+                {{section.definition.title}}
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <div *ngIf="section.definition.fab" class="page-section2-fab">
+              <button mat-fab color="accent" (click)="section.definition.onAction(section.definition.fab.action)">
+                <mat-icon>{{section.definition.fab.icon}}</mat-icon>
+              </button>
+            </div>
+            <ng-container *ngTemplateOutlet="section.definition.content"></ng-container>
+            <mat-action-row>
+              <button *ngFor="let action of section.definition.actions" mat-button
+                (click)="section.definition.onAction(action.action)">
+                <mat-icon *ngIf="action.icon">{{action.icon}}</mat-icon> {{action.label}}
+              </button>
+            </mat-action-row>
+          </mat-expansion-panel>
         </ngx-gridster-item>
       </ngx-gridster>
       <div class="page-floating-button">

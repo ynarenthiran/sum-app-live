@@ -11,19 +11,19 @@
     </div>
   </lib-page-header>
   <lib-flexible-page-section title="Members">
-    <app-collaboration-table [collaborationId]="collaborationId" [reader]="memberReader" [mapper]="memberMapper"
-      [fields]="Fields_Members">
-    </app-collaboration-table>
+    <app-comp-table [collaborationId]="collaborationId" [reader]="memberReader" [mapper]="memberMapper"
+      [fields]="Fields_Members" [actions]="Actions_Members" [handler]="memberHandler">
+    </app-comp-table>
   </lib-flexible-page-section>
   <lib-flexible-page-section title="Posts">
-    <app-collaboration-table [collaborationId]="collaborationId" path="posts" [mapper]="postMapper"
-      [fields]="Fields_Posts">
-    </app-collaboration-table>
+    <app-comp-table [collaborationId]="collaborationId" path="posts" [mapper]="postMapper" [fields]="Fields_Posts">
+    </app-comp-table>
   </lib-flexible-page-section>
-  <lib-flexible-page-section title="Documents">
-    <app-collaboration-table [collaborationId]="collaborationId" path="documents" [mapper]="documentMapper"
+  <lib-flexible-page-section title="Documents" (action)="table.onAction($event)">
+    <app-comp-table #table [collaborationId]="collaborationId" path="documents" [mapper]="documentMapper"
       [fields]="Fields_Documents">
-    </app-collaboration-table>
+    </app-comp-table>
+    <lib-flexible-section-fab action="addFile" icon="add"></lib-flexible-section-fab>
   </lib-flexible-page-section>
 </lib-flexible-page>
 <!--[path]="{path: 'members', joinScope: 'R', join: {id: 'users'}}" [mapper]="memberMapper"-->

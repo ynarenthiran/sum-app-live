@@ -14,26 +14,37 @@ export interface TableColumn {
   label: string;
   type?: TableColumnType;
 }
+export interface ActionColumn {
+  action: string;
+  label?: string;
+  icon?: string;
+}
 
 export const FIELDS_DOCUMENTS = {
   icon: { type: TableColumnType.Icon },
   name: 'Name',
   description: 'Description',
-};
+}
 
 export const FIELDS_POSTS = {
   text: 'Text',
   authorUid: 'Posted By',
   postedOn: 'Posted On',
   postedBySelf: 'My Post',
-};
+}
 
 export const FIELDS_MEMBERS = {
   displayName: 'Name',
   email: 'Email',
   roles: { label: 'Roles', type: TableColumnType.Chips },
   tags: { label: 'Tags', type: TableColumnType.Chips },
-};
+}
+
+export const ACTIONS_MEMBERS = {
+  add: { icon: 'add', main: true },
+  edit: { icon: 'edit' },
+  remove: { icon: 'remove_circle' }
+}
 
 export abstract class DataReader {
   abstract read(id: string): Observable<any[]>;
@@ -41,6 +52,10 @@ export abstract class DataReader {
 
 export abstract class DataMapper {
   abstract map(input: any): any;
+}
+
+export abstract class ViewHandler {
+  abstract action(action: string, record?: any);
 }
 
 export interface PathObject {

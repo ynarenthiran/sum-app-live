@@ -1,91 +1,13 @@
-import { Component, OnInit, Input, DoCheck, OnChanges, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Observable, of, Subscription } from 'rxjs';
-import { AppConfigService } from 'src/app/services/app.config';
-import { AngularFirestore } from '@angular/fire/firestore';
 import { map, switchMap } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
-import { CollaborationService, Status, Collaboration } from '../collaboration.service';
 import { AuthService } from 'src/app/authentication/auth.service';
 import {
-  FIELDS_POSTS, FIELDS_MEMBERS, FIELDS_DOCUMENTS, DataReader, DataMapper,
-  TableColumn, PathObject, GenericDataReader, TableColumnType
-} from './test-common';
-
-@Component({
-  selector: 'app-collaboration-table',
-  templateUrl: './test-table.html'
-})
-export class ComponentTableComponent implements OnInit, OnChanges {
-  private columnType = TableColumnType;
-
-  @Input()
-  collaborationId: string;
-
-  @Input()
-  path?: string | PathObject;
-
-  @Input()
-  reader?: DataReader;
-
-  @Input()
-  mapper?: DataMapper;
-
-  @Input()
-  fields: any;
-
-  private columns: TableColumn[]
-  private displayedColumns: string[] = [];
-
-  private records$: Observable<any[]> = of([]);
-
-  constructor(private config: AppConfigService, private db: AngularFirestore, private genReader: GenericDataReader) { }
-
-  ngOnInit() {
-  }
-
-  ngOnChanges() {
-    this.initialize();
-  }
-
-  private initialize() {
-    this.getRecords();
-    this.getView();
-  }
-
-  private getRecords() {
-    if (this.path)
-      this.records$ = this.genReader.read(this.path, this.collaborationId);
-    else {
-      this.records$ = this.reader.read(this.collaborationId)
-    }
-    if (this.mapper) {
-      this.records$ = this.records$.pipe(
-        map(records => records.map(record => this.mapper.map(record)))
-      );
-    }
-  }
-
-  private getView() {
-    this.columns = [];
-    this.displayedColumns = [];
-    Object.keys(this.fields).forEach((key) => {
-      var label: string = "";
-      var type: TableColumnType = TableColumnType.Default;
-      if (typeof this.fields[key] == "string") {
-        label = this.fields[key];
-      }
-      else {
-        const spec = this.fields[key];
-        if (spec.label)
-          label = spec.label;
-        if (spec.type)
-          type = spec.type;
-      }
-      this.columns.push({ field: key, label: label, type: type });
-      this.displayedColumns.push(key);
-    });
-  }
-}
+  FIELDS_POSTS, FIELDS_MEMBERS, FIELDS_DOCUMENTS, DataMapper, DataReader, ACTIONS_MEMBERS, ViewHandler
+} from './util/common';
+import { Status, Collaboration, CollaborationService } from './collaboration.service';
+import { MatSnackBar } from '@angular/material';
 
 interface StatusValue extends Status {
   value: string;
@@ -96,13 +18,14 @@ interface ActionValue {
 }
 
 @Component({
-  selector: 'app-test',
-  templateUrl: './test.component.html',
-  styleUrls: ['./test.component.scss']
+  selector: 'app-collaboration',
+  templateUrl: './collaboration.component.html',
+  styleUrls: ['./collaboration.component.scss']
 })
-export class TestComponent implements OnInit {
+export class CollaborationComponent implements OnInit {
   private Fields_Posts: any = FIELDS_POSTS;
   private Fields_Members: any = FIELDS_MEMBERS;
+  private Actions_Members: any = ACTIONS_MEMBERS;
   private Fields_Documents: any = FIELDS_DOCUMENTS;
 
   private subs: Subscription = new Subscription();
@@ -111,7 +34,8 @@ export class TestComponent implements OnInit {
   private statusValues$: Observable<StatusValue[]>;
   private actions: ActionValue[] = [];
 
-  constructor(private route: ActivatedRoute, private auth: AuthService, private srv: CollaborationService) { }
+  constructor(private route: ActivatedRoute, private auth: AuthService, private srv: CollaborationService,
+    private snackBar: MatSnackBar) { }
 
   ngOnInit() {
     this.route.paramMap.pipe(
@@ -134,8 +58,11 @@ export class TestComponent implements OnInit {
     this.subs.add(
       this.srv.getCollaboration(id,
         (c) => {
-          if (!c)
-            window.alert("Does not exist");
+          if (!c) {
+            this.snackBar.open("Collaboration does not exist", undefined, {
+              duration: 5000,
+            });
+          }
           this.collaboration = c;
           this.loadStatus(this.collaboration.typeId);
           this.loadAction();
@@ -159,7 +86,9 @@ export class TestComponent implements OnInit {
   }
 
   private loadAction() {
-    this.actions = Object.keys(this.collaboration.action).map(key => { return { id: key, name: this.collaboration.action[key] }; });
+    this.actions = Object.keys(this.collaboration.action).map(key => {
+      return { id: key, name: this.collaboration.action[key] };
+    });
   }
 
   // Members
@@ -174,6 +103,11 @@ export class TestComponent implements OnInit {
       return this.srv.getMembers(id);
     }
   })(this.srv);
+  private memberHandler = new (class MemberViewHandler extends ViewHandler {
+    action(action: string, record?: any) {
+      throw new Error("Method not implemented.");
+    }
+  })();
   // Documents
   private documentMapper = new (class DocumentDataMapper extends DataMapper {
     map(input: any) {
