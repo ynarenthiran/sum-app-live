@@ -1,8 +1,14 @@
 <mat-table [dataSource]="records$">
     <ng-container *ngFor="let column of columns" matColumnDef="{{column.field}}">
         <mat-header-cell *matHeaderCellDef>{{column.label}}</mat-header-cell>
-        <mat-cell *matCellDef="let element">
-            {{element[column.field]}}
+        <mat-cell *matCellDef="let element" [ngSwitch]="column.type">
+            <mat-icon *ngSwitchCase="columnType.Icon">{{element[column.field]}}</mat-icon>
+            <mat-chip-list *ngSwitchCase="columnType.Chips">
+                <mat-chip *ngFor="let value of element[column.field]">
+                    {{value}}
+                </mat-chip>
+            </mat-chip-list>
+            <span *ngSwitchDefault>{{element[column.field]}}</span>
         </mat-cell>
     </ng-container>
     <mat-header-row mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

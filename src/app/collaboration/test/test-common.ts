@@ -4,8 +4,19 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { map, tap, mergeAll, mergeMap, combineAll, combineLatest, toArray, flatMap, concatMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 
+export enum TableColumnType {
+  Default = 'Default',
+  Icon = 'Icon',
+  Chips = 'Chips'
+}
+export interface TableColumn {
+  field: string;
+  label: string;
+  type?: TableColumnType;
+}
+
 export const FIELDS_DOCUMENTS = {
-  icon: '',
+  icon: { type: TableColumnType.Icon },
   name: 'Name',
   description: 'Description',
 };
@@ -20,14 +31,9 @@ export const FIELDS_POSTS = {
 export const FIELDS_MEMBERS = {
   displayName: 'Name',
   email: 'Email',
-  roles: 'Roles',
-  tags: 'Tags'
+  roles: { label: 'Roles', type: TableColumnType.Chips },
+  tags: { label: 'Tags', type: TableColumnType.Chips },
 };
-
-export interface TableColumn {
-  field: string;
-  label: string;
-}
 
 export abstract class DataReader {
   abstract read(id: string): Observable<any[]>;

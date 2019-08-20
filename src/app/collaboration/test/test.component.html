@@ -1,5 +1,15 @@
 <lib-flexible-page>
-  <lib-page-header>Hello World</lib-page-header>
+  <!--title="{{collaboration?.name}}" subTitle="{{collaboration?.description}}">-->
+  <lib-page-header class="collaboration-header">
+    <div *ngIf="statusValues$" class="status-list mat-subheading-2">
+      <span *ngFor="let statusVal of statusValues$ | async">
+        {{statusVal.description}}: {{statusVal.value}}
+      </span>
+    </div>
+    <div *ngIf="actions.length > 0" class="action-list">
+      <button mat-raised-button *ngFor="let action of actions" (click)="completeAction(action)">{{action.name}}</button>
+    </div>
+  </lib-page-header>
   <lib-flexible-page-section title="Members">
     <app-collaboration-table [collaborationId]="collaborationId" [reader]="memberReader" [mapper]="memberMapper"
       [fields]="Fields_Members">
