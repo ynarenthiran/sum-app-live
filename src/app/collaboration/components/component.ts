@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, Directive, TemplateRef, ContentChild } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { AppConfigService } from 'src/app/services/app.config';
 import { AngularFirestore } from '@angular/fire/firestore';
@@ -127,4 +127,20 @@ export class ComponentTable extends ComponentBase {
         this.displayedColumns.push("actions");
     }
   }
+}
+
+@Directive({
+  selector: '[appComponentListTemplate]'
+})
+export class ComponentListTemplate {
+  constructor(public templateRef: TemplateRef<any>) {
+  }
+}
+@Component({
+  selector: 'app-comp-list',
+  templateUrl: './list.html'
+})
+export class ComponentList extends ComponentBase {
+  @ContentChild(ComponentListTemplate)
+  template: ComponentListTemplate;
 }

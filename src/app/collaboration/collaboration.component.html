@@ -10,16 +10,23 @@
       <button mat-raised-button *ngFor="let action of actions" (click)="completeAction(action)">{{action.name}}</button>
     </div>
   </lib-page-header>
+  <!--Members-->
   <lib-flexible-page-section title="Members" (action)="table.onAction($event)">
     <app-comp-table #table [collaborationId]="collaborationId" [reader]="memberReader" [mapper]="memberMapper"
       [fields]="Fields_Members" [actions]="Actions_Members" [handler]="memberHandler">
     </app-comp-table>
     <lib-flexible-section-fab action="add" icon="add"></lib-flexible-section-fab>
   </lib-flexible-page-section>
+  <!--Posts-->
   <lib-flexible-page-section title="Posts">
-    <app-comp-table [collaborationId]="collaborationId" path="posts" [mapper]="postMapper" [fields]="Fields_Posts">
-    </app-comp-table>
+    <app-comp-list [collaborationId]="collaborationId" path="posts" [mapper]="postMapper">
+      <div *appComponentListTemplate="let post" [ngClass]="post.postedBySelf ? 'post-entry-self':'post-entry-other'">
+        <p>{{post.text}}</p>
+        <p class="post-time">{{post.postedOn.toDate() | amTimeAgo}}</p> <!-- https://github.com/urish/ngx-moment -->
+      </div>
+    </app-comp-list>
   </lib-flexible-page-section>
+  <!--Documents-->
   <lib-flexible-page-section title="Documents" (action)="table.onAction($event)">
     <app-comp-table #table [collaborationId]="collaborationId" path="documents" [mapper]="documentMapper"
       [fields]="Fields_Documents">

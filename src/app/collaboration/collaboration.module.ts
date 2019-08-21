@@ -32,7 +32,7 @@ import { TextFieldModule } from '@angular/cdk/text-field';
 import { FormsModule } from '@angular/forms';
 import { CollaborationComponent } from './collaboration.component';
 import { GenericDataReader } from './util/common';
-import { ComponentTable } from './components/component';
+import { ComponentTable, ComponentList, ComponentListTemplate } from './components/component';
 
 @NgModule({
   declarations: [
@@ -43,7 +43,9 @@ import { ComponentTable } from './components/component';
     DocumentDropArea,
     ListComponent,
     PostComponent,
-    ComponentTable
+    ComponentTable,
+    ComponentList,
+    ComponentListTemplate
   ],
   imports: [
     CommonModule,

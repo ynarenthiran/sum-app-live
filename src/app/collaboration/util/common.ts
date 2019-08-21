@@ -41,7 +41,6 @@ export const FIELDS_MEMBERS = {
 }
 
 export const ACTIONS_MEMBERS = {
-  add: { icon: 'add', main: true },
   edit: { icon: 'edit' },
   remove: { icon: 'remove_circle' }
 }

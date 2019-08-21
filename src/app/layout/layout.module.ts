@@ -10,7 +10,7 @@ import {
   MatListModule,
   MatRippleModule,
   MatTreeModule,
-  MatExpansionModule
+  MatExpansionModule,
 } from '@angular/material';
 import { GridsterModule } from 'angular2gridster';
 
