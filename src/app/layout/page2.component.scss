@@ -2,11 +2,24 @@
 
 .page-content2 {
     flex: 1 1 auto;
+    display: flex;
 }
 .page-floating-button {
     position: absolute;
     right: 32px;
     bottom: 32px;
+    z-index: 5;
+}
+.page-grid-container {
+    display: block;
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    z-index: 10;
+}
+.page-grid-container-inner {
+    overflow: auto;
+    height: 100%; 
 }
 .page-section2-container-header {
     user-select: none;

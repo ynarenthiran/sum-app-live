@@ -17,12 +17,35 @@ interface ActionValue {
   name: string;
 }
 
+const TEST_DATA = [
+  {
+    id: 'container1', label: 'Container One', x: 0, y: 0,
+    instances: [
+      { sectionId: 'members', title: 'Members', description: 'Members of the collaboration' }
+    ]
+  },
+  {
+    id: 'container2', label: 'Container One', x: 1, y: 0,
+    instances: [
+      { sectionId: 'documents', title: 'Documents', description: 'Documents in the collaboration' }
+    ]
+  },
+  {
+    id: 'container3', label: 'Container Two', x: 0, y: 1,
+    instances: [
+      { sectionId: 'posts', title: 'Posts', description: 'Posts in the collaboration' }
+    ]
+  },
+];
+
 @Component({
   selector: 'app-collaboration',
   templateUrl: './collaboration.component.html',
   styleUrls: ['./collaboration.component.scss']
 })
 export class CollaborationComponent implements OnInit {
+  private containers = TEST_DATA;
+
   private Fields_Posts: any = FIELDS_POSTS;
   private Fields_Members: any = FIELDS_MEMBERS;
   private Actions_Members: any = ACTIONS_MEMBERS;

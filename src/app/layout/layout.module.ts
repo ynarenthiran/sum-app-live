@@ -11,6 +11,7 @@ import {
   MatRippleModule,
   MatTreeModule,
   MatExpansionModule,
+  MatSidenavModule
 } from '@angular/material';
 import { GridsterModule } from 'angular2gridster';
 
@@ -27,7 +28,13 @@ import {
   PageNode,
   PageHeader
 } from './page.component';
-import { FlexiblePageComponent, FlexiblePageSection, FlexiblePageSectionAction, FlexiblePageSectionFab, FlexiblePageSectionContent, FlexiblePageSectionFooter } from './page2.component';
+import {
+  FlexiblePageComponent, FlexiblePageSection, FlexiblePageSectionAction,
+  FlexiblePageSectionFab, FlexiblePageSectionContent, FlexiblePageSectionFooter,
+  FlexiblePageSectionContainer,
+  FlexiblePageSectionInstance
+} from './page2.component';
+import { DialogModule } from '../dialog/dialog.module';
 
 @NgModule({
   imports: [
@@ -42,7 +49,9 @@ import { FlexiblePageComponent, FlexiblePageSection, FlexiblePageSectionAction, 
     MatRippleModule,
     MatTreeModule,
     MatExpansionModule,
-    GridsterModule
+    MatSidenavModule,
+    GridsterModule,
+    DialogModule
   ],
   declarations: [
     PageComponent,
@@ -60,7 +69,9 @@ import { FlexiblePageComponent, FlexiblePageSection, FlexiblePageSectionAction, 
     FlexiblePageSectionAction,
     FlexiblePageSectionFab,
     FlexiblePageSectionContent,
-    FlexiblePageSectionFooter
+    FlexiblePageSectionFooter,
+    FlexiblePageSectionContainer,
+    FlexiblePageSectionInstance
   ],
   exports: [
     PageComponent,
@@ -78,7 +89,9 @@ import { FlexiblePageComponent, FlexiblePageSection, FlexiblePageSectionAction, 
     FlexiblePageSectionAction,
     FlexiblePageSectionFab,
     FlexiblePageSectionContent,
-    FlexiblePageSectionFooter
+    FlexiblePageSectionFooter,
+    FlexiblePageSectionContainer,
+    FlexiblePageSectionInstance
   ],
   providers: [
     PageService

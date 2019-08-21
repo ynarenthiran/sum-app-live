@@ -36,6 +36,9 @@
 .cursor {
     cursor: pointer;
 }
+.no-background {
+    background: none;
+}
 
 /* Global classes because of view encapsulation issues */
 .sidebar-nav-list-item {

@@ -10,8 +10,15 @@
       <button mat-raised-button *ngFor="let action of actions" (click)="completeAction(action)">{{action.name}}</button>
     </div>
   </lib-page-header>
+  <!--Section containers-->
+  <lib-flexible-section-container *ngFor="let container of containers" [id]="container.id" [label]="container.label"
+    [x]="container.x" [y]="container.y">
+    <lib-flexible-section-instance *ngFor="let instance of container.instances" [sectionId]="instance.sectionId"
+      [title]="instance.title" [description]="instance.description">
+    </lib-flexible-section-instance>
+  </lib-flexible-section-container>
   <!--Members-->
-  <lib-flexible-page-section title="Members" (action)="table.onAction($event)">
+  <lib-flexible-page-section id="members" icon="person" title="Members" (action)="table.onAction($event)">
     <lib-flexible-section-content>
       <app-comp-table #table [collaborationId]="collaborationId" [reader]="memberReader" [mapper]="memberMapper"
         [fields]="Fields_Members" [actions]="Actions_Members" [handler]="memberHandler">
@@ -20,7 +27,7 @@
     <lib-flexible-section-fab action="add" icon="add"></lib-flexible-section-fab>
   </lib-flexible-page-section>
   <!--Posts-->
-  <lib-flexible-page-section title="Posts">
+  <lib-flexible-page-section id="posts" icon="comment" title="Posts">
     <lib-flexible-section-content>
       <app-comp-list #list [collaborationId]="collaborationId" path="posts" [mapper]="postMapper">
         <div *appComponentListTemplate="let post" [ngClass]="post.postedBySelf ? 'post-entry-self':'post-entry-other'">
@@ -42,7 +49,8 @@
     </lib-flexible-section-footer>
   </lib-flexible-page-section>
   <!--Documents-->
-  <lib-flexible-page-section title="Documents" (action)="table.onAction($event)">
+  <lib-flexible-page-section id="documents" icon="insert_drive_file" title="Documents"
+    (action)="table.onAction($event)">
     <lib-flexible-section-content>
       <app-comp-table #table [collaborationId]="collaborationId" path="documents" [mapper]="documentMapper"
         [fields]="Fields_Documents">
