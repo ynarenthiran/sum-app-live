@@ -30,6 +30,22 @@
                           {{instance.description}}
                         </mat-panel-description>
                       </mat-expansion-panel-header>
+                      <!--Start: We will use static elements and for dynamic we use createEmbeddedView or Context parameter-->
+                      <div *ngIf="instance.definition.fab" class="page-section2-fab">
+                        <button mat-fab color="accent"
+                          (click)="instance.definition.onAction(instance.definition.fab.action)">
+                          <mat-icon>{{instance.definition.fab.icon}}</mat-icon>
+                        </button>
+                      </div>
+                      <ng-container *ngTemplateOutlet="instance.definition.content"></ng-container>
+                      <mat-action-row>
+                        <button *ngFor="let action of instance.definition.actions" mat-button
+                          (click)="instance.definition.onAction(action.action)">
+                          <mat-icon *ngIf="action.icon">{{action.icon}}</mat-icon> {{action.label}}
+                        </button>
+                        <ng-container *ngTemplateOutlet="instance.definition.footer"></ng-container>
+                      </mat-action-row>
+                      <!--End-->
                     </mat-expansion-panel>
                   </div>
                 </ngx-gridster-item>

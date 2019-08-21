@@ -1,9 +1,20 @@
 import {
-    Component, Directive, TemplateRef, ViewChild, QueryList, ContentChildren, Input, AfterContentInit, Output, EventEmitter, ContentChild
+    Component, Directive, TemplateRef, ViewChild, QueryList, ContentChildren, Input, AfterContentInit, Output, EventEmitter, ContentChild, AfterContentChecked
 } from '@angular/core';
 import { GridsterComponent } from 'angular2gridster';
 import { FormComponent } from '../dialog/form.component';
 
+@Directive({
+    selector: '[libFlexibleSectionContentHost]'
+})
+export class FlexiblePageSectionContentHost {
+    @Input()
+    sectionId: string;
+    @Input()
+    title: string;
+    @Input()
+    description: string;
+}
 @Directive({
     selector: 'lib-flexible-section-instance'
 })
@@ -14,8 +25,9 @@ export class FlexiblePageSectionInstance {
     title: string;
     @Input()
     description: string;
-}
 
+    definition: FlexiblePageSection;
+}
 @Directive({
     selector: 'lib-flexible-section-container'
 })
@@ -106,18 +118,19 @@ export class FlexiblePageSection {
     templateUrl: './page-flexible.html',
     styleUrls: ['./page.component.scss', './page2.component.scss']
 })
-export class FlexiblePageComponent implements AfterContentInit {
+export class FlexiblePageComponent implements AfterContentInit, AfterContentChecked {
     private gridsterOptions = {
-        lanes: 2, // how many lines (grid cells) dashboard has
-        direction: 'vertical', // items floating direction: vertical/horizontal
-        dragAndDrop: false, // possible to change items position by drag n drop
-        resizable: false, // possible to resize items by drag n drop by item edge/corner
-        useCSSTransforms: true, // improves rendering performance by using CSS transform in place of left/top
+        lanes: 2,
+        direction: 'vertical',
+        dragAndDrop: false,
+        resizable: false,
+        shrink: true,
+        useCSSTransforms: true,
+        responsiveView: true,
+        responsiveToParent: true,
     };
-    private sectionInstances: any[] = [];
     private isEditMode = false;
     private gridEditOptions: any;
-
 
     private indices = new Array(100).fill({ index: 1 });
 
@@ -134,13 +147,11 @@ export class FlexiblePageComponent implements AfterContentInit {
     gridOptionsForm: FormComponent;
 
     ngAfterContentInit(): void {
-        let sectionInstances = [];
-        let i: number = 0;
-        this.sectionDefinitions.forEach((sectionDef) => {
-            sectionInstances.push({ definition: sectionDef, x: i % 2, y: Math.floor(i / 2), w: 1, h: 1 });
-            i++;
-        });
-        this.sectionInstances = sectionInstances;
+        this.grid.reload();
+    }
+
+    ngAfterContentChecked(): void {
+        this.initializeSectionInstances();
     }
 
     toggleEditMode() {
@@ -162,5 +173,13 @@ export class FlexiblePageComponent implements AfterContentInit {
         this.gridEditOptions = {
             Columns: this.gridsterOptions.lanes
         }
+    }
+
+    private initializeSectionInstances() {
+        this.sectionContainers.forEach((container) => {
+            container.instances.forEach((instance) => {
+                instance.definition = this.sectionDefinitions.find((item, i, a) => item.id == instance.sectionId);
+            });
+        });
     }
 }
