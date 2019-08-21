@@ -1,6 +1,7 @@
 import {
     Component, Directive, TemplateRef, ViewChild, QueryList, ContentChildren, Input, AfterContentInit, Output, EventEmitter, ContentChild
 } from '@angular/core';
+import { GridsterComponent } from 'angular2gridster';
 
 @Directive({
     selector: 'lib-flexible-section-action'
@@ -73,14 +74,18 @@ export class FlexiblePageComponent implements AfterContentInit {
     private gridsterOptions = {
         lanes: 5, // how many lines (grid cells) dashboard has
         direction: 'vertical', // items floating direction: vertical/horizontal
-        dragAndDrop: true, // possible to change items position by drag n drop
-        resizable: true, // possible to resize items by drag n drop by item edge/corner
+        dragAndDrop: false, // possible to change items position by drag n drop
+        resizable: false, // possible to resize items by drag n drop by item edge/corner
         useCSSTransforms: true, // improves rendering performance by using CSS transform in place of left/top
     };
     private sectionInstances: any[] = [];
+    private isEditMode = false;
 
     @ContentChildren(FlexiblePageSection)
     sectionDefinitions: QueryList<FlexiblePageSection>;
+
+    @ViewChild(GridsterComponent)
+    grid: GridsterComponent;
 
     ngAfterContentInit(): void {
         let sectionInstances = [];
@@ -90,5 +95,12 @@ export class FlexiblePageComponent implements AfterContentInit {
             i++;
         });
         this.sectionInstances = sectionInstances;
+    }
+
+    toggleEditMode() {
+        this.isEditMode = !this.isEditMode;
+        this.grid.setOption('dragAndDrop', this.isEditMode);
+        this.grid.setOption('resizable', this.isEditMode);
+        this.grid.reload();
     }
 }

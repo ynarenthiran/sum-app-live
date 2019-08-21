@@ -8,10 +8,14 @@
     </div>
     <div #bounds class="page-content2">
       <!--Sections Rendered Here-->
-      <ngx-gridster [options]="gridsterOptions" [draggableOptions]="{ handlerClass: 'panel-section-header2' }">
+      <ngx-gridster [options]="gridsterOptions" [draggableOptions]="{ handlerClass: 'page-section2-container-header' }">
         <ngx-gridster-item *ngFor="let section of sectionInstances" [(x)]="section.x" [(y)]="section.y"
           [(w)]="section.w" [(h)]="section.h">
-          <div class="page-section2-container">
+          <div
+            [ngClass]="{'page-section2-container': true, 'page-section2-container-edit': this.isEditMode, 'page-section2-container-run': !this.isEditMode}">
+            <div *ngIf="isEditMode" class="page-section2-container-header mat-typography">
+              Container
+            </div>
             <mat-expansion-panel expanded>
               <mat-expansion-panel-header>
                 <mat-panel-title>
@@ -40,7 +44,7 @@
       </ngx-gridster>
       <div class="page-floating-button">
         <!--Floating Buttons Here-->
-        <button mat-fab color="accent" (click)="customize()">
+        <button mat-fab color="accent" (click)="toggleEditMode()">
           <mat-icon>settings</mat-icon>
         </button>
       </div>
