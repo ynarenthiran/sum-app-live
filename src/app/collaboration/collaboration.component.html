@@ -10,10 +10,11 @@
       <button mat-raised-button *ngFor="let action of actions" (click)="completeAction(action)">{{action.name}}</button>
     </div>
   </lib-page-header>
-  <lib-flexible-page-section title="Members">
-    <app-comp-table [collaborationId]="collaborationId" [reader]="memberReader" [mapper]="memberMapper"
+  <lib-flexible-page-section title="Members" (action)="table.onAction($event)">
+    <app-comp-table #table [collaborationId]="collaborationId" [reader]="memberReader" [mapper]="memberMapper"
       [fields]="Fields_Members" [actions]="Actions_Members" [handler]="memberHandler">
     </app-comp-table>
+    <lib-flexible-section-fab action="add" icon="add"></lib-flexible-section-fab>
   </lib-flexible-page-section>
   <lib-flexible-page-section title="Posts">
     <app-comp-table [collaborationId]="collaborationId" path="posts" [mapper]="postMapper" [fields]="Fields_Posts">
@@ -24,6 +25,7 @@
       [fields]="Fields_Documents">
     </app-comp-table>
     <lib-flexible-section-fab action="addFile" icon="add"></lib-flexible-section-fab>
+    <lib-flexible-section-action action="addFolder" icon="create_new_folder"></lib-flexible-section-action>
   </lib-flexible-page-section>
 </lib-flexible-page>
 <!--[path]="{path: 'members', joinScope: 'R', join: {id: 'users'}}" [mapper]="memberMapper"-->

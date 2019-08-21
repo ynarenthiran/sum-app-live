@@ -1,5 +1,5 @@
 import {
-    Component, Directive, TemplateRef, ViewChild, QueryList, ContentChildren, Input, AfterContentInit, Output, EventEmitter
+    Component, Directive, TemplateRef, ViewChild, QueryList, ContentChildren, Input, AfterContentInit, Output, EventEmitter, ContentChild
 } from '@angular/core';
 
 @Directive({
@@ -34,11 +34,11 @@ export class FlexiblePageSection {
     @Output()
     action: EventEmitter<string> = new EventEmitter<string>();
 
-    @ContentChildren(FlexiblePageSectionFab)
+    @ContentChild(FlexiblePageSectionFab)
     fab: FlexiblePageSectionFab;
 
     @ContentChildren(FlexiblePageSectionAction)
-    actions: FlexiblePageSectionAction;
+    actions: QueryList<FlexiblePageSectionAction>;
 
     @ViewChild(TemplateRef)
     content: TemplateRef<any>;

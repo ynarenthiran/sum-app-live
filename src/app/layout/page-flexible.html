@@ -11,7 +11,8 @@
       <ngx-gridster [options]="gridsterOptions" [draggableOptions]="{ handlerClass: 'panel-section-header2' }">
         <ngx-gridster-item *ngFor="let section of sectionInstances" [(x)]="section.x" [(y)]="section.y"
           [(w)]="section.w" [(h)]="section.h">
-          <mat-expansion-panel class="page-section2" expanded>
+          <div class="page-section2-container">
+          <mat-expansion-panel expanded>
             <mat-expansion-panel-header>
               <mat-panel-title>
                 {{section.definition.title}}
@@ -33,6 +34,7 @@
               </button>
             </mat-action-row>
           </mat-expansion-panel>
+          </div>
         </ngx-gridster-item>
       </ngx-gridster>
       <div class="page-floating-button">

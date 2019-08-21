@@ -11,12 +11,9 @@ import {
 } from '../util/common';
 
 @Component({
-  selector: 'app-comp-table',
-  templateUrl: './table.html'
+  selector: 'app-comp-base'
 })
-export class ComponentTable implements OnInit, OnChanges {
-  private columnType = TableColumnType;
-
+class ComponentBase implements OnInit, OnChanges {
   @Input()
   collaborationId: string;
 
@@ -30,18 +27,7 @@ export class ComponentTable implements OnInit, OnChanges {
   mapper?: DataMapper;
 
   @Input()
-  fields: any;
-
-  @Input()
   handler: ViewHandler
-
-  @Input()
-  actions: any;
-
-  private columns: TableColumn[];
-  private actionColumns: ActionColumn[];
-  private mainAction: ActionColumn;
-  private displayedColumns: string[] = [];
 
   private records$: Observable<any[]> = of([]);
 
@@ -59,9 +45,8 @@ export class ComponentTable implements OnInit, OnChanges {
       this.handler.action(action, element);
   }
 
-  private initialize() {
+  protected initialize() {
     this.getRecords();
-    this.getView();
   }
 
   private getRecords() {
@@ -75,6 +60,29 @@ export class ComponentTable implements OnInit, OnChanges {
         map(records => records.map(record => this.mapper.map(record)))
       );
     }
+  }
+}
+
+@Component({
+  selector: 'app-comp-table',
+  templateUrl: './table.html'
+})
+export class ComponentTable extends ComponentBase {
+  private columnType = TableColumnType;
+
+  @Input()
+  fields: any;
+
+  @Input()
+  actions: any;
+
+  private columns: TableColumn[];
+  private actionColumns: ActionColumn[];
+  private displayedColumns: string[] = [];
+
+  protected initialize() {
+    super.initialize();
+    this.getView();
   }
 
   private getView() {
@@ -101,7 +109,6 @@ export class ComponentTable implements OnInit, OnChanges {
     this.actionColumns = [];
     if (this.actions) {
       Object.keys(this.actions).forEach((key) => {
-        var main: boolean = false;
         var label: string = "";
         var icon: string = "";
         if (typeof this.actions[key] == "string") {
@@ -113,13 +120,8 @@ export class ComponentTable implements OnInit, OnChanges {
             label = spec.label;
           if (spec.icon)
             icon = spec.icon;
-          if (spec.main)
-            main = spec.main;
         }
-        if (main)
-          this.mainAction = { action: key, icon: icon };
-        else
-          this.actionColumns.push({ action: key, label: label, icon: icon });
+        this.actionColumns.push({ action: key, label: label, icon: icon });
       });
       if (this.actionColumns.length > 0)
         this.displayedColumns.push("actions");
