@@ -22,7 +22,20 @@ export class FlexiblePageSectionFab {
     @Input()
     icon: string;
 }
-
+@Directive({
+    selector: 'lib-flexible-section-content'
+})
+export class FlexiblePageSectionContent {
+}
+@Directive({
+    selector: 'lib-flexible-section-footer',
+    host: {
+        '[class.spacer]': 'true',
+        '[class.row]': 'true',
+    }
+})
+export class FlexiblePageSectionFooter {
+}
 @Component({
     selector: 'lib-flexible-page-section',
     templateUrl: './page2-section.html'
@@ -40,8 +53,11 @@ export class FlexiblePageSection {
     @ContentChildren(FlexiblePageSectionAction)
     actions: QueryList<FlexiblePageSectionAction>;
 
-    @ViewChild(TemplateRef)
+    @ViewChild('content')
     content: TemplateRef<any>;
+
+    @ViewChild('footer')
+    footer: TemplateRef<any>;
 
     onAction(action: string) {
         this.action.emit(action);

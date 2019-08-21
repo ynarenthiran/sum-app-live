@@ -27,7 +27,7 @@ import {
   PageNode,
   PageHeader
 } from './page.component';
-import { FlexiblePageComponent, FlexiblePageSection, FlexiblePageSectionAction, FlexiblePageSectionFab } from './page2.component';
+import { FlexiblePageComponent, FlexiblePageSection, FlexiblePageSectionAction, FlexiblePageSectionFab, FlexiblePageSectionContent, FlexiblePageSectionFooter } from './page2.component';
 
 @NgModule({
   imports: [
@@ -58,7 +58,9 @@ import { FlexiblePageComponent, FlexiblePageSection, FlexiblePageSectionAction, 
     PageSectionDetail,
     PageNode,
     FlexiblePageSectionAction,
-    FlexiblePageSectionFab
+    FlexiblePageSectionFab,
+    FlexiblePageSectionContent,
+    FlexiblePageSectionFooter
   ],
   exports: [
     PageComponent,
@@ -74,7 +76,9 @@ import { FlexiblePageComponent, FlexiblePageSection, FlexiblePageSectionAction, 
     PageSectionDetail,
     PageNode,
     FlexiblePageSectionAction,
-    FlexiblePageSectionFab
+    FlexiblePageSectionFab,
+    FlexiblePageSectionContent,
+    FlexiblePageSectionFooter
   ],
   providers: [
     PageService

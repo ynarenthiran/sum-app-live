@@ -32,6 +32,7 @@
                   (click)="section.definition.onAction(action.action)">
                   <mat-icon *ngIf="action.icon">{{action.icon}}</mat-icon> {{action.label}}
                 </button>
+                <ng-container *ngTemplateOutlet="section.definition.footer"></ng-container>
               </mat-action-row>
             </mat-expansion-panel>
           </div>

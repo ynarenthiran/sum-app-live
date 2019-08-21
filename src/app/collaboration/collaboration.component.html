@@ -12,25 +12,42 @@
   </lib-page-header>
   <!--Members-->
   <lib-flexible-page-section title="Members" (action)="table.onAction($event)">
-    <app-comp-table #table [collaborationId]="collaborationId" [reader]="memberReader" [mapper]="memberMapper"
-      [fields]="Fields_Members" [actions]="Actions_Members" [handler]="memberHandler">
-    </app-comp-table>
+    <lib-flexible-section-content>
+      <app-comp-table #table [collaborationId]="collaborationId" [reader]="memberReader" [mapper]="memberMapper"
+        [fields]="Fields_Members" [actions]="Actions_Members" [handler]="memberHandler">
+      </app-comp-table>
+    </lib-flexible-section-content>
     <lib-flexible-section-fab action="add" icon="add"></lib-flexible-section-fab>
   </lib-flexible-page-section>
   <!--Posts-->
   <lib-flexible-page-section title="Posts">
-    <app-comp-list [collaborationId]="collaborationId" path="posts" [mapper]="postMapper">
-      <div *appComponentListTemplate="let post" [ngClass]="post.postedBySelf ? 'post-entry-self':'post-entry-other'">
-        <p>{{post.text}}</p>
-        <p class="post-time">{{post.postedOn.toDate() | amTimeAgo}}</p> <!-- https://github.com/urish/ngx-moment -->
+    <lib-flexible-section-content>
+      <app-comp-list #list [collaborationId]="collaborationId" path="posts" [mapper]="postMapper">
+        <div *appComponentListTemplate="let post" [ngClass]="post.postedBySelf ? 'post-entry-self':'post-entry-other'">
+          <p>{{post.text}}</p>
+          <p class="post-time">{{post.postedOn.toDate() | amTimeAgo}}</p> <!-- https://github.com/urish/ngx-moment -->
+        </div>
+      </app-comp-list>
+    </lib-flexible-section-content>
+    <lib-flexible-section-footer>
+      <mat-form-field appearance="outline" class="spacer">
+        <input #text matInput placeholder="Enter message" />
+        <mat-icon matSuffix (click)="list.onAction('editor')" class="cursor">open_in_new</mat-icon>
+      </mat-form-field>
+      <div class="post-input-send">
+        <button mat-stroked-button color="primary">
+          <mat-icon (click)="list.onAction('send')">send</mat-icon>
+        </button>
       </div>
-    </app-comp-list>
+    </lib-flexible-section-footer>
   </lib-flexible-page-section>
   <!--Documents-->
   <lib-flexible-page-section title="Documents" (action)="table.onAction($event)">
-    <app-comp-table #table [collaborationId]="collaborationId" path="documents" [mapper]="documentMapper"
-      [fields]="Fields_Documents">
-    </app-comp-table>
+    <lib-flexible-section-content>
+      <app-comp-table #table [collaborationId]="collaborationId" path="documents" [mapper]="documentMapper"
+        [fields]="Fields_Documents">
+      </app-comp-table>
+    </lib-flexible-section-content>
     <lib-flexible-section-fab action="addFile" icon="add"></lib-flexible-section-fab>
     <lib-flexible-section-action action="addFolder" icon="create_new_folder"></lib-flexible-section-action>
   </lib-flexible-page-section>

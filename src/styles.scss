@@ -25,6 +25,17 @@
 .spacer {
     flex: 1 1 auto;
 }
+.row {
+    display: flex;
+    flex-direction: row;
+}
+.column {
+    display: flex;
+    flex-direction: row;
+}
+.cursor {
+    cursor: pointer;
+}
 
 /* Global classes because of view encapsulation issues */
 .sidebar-nav-list-item {
