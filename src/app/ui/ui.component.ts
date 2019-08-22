@@ -1,5 +1,5 @@
 import {
-  Component, OnInit, Input, ContentChild, TemplateRef, Output, EventEmitter, Directive, ElementRef, HostListener, OnChanges, OnDestroy
+  Component, OnInit, Input, ContentChild, TemplateRef, Output, EventEmitter, Directive, ElementRef, HostListener, OnChanges, OnDestroy, ViewChild, ViewContainerRef, AfterContentChecked
 } from '@angular/core';
 import { FlexiblePageSectionContainer } from '../layout/page2.component';
 
@@ -8,7 +8,7 @@ import { FlexiblePageSectionContainer } from '../layout/page2.component';
   templateUrl: './panel.component.html',
   styleUrls: ['./ui.component.scss']
 })
-export class PanelComponent implements OnInit {
+export class PanelComponent implements AfterContentChecked {
   @Input()
   icon: string;
   @Input()
@@ -37,12 +37,27 @@ export class PanelComponent implements OnInit {
   @ContentChild('footer')
   footer: TemplateRef<any>;
 
+  @ViewChild('contentContainer', { read: ViewContainerRef })
+  contentContainer: ViewContainerRef;
+  @ViewChild('footerContainer', { read: ViewContainerRef })
+  footerContainer: ViewContainerRef;
+
   private _expanded = true;
   private _expanderIcon: string = 'expand_less'
 
   constructor() { }
 
-  ngOnInit() {
+  ngAfterContentChecked() {
+    if (this.contentContainer) {
+      if (this.contentContainer.length < 1) {
+        this.contentContainer.createEmbeddedView(this.content);
+      }
+    }
+    if (this.footerContainer) {
+      if (this.footerContainer.length < 1) {
+        this.footerContainer.createEmbeddedView(this.footer);
+      }
+    }
   }
 
   toggleExpanded() {

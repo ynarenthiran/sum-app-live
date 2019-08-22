@@ -30,8 +30,7 @@ import {
 } from './page.component';
 import {
   FlexiblePageComponent, FlexiblePageSection, FlexiblePageSectionAction,
-  FlexiblePageSectionContent, FlexiblePageSectionFooter, FlexiblePageSectionContainer,
-  FlexiblePageSectionInstance
+  FlexiblePageSectionContainer, FlexiblePageSectionInstance
 } from './page2.component';
 import { DialogModule } from '../dialog/dialog.module';
 import { UIModule } from '../ui/ui.module';
@@ -68,8 +67,6 @@ import { UIModule } from '../ui/ui.module';
     PageSectionDetail,
     PageNode,
     FlexiblePageSectionAction,
-    FlexiblePageSectionContent,
-    FlexiblePageSectionFooter,
     FlexiblePageSectionContainer,
     FlexiblePageSectionInstance
   ],
@@ -87,8 +84,6 @@ import { UIModule } from '../ui/ui.module';
     PageSectionDetail,
     PageNode,
     FlexiblePageSectionAction,
-    FlexiblePageSectionContent,
-    FlexiblePageSectionFooter,
     FlexiblePageSectionContainer,
     FlexiblePageSectionInstance
   ],

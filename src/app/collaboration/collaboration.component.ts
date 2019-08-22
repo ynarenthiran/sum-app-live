@@ -22,9 +22,18 @@ const TEST_DATA = [
   {
     id: 'container1', label: 'Container One', x: 0, y: 0,
     instances: [
-      { sectionId: 'documents', title: 'Documents', description: 'Documents in the collaboration' },
-      { sectionId: 'posts', title: 'Posts', description: 'Posts in the collaboration' },
-      { sectionId: 'members', title: 'Members', description: 'Members of the collaboration' }
+      {
+        sectionId: 'documents', title: 'Documents', description: 'Documents in the collaboration',
+        context: { text: "Manish's Documents" }
+      },
+      {
+        sectionId: 'posts', title: 'Posts', description: 'Posts in the collaboration',
+        context: { text: "Manish's Posts" }
+      },
+      {
+        sectionId: 'members', title: 'Members', description: 'Members of the collaboration',
+        context: { text: "Manish's Members" }
+      }
     ]
   },
   {
@@ -74,7 +83,10 @@ export class CollaborationComponent implements OnInit {
 
   onSectionInstanceAdded(event: SectionInstanceAddEvent) {
     const container = this.containers.find((item, a, i) => item.id == event.containerId);
-    container.instances.push({ sectionId: event.sectionId, title: 'New', description: 'New' });
+    container.instances.push({
+      sectionId: event.sectionId, title: 'New', description: 'New',
+      context: {text: "New's New"}
+    });
   }
 
   private loadCollaboration(id: string) {

@@ -6,17 +6,6 @@ import { FormComponent } from '../dialog/form.component';
 import { ShellService } from '../shell/shell.component';
 
 @Directive({
-    selector: '[libFlexibleSectionContentHost]'
-})
-export class FlexiblePageSectionContentHost {
-    @Input()
-    sectionId: string;
-    @Input()
-    title: string;
-    @Input()
-    description: string;
-}
-@Directive({
     selector: 'lib-flexible-section-instance'
 })
 export class FlexiblePageSectionInstance {
@@ -26,6 +15,8 @@ export class FlexiblePageSectionInstance {
     title: string;
     @Input()
     description: string;
+    @Input()
+    context?: string;
 
     definition: FlexiblePageSection;
 }
@@ -59,23 +50,9 @@ export class FlexiblePageSectionAction {
     @Input()
     icon: string;
 }
+
 @Directive({
-    selector: 'lib-flexible-section-content'
-})
-export class FlexiblePageSectionContent {
-}
-@Directive({
-    selector: 'lib-flexible-section-footer',
-    host: {
-        '[class.spacer]': 'true',
-        '[class.row]': 'true',
-    }
-})
-export class FlexiblePageSectionFooter {
-}
-@Component({
-    selector: 'lib-flexible-page-section',
-    templateUrl: './page2-section.html'
+    selector: 'lib-flexible-page-section'
 })
 export class FlexiblePageSection {
     @Input()
@@ -97,10 +74,10 @@ export class FlexiblePageSection {
     @ContentChildren(FlexiblePageSectionAction)
     actions: QueryList<FlexiblePageSectionAction>;
 
-    @ViewChild('content')
+    @ContentChild('content')
     content: TemplateRef<any>;
 
-    @ViewChild('footer')
+    @ContentChild('footer')
     footer: TemplateRef<any>;
 
     onAction(action: string) {
