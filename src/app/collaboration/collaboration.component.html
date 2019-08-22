@@ -1,4 +1,4 @@
-<lib-flexible-page title="{{collaboration?.name}}" subTitle="{{collaboration?.description}}">
+<lib-flexible-page title="{{collaboration?.name}}" subTitle="{{collaboration?.description}}" (sectionInstanceAdded)="onSectionInstanceAdded($event)">
   <!--title="{{collaboration?.name}}" subTitle="{{collaboration?.description}}">-->
   <lib-page-header class="collaboration-header">
     <div *ngIf="statusValues$" class="status-list mat-subheading-2">

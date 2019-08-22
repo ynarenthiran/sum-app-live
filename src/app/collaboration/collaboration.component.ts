@@ -8,6 +8,7 @@ import {
 } from './util/common';
 import { Status, Collaboration, CollaborationService } from './collaboration.service';
 import { MatSnackBar } from '@angular/material';
+import { SectionInstanceAddEvent } from '../layout/page2.component';
 
 interface StatusValue extends Status {
   value: string;
@@ -69,6 +70,11 @@ export class CollaborationComponent implements OnInit {
 
   completeAction(action: ActionValue) {
     this.srv.triggerAction(this.collaborationId, action.id);
+  }
+
+  onSectionInstanceAdded(event: SectionInstanceAddEvent) {
+    const container = this.containers.find((item, a, i) => item.id == event.containerId);
+    container.instances.push({ sectionId: event.sectionId, title: 'New', description: 'New' });
   }
 
   private loadCollaboration(id: string) {

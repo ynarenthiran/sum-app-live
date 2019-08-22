@@ -36,13 +36,18 @@
     display: flex;
     flex-direction: row;
 }
-.cursor {
-    cursor: pointer;
+
+
+/* Decoration */
+.drop-target {
+    border: 2px dashed black;
 }
 .no-background {
     background: none;
 }
-
+.cursor {
+    cursor: pointer;
+}
 /* Global classes because of view encapsulation issues */
 .sidebar-nav-list-item {
     border-radius: 0px 24px 24px 0px;

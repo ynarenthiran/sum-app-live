@@ -17,14 +17,16 @@
                 <ngx-gridster-item *ngFor="let container of sectionContainers" [(x)]="container.x" [(y)]="container.y"
                   [(w)]="container.width" [(h)]="container.height">
                   <div
-                    [ngClass]="{'page-section2-container': true, 'page-section2-container-edit': this.isEditMode, 'page-section2-container-run': !this.isEditMode}">
+                    [ngClass]="{'page-section2-container': true, 'page-section2-container-edit': this.isEditMode, 'page-section2-container-run': !this.isEditMode}"
+                    [libDropArea]="isEditMode" (dropped)="onSectionDrop(container.id, $event)">
                     <div *ngIf="isEditMode" class="page-section2-container-header mat-typography">
                       {{container.label}}
                     </div>
                     <lib-panel *ngFor="let instance of container.instances" [icon]="instance.definition.icon"
                       [title]="instance.title" [description]="instance.description"
                       [fabIcon]="instance.definition.fabIcon" (fabClick)="instance.definition.onAction('fab')"
-                      [droppable]="instance.definition.droppable" (droppped)="instance.definition.onDrop('drop', $event)">
+                      [droppable]="instance.definition.droppable"
+                      (droppped)="instance.definition.onDrop('drop', $event)">
                       <!--Start: We will use static elements and for dynamic we use createEmbeddedView or Context parameter-->
                       <ng-template #content>
                         <ng-container *ngTemplateOutlet="instance.definition.content"></ng-container>
@@ -54,7 +56,8 @@
                 </mat-panel-title>
               </mat-expansion-panel-header>
               <mat-list>
-                <mat-list-item *ngFor="let section of sectionDefinitions">
+                <mat-list-item *ngFor="let section of sectionDefinitions" libDragEntity="true"
+                  [dragData]="{sectionId: section.id}">
                   <mat-icon matListIcon>{{section.icon}}</mat-icon>
                   <h3 matLine> {{section.title}} </h3>
                 </mat-list-item>

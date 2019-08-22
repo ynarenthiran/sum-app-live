@@ -1,12 +1,13 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatToolbarModule, MatIconModule, MatRippleModule, MatButtonModule } from '@angular/material';
-import { PanelComponent, UIDropArea } from './ui.component';
+import { PanelComponent, UIDropArea, UIDragEntity } from './ui.component';
 
 @NgModule({
   declarations: [
     PanelComponent,
     UIDropArea,
+    UIDragEntity
   ],
   imports: [
     CommonModule,
@@ -17,7 +18,8 @@ import { PanelComponent, UIDropArea } from './ui.component';
   ],
   exports: [
     PanelComponent,
-    UIDropArea
+    UIDropArea,
+    UIDragEntity
   ]
 })
 export class UIModule { }

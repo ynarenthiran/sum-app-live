@@ -111,6 +111,10 @@ export class FlexiblePageSection {
     }
 }
 
+export interface SectionInstanceAddEvent {
+    containerId: string;
+    sectionId: string;
+}
 @Component({
     selector: 'lib-flexible-page',
     templateUrl: './page-flexible.html',
@@ -140,6 +144,9 @@ export class FlexiblePageComponent implements AfterContentInit, AfterContentChec
     set subTitle(value: string) {
         this.shellSrv.subtitle = value;
     }
+
+    @Output()
+    sectionInstanceAdded: EventEmitter<SectionInstanceAddEvent> = new EventEmitter<SectionInstanceAddEvent>();
 
     @ContentChildren(FlexiblePageSection)
     sectionDefinitions: QueryList<FlexiblePageSection>;
@@ -182,6 +189,11 @@ export class FlexiblePageComponent implements AfterContentInit, AfterContentChec
         this.gridEditOptions = {
             Columns: this.gridsterOptions.lanes
         }
+    }
+
+    onSectionDrop(containerId: string, event: any) {
+        const data = JSON.parse(event.getData('application/json'));
+        this.sectionInstanceAdded.emit({ containerId: containerId, sectionId: data.sectionId });
     }
 
     private initializeSectionInstances() {

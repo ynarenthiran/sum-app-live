@@ -6,16 +6,17 @@
     <span class="mat-title no-margin">{{title}}</span>
     <span class="mat-caption no-margin">{{description}}</span>
   </div>
-  <mat-icon matRipple matRippleCentered="true" matRippleUnbounded="true" matRippleRadius="24" (click)="toggleExpanded()"
-    class="panel-header-button">{{_expanderIcon}}</mat-icon>
+  <button mat-icon-button (click)="toggleExpanded()">
+    <mat-icon>{{_expanderIcon}}</mat-icon>
+  </button>
 </div>
-<div *ngIf="_expanded" [libDropArea]="droppable" (dropped)="onDropped($event)" class="spacer vbox anchor">
-    <div *ngIf="fabIcon" class="panel-fab">
-        <button mat-fab color="accent" (click)="onFab()">
-          <mat-icon>{{fabIcon}}</mat-icon>
-        </button>
-      </div>
-  <div class="spacer vbox">
+<div *ngIf="_expanded" class="spacer vbox anchor">
+  <div *ngIf="fabIcon" class="panel-fab">
+    <button mat-fab color="accent" (click)="onFab()">
+      <mat-icon>{{fabIcon}}</mat-icon>
+    </button>
+  </div>
+  <div [libDropArea]="droppable" (dropped)="onDropped($event)" class="spacer vbox">
     <ng-container *ngTemplateOutlet="content"></ng-container>
   </div>
   <div class="panel-header">

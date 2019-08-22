@@ -59,6 +59,8 @@ export class PanelComponent implements OnInit {
   }
 }
 
+const DRAG_EFFECT: string = 'link';
+
 @Directive({
   selector: '[libDropArea]'
 })
@@ -66,7 +68,7 @@ export class UIDropArea {
   @Input()
   libDropArea: boolean;
   @Input()
-  dropTargetClass: string;
+  dropTargetClass: string = 'drop-target';
   @Output()
   dropped: EventEmitter<any> = new EventEmitter<any>();
 
@@ -79,7 +81,7 @@ export class UIDropArea {
       if (e.preventDefault) {
         e.preventDefault();
       }
-      e.dataTransfer.dropEffect = 'copy';
+      e.dataTransfer.dropEffect = DRAG_EFFECT;
       if (this.dropTargetClass)
         this.el.nativeElement.classList.add(this.dropTargetClass);
       return false;
@@ -115,6 +117,36 @@ export class UIDropArea {
         this.el.nativeElement.classList.remove(this.dropTargetClass);
       this.dropped.emit(e.dataTransfer);
       return false;
+    }
+  }
+}
+
+@Directive({
+  selector: '[libDragEntity]'
+})
+export class UIDragEntity {
+  @Input()
+  libDragEntity: boolean = true;
+  @Input()
+  dragData: any;
+
+  constructor(private el: ElementRef) {
+    this.el.nativeElement.draggable = "true";
+  }
+
+  @HostListener('dragstart', ['$event'])
+  onDragStart(e: any) {
+    if (this.libDragEntity) {
+      e.dataTransfer.effectAllowed = DRAG_EFFECT;
+      e.dataTransfer.setData('application/json', JSON.stringify(this.dragData));
+      // TODO: Notify parent that we are taking this from you
+    }
+  }
+
+  @HostListener('dragend', ['$event'])
+  onDragEnd(e: any) {
+    if (this.libDragEntity) {
+      // TODO: Notify parent that we have taken this from you
     }
   }
 }
