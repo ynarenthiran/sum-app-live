@@ -22,14 +22,18 @@
                     <div *ngIf="isEditMode" class="page-section2-container-header mat-typography">
                       {{container.label}}
                     </div>
+                    <!--Do not pass context to all action calls-->
+                    <!--Just set some @Input() in a chain to the templet context-->
+                    <!--Just set some @Input() in a chain to the templet context-->
                     <lib-panel *ngFor="let instance of container.instances" [icon]="instance.definition.icon"
                       [title]="instance.title" [description]="instance.description"
                       [fabIcon]="instance.definition.fabIcon" (fabClick)="instance.definition.onAction('fab')"
                       [droppable]="instance.definition.droppable"
                       (droppped)="instance.definition.onDrop('drop', $event)">
-                      <!--Start: We will use static elements and for dynamic we use createEmbeddedView or Context parameter-->
                       <ng-template #content>
-                        <ng-container *ngTemplateOutlet="instance.definition.content"></ng-container>
+                        <ng-container
+                          *ngTemplateOutlet="instance.definition.content; context: {$implicit: instance.context}">
+                        </ng-container>
                       </ng-template>
                       <ng-template #footer>
                         <button *ngFor="let action of instance.definition.actions" mat-button
@@ -38,7 +42,6 @@
                         </button>
                         <ng-container *ngTemplateOutlet="instance.definition.footer"></ng-container>
                       </ng-template>
-                      <!--End-->
                     </lib-panel>
                   </div>
                 </ngx-gridster-item>

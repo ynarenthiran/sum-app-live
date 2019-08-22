@@ -20,16 +20,16 @@
   </lib-flexible-section-container>
   <!--Members-->
   <lib-flexible-page-section id="members" icon="person" title="Members" fabIcon="add" (action)="table.onAction($event)">
-    <ng-template #content>
-      <app-comp-table #table [collaborationId]="collaborationId" [reader]="memberReader" [mapper]="memberMapper"
-        [fields]="Fields_Members" [actions]="Actions_Members" [handler]="memberHandler">
+    <ng-template #content let-context>
+      <app-comp-table #table [collaborationId]="collaborationId" [context]="context" [reader]="memberReader"
+        [mapper]="memberMapper" [fields]="Fields_Members" [actions]="Actions_Members" [handler]="memberHandler">
       </app-comp-table>
     </ng-template>
   </lib-flexible-page-section>
   <!--Posts-->
   <lib-flexible-page-section id="posts" icon="comment" title="Posts">
-    <ng-template #content>
-      <app-comp-list #list [collaborationId]="collaborationId" path="posts" [mapper]="postMapper">
+    <ng-template #content let-context>
+      <app-comp-list #list [collaborationId]="collaborationId" [context]="context" path="posts" [mapper]="postMapper">
         <div *appComponentListTemplate="let post" [ngClass]="post.postedBySelf ? 'post-entry-self':'post-entry-other'">
           <p>{{post.text}}</p>
           <p class="post-time">{{post.postedOn.toDate() | amTimeAgo}}</p> <!-- https://github.com/urish/ngx-moment -->
@@ -44,7 +44,7 @@
         </mat-form-field>
         <div class="post-input-send">
           <button mat-stroked-button color="primary">
-            <mat-icon (click)="list.onAction('send')">send</mat-icon>
+            <mat-icon (click)="list.onAction('send', text.value)">send</mat-icon>
           </button>
         </div>
       </div>
@@ -53,9 +53,9 @@
   <!--Documents-->
   <lib-flexible-page-section id="documents" icon="insert_drive_file" title="Documents" fabIcon="add" droppable="true"
     (dropped)="table.onAction('drop', $event)" (action)="table.onAction($event)">
-    <ng-template #content>
-      <app-comp-table #table [collaborationId]="collaborationId" path="documents" [mapper]="documentMapper"
-        [fields]="Fields_Documents">
+    <ng-template #content let-context>
+      <app-comp-table #table [collaborationId]="collaborationId" [context]="context" path="documents"
+        [mapper]="documentMapper" [fields]="Fields_Documents">
       </app-comp-table>
     </ng-template>
     <lib-flexible-section-action action="addFolder" icon="create_new_folder"></lib-flexible-section-action>

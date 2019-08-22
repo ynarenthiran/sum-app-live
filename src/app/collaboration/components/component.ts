@@ -16,6 +16,8 @@ import {
 class ComponentBase implements OnInit, OnChanges {
   @Input()
   collaborationId: string;
+  @Input()
+  context: any;
 
   @Input()
   path?: string | PathObject;
