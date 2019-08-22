@@ -3,6 +3,7 @@ import {
 } from '@angular/core';
 import { GridsterComponent } from 'angular2gridster';
 import { FormComponent } from '../dialog/form.component';
+import { ShellService } from '../shell/shell.component';
 
 @Directive({
     selector: '[libFlexibleSectionContentHost]'
@@ -59,15 +60,6 @@ export class FlexiblePageSectionAction {
     icon: string;
 }
 @Directive({
-    selector: 'lib-flexible-section-fab'
-})
-export class FlexiblePageSectionFab {
-    @Input()
-    action: string;
-    @Input()
-    icon: string;
-}
-@Directive({
     selector: 'lib-flexible-section-content'
 })
 export class FlexiblePageSectionContent {
@@ -92,12 +84,15 @@ export class FlexiblePageSection {
     icon: string;
     @Input()
     title: string;
+    @Input()
+    fabIcon: string
+    @Input()
+    droppable: boolean;
 
     @Output()
     action: EventEmitter<string> = new EventEmitter<string>();
-
-    @ContentChild(FlexiblePageSectionFab)
-    fab: FlexiblePageSectionFab;
+    @Output()
+    dropped: EventEmitter<any> = new EventEmitter<any>();
 
     @ContentChildren(FlexiblePageSectionAction)
     actions: QueryList<FlexiblePageSectionAction>;
@@ -110,6 +105,9 @@ export class FlexiblePageSection {
 
     onAction(action: string) {
         this.action.emit(action);
+    }
+    onDrop(event) {
+        this.dropped.emit(this.dropped);
     }
 }
 
@@ -134,6 +132,15 @@ export class FlexiblePageComponent implements AfterContentInit, AfterContentChec
 
     private indices = new Array(100).fill({ index: 1 });
 
+    @Input()
+    set title(value: string) {
+        this.shellSrv.title = value;
+    }
+    @Input()
+    set subTitle(value: string) {
+        this.shellSrv.subtitle = value;
+    }
+
     @ContentChildren(FlexiblePageSection)
     sectionDefinitions: QueryList<FlexiblePageSection>;
 
@@ -145,6 +152,8 @@ export class FlexiblePageComponent implements AfterContentInit, AfterContentChec
 
     @ViewChild('gridOptionsForm')
     gridOptionsForm: FormComponent;
+
+    constructor(private shellSrv: ShellService) { }
 
     ngAfterContentInit(): void {
         this.grid.reload();

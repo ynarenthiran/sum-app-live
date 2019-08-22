@@ -1,4 +1,4 @@
-<lib-flexible-page>
+<lib-flexible-page title="{{collaboration?.name}}" subTitle="{{collaboration?.description}}">
   <!--title="{{collaboration?.name}}" subTitle="{{collaboration?.description}}">-->
   <lib-page-header class="collaboration-header">
     <div *ngIf="statusValues$" class="status-list mat-subheading-2">
@@ -18,13 +18,12 @@
     </lib-flexible-section-instance>
   </lib-flexible-section-container>
   <!--Members-->
-  <lib-flexible-page-section id="members" icon="person" title="Members" (action)="table.onAction($event)">
+  <lib-flexible-page-section id="members" icon="person" title="Members" fabIcon="add" (action)="table.onAction($event)">
     <lib-flexible-section-content>
       <app-comp-table #table [collaborationId]="collaborationId" [reader]="memberReader" [mapper]="memberMapper"
         [fields]="Fields_Members" [actions]="Actions_Members" [handler]="memberHandler">
       </app-comp-table>
     </lib-flexible-section-content>
-    <lib-flexible-section-fab action="add" icon="add"></lib-flexible-section-fab>
   </lib-flexible-page-section>
   <!--Posts-->
   <lib-flexible-page-section id="posts" icon="comment" title="Posts">
@@ -49,14 +48,13 @@
     </lib-flexible-section-footer>
   </lib-flexible-page-section>
   <!--Documents-->
-  <lib-flexible-page-section id="documents" icon="insert_drive_file" title="Documents"
-    (action)="table.onAction($event)">
+  <lib-flexible-page-section id="documents" icon="insert_drive_file" title="Documents" fabIcon="add" droppable="true"
+    (dropped)="table.onAction('drop', $event)" (action)="table.onAction($event)">
     <lib-flexible-section-content>
       <app-comp-table #table [collaborationId]="collaborationId" path="documents" [mapper]="documentMapper"
         [fields]="Fields_Documents">
       </app-comp-table>
     </lib-flexible-section-content>
-    <lib-flexible-section-fab action="addFile" icon="add"></lib-flexible-section-fab>
     <lib-flexible-section-action action="addFolder" icon="create_new_folder"></lib-flexible-section-action>
   </lib-flexible-page-section>
 </lib-flexible-page>

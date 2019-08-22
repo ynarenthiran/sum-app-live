@@ -1,20 +1,23 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatToolbarModule, MatIconModule, MatRippleModule } from '@angular/material';
-import { PanelComponent } from './ui.component';
+import { MatToolbarModule, MatIconModule, MatRippleModule, MatButtonModule } from '@angular/material';
+import { PanelComponent, UIDropArea } from './ui.component';
 
 @NgModule({
   declarations: [
-    PanelComponent
+    PanelComponent,
+    UIDropArea,
   ],
   imports: [
     CommonModule,
     MatToolbarModule,
     MatIconModule,
-    MatRippleModule
+    MatRippleModule,
+    MatButtonModule
   ],
   exports: [
-    PanelComponent
+    PanelComponent,
+    UIDropArea
   ]
 })
 export class UIModule { }

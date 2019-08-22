@@ -9,9 +9,9 @@ const routes: Routes = [
     path: '', component: ShellComponent, canActivate: [AuthGuard],
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-      { path: 'dashboard', loadChildren: './dashboard/dashboard.module#DashboardModule' },
-      { path: 'collaboration', loadChildren: './collaboration/collaboration.module#CollaborationModule' },
-      { path: 'configuration', loadChildren: './configuration/configuration.module#ConfigurationModule' }
+      { path: 'dashboard', data: { title: 'Dashboard' }, loadChildren: './dashboard/dashboard.module#DashboardModule' },
+      { path: 'collaboration', data: { title: 'Collaborations' }, loadChildren: './collaboration/collaboration.module#CollaborationModule' },
+      { path: 'configuration', data: { title: 'Configuration' }, loadChildren: './configuration/configuration.module#ConfigurationModule' }
     ]
   }
 ];

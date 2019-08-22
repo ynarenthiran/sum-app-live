@@ -9,8 +9,13 @@
   <mat-icon matRipple matRippleCentered="true" matRippleUnbounded="true" matRippleRadius="24" (click)="toggleExpanded()"
     class="panel-header-button">{{_expanderIcon}}</mat-icon>
 </div>
-<div class="spacer vbox">
-  <div *ngIf="_expanded" class="spacer vbox">
+<div *ngIf="_expanded" [libDropArea]="droppable" (dropped)="onDropped($event)" class="spacer vbox anchor">
+    <div *ngIf="fabIcon" class="panel-fab">
+        <button mat-fab color="accent" (click)="onFab()">
+          <mat-icon>{{fabIcon}}</mat-icon>
+        </button>
+      </div>
+  <div class="spacer vbox">
     <ng-container *ngTemplateOutlet="content"></ng-container>
   </div>
   <div class="panel-header">

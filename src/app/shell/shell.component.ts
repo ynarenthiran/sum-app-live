@@ -42,6 +42,13 @@ export class ShellComponent implements OnInit {
         if (event instanceof NavigationEnd) {
           this.srv.title = "";
           this.srv.subtitle = "";
+          const data = this.route.firstChild.routeConfig.data;
+          if (data) {
+            if (data.title)
+              this.srv.title = data.title;
+            if (data.subtitle)
+              this.srv.subtitle = data.subtitle;
+          }
           this.updateAppStatus();
         }
       })
