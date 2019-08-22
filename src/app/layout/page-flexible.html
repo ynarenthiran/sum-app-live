@@ -21,32 +21,19 @@
                     <div *ngIf="isEditMode" class="page-section2-container-header mat-typography">
                       {{container.label}}
                     </div>
-                    <mat-expansion-panel *ngFor="let instance of container.instances" expanded>
-                      <mat-expansion-panel-header>
-                        <mat-panel-title>
-                          {{instance.title}}
-                        </mat-panel-title>
-                        <mat-panel-description>
-                          {{instance.description}}
-                        </mat-panel-description>
-                      </mat-expansion-panel-header>
-                      <!--Start: We will use static elements and for dynamic we use createEmbeddedView or Context parameter-->
-                      <div *ngIf="instance.definition.fab" class="page-section2-fab">
-                        <button mat-fab color="accent"
-                          (click)="instance.definition.onAction(instance.definition.fab.action)">
-                          <mat-icon>{{instance.definition.fab.icon}}</mat-icon>
-                        </button>
-                      </div>
-                      <ng-container *ngTemplateOutlet="instance.definition.content"></ng-container>
-                      <mat-action-row>
+                    <lib-panel *ngFor="let instance of container.instances" [icon]="instance.definition.icon"
+                      [title]="instance.title" [description]="instance.description">
+                      <ng-template #content>
+                        <ng-container *ngTemplateOutlet="instance.definition.content"></ng-container>
+                      </ng-template>
+                      <ng-template #footer>
                         <button *ngFor="let action of instance.definition.actions" mat-button
                           (click)="instance.definition.onAction(action.action)">
                           <mat-icon *ngIf="action.icon">{{action.icon}}</mat-icon> {{action.label}}
                         </button>
                         <ng-container *ngTemplateOutlet="instance.definition.footer"></ng-container>
-                      </mat-action-row>
-                      <!--End-->
-                    </mat-expansion-panel>
+                      </ng-template>
+                    </lib-panel>
                   </div>
                 </ngx-gridster-item>
               </ngx-gridster>

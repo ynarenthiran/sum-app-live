@@ -22,13 +22,13 @@ const TEST_DATA = [
     id: 'container1', label: 'Container One', x: 0, y: 0,
     instances: [
       { sectionId: 'documents', title: 'Documents', description: 'Documents in the collaboration' },
-      { sectionId: 'posts', title: 'Posts', description: 'Posts in the collaboration' }
+      { sectionId: 'posts', title: 'Posts', description: 'Posts in the collaboration' },
+      { sectionId: 'members', title: 'Members', description: 'Members of the collaboration' }
     ]
   },
   {
     id: 'container2', label: 'Container One', x: 1, y: 0,
     instances: [
-      { sectionId: 'members', title: 'Members', description: 'Members of the collaboration' }
     ]
   }
 ];

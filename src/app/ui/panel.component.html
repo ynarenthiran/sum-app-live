@@ -1,0 +1,19 @@
+<div class="panel-header">
+  <div class="vbox">
+    <mat-icon class="panel-header-icon">{{icon}}</mat-icon>
+  </div>
+  <div class="spacer vbox">
+    <span class="mat-title no-margin">{{title}}</span>
+    <span class="mat-caption no-margin">{{description}}</span>
+  </div>
+  <mat-icon matRipple matRippleCentered="true" matRippleUnbounded="true" matRippleRadius="24" (click)="toggleExpanded()"
+    class="panel-header-button">{{_expanderIcon}}</mat-icon>
+</div>
+<div class="spacer vbox">
+  <div *ngIf="_expanded" class="spacer vbox">
+    <ng-container *ngTemplateOutlet="content"></ng-container>
+  </div>
+  <div class="panel-header">
+    <ng-container *ngTemplateOutlet="footer"></ng-container>
+  </div>
+</div>

@@ -33,14 +33,20 @@
     right: 8px;
     top: 8px;
     bottom: 8px;
-    display: grid;
-    grid-auto-rows: 1fr;
-    grid-row-gap: 16px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 4px;
+}
+.page-section2-container lib-panel {
+    margin-bottom: 16px;
+}
+.page-section2-container lib-panel:last-child {
+    margin-bottom: 0;
 }
 .page-section2-container-edit {
     grid-template-rows: 32px;
     padding: 8px;
-    background: $color-secondary;
+    background: rgba($color-secondary, 0.5);
 }
 .page-section2-container-run {
     padding: 0px;

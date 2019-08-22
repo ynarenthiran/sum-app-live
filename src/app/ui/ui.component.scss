@@ -1,0 +1,26 @@
+@import '../../global';
+
+:host {
+    display: flex;
+    flex-direction: column;
+    border-radius: 4px;
+    background-color: $color-secondary;
+}
+.panel-header-icon {
+    font-size: 40px;
+    width: 40px;
+    height: 40px;
+}
+.panel-header-button {
+    user-select: none;
+    cursor: pointer;
+}
+.panel-header {
+    border-radius: 4px;
+    background-color: $color-secondary;
+    height: 64px;
+    padding: 0 16px 0 16px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}

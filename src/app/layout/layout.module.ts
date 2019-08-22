@@ -35,6 +35,7 @@ import {
   FlexiblePageSectionInstance
 } from './page2.component';
 import { DialogModule } from '../dialog/dialog.module';
+import { UIModule } from '../ui/ui.module';
 
 @NgModule({
   imports: [
@@ -51,7 +52,8 @@ import { DialogModule } from '../dialog/dialog.module';
     MatExpansionModule,
     MatSidenavModule,
     GridsterModule,
-    DialogModule
+    DialogModule,
+    UIModule
   ],
   declarations: [
     PageComponent,
