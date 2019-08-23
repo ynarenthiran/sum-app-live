@@ -72,8 +72,8 @@ export interface Post extends AbstractObject {
 })
 export class CollaborationService {
   constructor(private db: AngularFirestore, private storage: AngularFireStorage, private func: AngularFireFunctions,
-    private config: AppConfigService, private auth: AuthService, private dialog: DialogService, private objDialogSrv: ObjectDialogService,
-    private objSrv: ObjectService, private router: Router) { }
+    private config: AppConfigService, private auth: AuthService, public dialog: DialogService, public objDialogSrv: ObjectDialogService,
+    public objSrv: ObjectService, private router: Router) { }
 
   getUsers(): Observable<User[]> {
     return this.db.collection<User>(`users`)
@@ -246,9 +246,23 @@ export class CollaborationService {
     return this.db.doc(`accounts/${this.config.getConfig().accountId}/collaborations/${id}/members/${member.id}`)
       .set(obj);
   }
+  createRecord(id: string, path: string, record: any) {
+    const accountId = this.config.getConfig().accountId;
+    this.db.collection(`accounts/${accountId}/collaborations/${id}/${path}`).add(record);
+  }
+  updateRecord(id: string, path: string, recordId: string, record: any) {
+    const accountId = this.config.getConfig().accountId;
+    return this.db.doc(`accounts/${accountId}/collaborations/${id}/${path}/${recordId}`)
+      .set(record);
+  }
 
   deleteMember(id: string, memberId: string) {
     return this.db.doc(`accounts/${this.config.getConfig().accountId}/collaborations/${id}/members/${memberId}`)
+      .delete();
+  }
+  deleteRecord(id: string, path: string, recordId: string) {
+    const accountId = this.config.getConfig().accountId;
+    return this.db.doc(`accounts/${accountId}/collaborations/${id}/${path}/${recordId}`)
       .delete();
   }
 

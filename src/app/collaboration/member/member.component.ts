@@ -91,39 +91,8 @@ export class MemberComponent implements OnInit {
   }
 
   editMember(member: Member) {
-    let roles = [], tags = [];
-    if (member.roles)
-      roles = member.roles;
-    if (member.tags)
-      tags = member.tags;
-    this.dialog.openDialog(JSON.parse(JSON.stringify({ Roles: roles, Tags: tags })),
-      {
-        title: `Update Member: ${member.user.displayName}`,
-        width: "400px",
-        button: { ok: "Update", cancel: "Cancel" },
-        values: {
-          Roles: ['Administrator', 'Contributor', 'Reader']
-        }
-      })
-      .subscribe((result) => {
-        this.onEditMember(member.id, result);
-      });
-  }
-
-  private onEditMember(memId: string, memIn: any) {
-    const member: Member = Object.assign({} as Member, { id: memId, roles: memIn.Roles, tags: memIn.Tags });
-    this.srv.postMember(this.collaborationId, member);
   }
 
   removeMember(member: Member) {
-    this.dialog.openConfirmationDialog(`Are you sure you want to remove "${member.user.displayName}" ?`,
-      {
-        title: `Remove Member`,
-        width: "400px",
-        button: { ok: "Remove", cancel: "Cancel" }
-      })
-      .subscribe(() => {
-        this.srv.deleteMember(this.collaborationId, member.id);
-      });
   }
 }

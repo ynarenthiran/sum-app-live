@@ -9,6 +9,7 @@ import {
 import { Status, Collaboration, CollaborationService } from './collaboration.service';
 import { MatSnackBar } from '@angular/material';
 import { SectionInstanceAddEvent } from '../layout/page2.component';
+import { ViewHandler, MemberViewHandler } from './util/handlers';
 
 interface StatusValue extends Status {
   value: string;
@@ -23,6 +24,10 @@ const TEST_DATA = [
     id: 'container1', label: 'Container One', x: 0, y: 0,
     instances: [
       {
+        sectionId: 'members', title: 'Members', description: 'Members of the collaboration',
+        context: { text: "Manish's Members" }
+      },
+      {
         sectionId: 'documents', title: 'Documents', description: 'Documents in the collaboration',
         context: { text: "Manish's Documents" }
       },
@@ -30,10 +35,6 @@ const TEST_DATA = [
         sectionId: 'posts', title: 'Posts', description: 'Posts in the collaboration',
         context: { text: "Manish's Posts" }
       },
-      {
-        sectionId: 'members', title: 'Members', description: 'Members of the collaboration',
-        context: { text: "Manish's Members" }
-      }
     ]
   },
   {
@@ -85,12 +86,13 @@ export class CollaborationComponent implements OnInit {
     const container = this.containers.find((item, a, i) => item.id == event.containerId);
     container.instances.push({
       sectionId: event.sectionId, title: 'New', description: 'New',
-      context: {text: "New's New"}
+      context: { text: "New's New" }
     });
   }
 
   private loadCollaboration(id: string) {
     this.collaborationId = id;
+    this.initializeHandlers();
     this.subs.add(
       this.srv.getCollaboration(id,
         (c) => {
@@ -139,11 +141,7 @@ export class CollaborationComponent implements OnInit {
       return this.srv.getMembers(id);
     }
   })(this.srv);
-  private memberHandler = new (class MemberViewHandler extends ViewHandler {
-    action(action: string, record?: any) {
-      throw new Error("Method not implemented.");
-    }
-  })();
+  private memberHandler: ViewHandler = new MemberViewHandler(this.srv);
   // Documents
   private documentMapper = new (class DocumentDataMapper extends DataMapper {
     map(input: any) {
@@ -157,4 +155,8 @@ export class CollaborationComponent implements OnInit {
       return Object.assign(input, { postedBySelf: (input.authorUid == this.auth.currentUserId) ? true : false });
     }
   })(this.auth);
+
+  private initializeHandlers() {
+    this.memberHandler.collaborationId = this.collaborationId;
+  }
 }

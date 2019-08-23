@@ -7,6 +7,7 @@ export interface DialogOptions {
   title?: string;
   width?: string;
   button: { ok?: string, cancel?: string };
+  labels?: any;
   values?: any;
   suggest?: any;
 }
@@ -67,10 +68,9 @@ export class InputDialogComponent implements OnInit {
   @ViewChild(FormComponent) form: FormComponent;
 
   private model: any;
-
   private values: any;
-
   private suggest: any;
+  private labels: any;
 
   constructor(
     private dialogRef: MatDialogRef<InputDialogComponent>,
@@ -79,6 +79,7 @@ export class InputDialogComponent implements OnInit {
     this.model = data.input;
     this.values = this.options.values;
     this.suggest = this.options.suggest;
+    this.labels = this.options.labels;
   }
 
   ngOnInit() {

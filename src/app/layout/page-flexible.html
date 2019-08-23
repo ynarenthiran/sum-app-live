@@ -22,9 +22,6 @@
                     <div *ngIf="isEditMode" class="page-section2-container-header mat-typography">
                       {{container.label}}
                     </div>
-                    <!--Do not pass context to all action calls-->
-                    <!--Just set some @Input() in a chain to the templet context-->
-                    <!--Just set some @Input() in a chain to the templet context-->
                     <lib-panel *ngFor="let instance of container.instances" [icon]="instance.definition.icon"
                       [title]="instance.title" [description]="instance.description"
                       [fabIcon]="instance.definition.fabIcon" (fabClick)="instance.definition.onAction('fab')"

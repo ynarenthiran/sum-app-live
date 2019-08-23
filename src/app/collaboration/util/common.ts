@@ -53,10 +53,6 @@ export abstract class DataMapper {
   abstract map(input: any): any;
 }
 
-export abstract class ViewHandler {
-  abstract action(action: string, record?: any);
-}
-
 export interface PathObject {
   path: string,
   joinScope?: string, // (''/undefined)collaboration, ('A')ccount, ('R')oot
