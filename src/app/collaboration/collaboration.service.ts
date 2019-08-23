@@ -61,8 +61,8 @@ export interface FileExt extends File {
 export interface Post extends AbstractObject {
   id: string;
   text: string;
-  authorUid: string;
-  postedOn: Date;
+  createdByUid: string;
+  createdOn: Date;
   // Transient fields
   postedBySelf: boolean;
 }
@@ -436,14 +436,14 @@ export class CollaborationService {
   getPosts(id: string): Observable<Post[]> {
     const accountId = this.config.getConfig().accountId;
     return this.db.collection<Post>(`accounts/${accountId}/collaborations/${id}/posts`,
-      ref => ref.orderBy('postedOn'))
+      ref => ref.orderBy('createdOn'))
       .snapshotChanges()
       .pipe(
         map(actions => actions.map(a => {
           const col = a.payload.doc.data() as Post;
           return Object.assign(col, {
             id: a.payload.doc.id,
-            postedBySelf: (col.authorUid == this.auth.currentUserId) ? true : false
+            postedBySelf: (col.createdByUid == this.auth.currentUserId) ? true : false
           });
         }))
       );
@@ -452,8 +452,8 @@ export class CollaborationService {
     const accountId = this.config.getConfig().accountId;
     const obj = {
       text: p.text,
-      authorUid: this.auth.currentUserId,
-      postedOn: new Date(),
+      createdByUid: this.auth.currentUserId,
+      createdOn: new Date(),
       typeId: (p.typeId) ? p.typeId : "",
       attributes: (p.attributes) ? p.attributes : {}
     };

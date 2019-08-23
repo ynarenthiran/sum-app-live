@@ -34,7 +34,7 @@
         [handler]="postHandler" class="spacer">
         <div *appComponentListTemplate="let post" [ngClass]="post.postedBySelf ? 'post-entry-self':'post-entry-other'">
           <p>{{post.text}}</p>
-          <p class="post-time">{{post.postedOn.toDate() | amTimeAgo}}</p> <!-- https://github.com/urish/ngx-moment -->
+          <p class="post-time">{{post.createdOn.toDate() | amTimeAgo}}</p> <!-- https://github.com/urish/ngx-moment -->
         </div>
       </app-comp-list>
       <div class="section-footer">

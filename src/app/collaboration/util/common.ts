@@ -28,8 +28,8 @@ export const FIELDS_DOCUMENTS = {
 
 export const FIELDS_POSTS = {
   text: 'Text',
-  authorUid: 'Posted By',
-  postedOn: 'Posted On',
+  createdByUid: 'Posted By',
+  createdOn: 'Posted On',
   postedBySelf: 'My Post',
 }
 
