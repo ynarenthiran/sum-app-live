@@ -24,20 +24,12 @@
                     </div>
                     <lib-panel *ngFor="let instance of container.instances" [icon]="instance.definition.icon"
                       [title]="instance.title" [description]="instance.description"
-                      [fabIcon]="instance.definition.fabIcon" (fabClick)="instance.definition.onAction('fab')"
                       [droppable]="instance.definition.droppable"
                       (droppped)="instance.definition.onDrop('drop', $event)">
                       <ng-template #content>
                         <ng-container
                           *ngTemplateOutlet="instance.definition.content; context: {$implicit: instance.context}">
                         </ng-container>
-                      </ng-template>
-                      <ng-template #footer>
-                        <button *ngFor="let action of instance.definition.actions" mat-button
-                          (click)="instance.definition.onAction(action.action)">
-                          <mat-icon *ngIf="action.icon">{{action.icon}}</mat-icon> {{action.label}}
-                        </button>
-                        <ng-container *ngTemplateOutlet="instance.definition.footer"></ng-container>
                       </ng-template>
                     </lib-panel>
                   </div>

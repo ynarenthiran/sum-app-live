@@ -19,33 +19,35 @@
     </lib-flexible-section-instance>
   </lib-flexible-section-container>
   <!--Members-->
-  <lib-flexible-page-section id="members" icon="person" title="Members" fabIcon="add" (action)="table.onAction($event)">
+  <lib-flexible-page-section id="members" icon="person" title="Members" (action)="table.onAction($event)">
     <ng-template #content let-context>
-      <app-comp-table #table [collaborationId]="collaborationId" [context]="context" [reader]="memberReader"
-        [mapper]="memberMapper" [fields]="Fields_Members" [actions]="Actions_Members" [handler]="memberHandler">
+      <app-comp-table #table [collaborationId]="collaborationId" [context]="context" fabIcon="add"
+        [reader]="memberReader" [mapper]="memberMapper" [fields]="Fields_Members" [actions]="Actions_Members"
+        [handler]="memberHandler">
       </app-comp-table>
     </ng-template>
   </lib-flexible-page-section>
   <!--Posts-->
   <lib-flexible-page-section id="posts" icon="comment" title="Posts">
     <ng-template #content let-context>
-      <app-comp-list #list [collaborationId]="collaborationId" [context]="context" path="posts" [mapper]="postMapper">
+      <app-comp-list #list [collaborationId]="collaborationId" [context]="context" path="posts" [mapper]="postMapper"
+        [handler]="postHandler" class="spacer">
         <div *appComponentListTemplate="let post" [ngClass]="post.postedBySelf ? 'post-entry-self':'post-entry-other'">
           <p>{{post.text}}</p>
           <p class="post-time">{{post.postedOn.toDate() | amTimeAgo}}</p> <!-- https://github.com/urish/ngx-moment -->
         </div>
       </app-comp-list>
-    </ng-template>
-    <ng-template #footer>
-      <div class="spacer row">
-        <mat-form-field appearance="outline" class="spacer">
-          <input #text matInput placeholder="Enter message" />
-          <mat-icon matSuffix (click)="list.onAction('editor')" class="cursor">open_in_new</mat-icon>
-        </mat-form-field>
-        <div class="post-input-send">
-          <button mat-stroked-button color="primary">
-            <mat-icon (click)="list.onAction('send', text.value)">send</mat-icon>
-          </button>
+      <div class="section-footer">
+        <div class="spacer row">
+          <mat-form-field appearance="outline" class="spacer no-hint">
+            <input #text matInput placeholder="Enter message" />
+            <mat-icon matSuffix (click)="list.onAction('editor')" class="cursor">open_in_new</mat-icon>
+          </mat-form-field>
+          <div class="post-input-send">
+            <button mat-stroked-button color="primary">
+              <mat-icon (click)="list.onAction('send', text.value)">send</mat-icon>
+            </button>
+          </div>
         </div>
       </div>
     </ng-template>
@@ -54,11 +56,11 @@
   <lib-flexible-page-section id="documents" icon="insert_drive_file" title="Documents" fabIcon="add" droppable="true"
     (dropped)="table.onAction('drop', $event)" (action)="table.onAction($event)">
     <ng-template #content let-context>
-      <app-comp-table #table [collaborationId]="collaborationId" [context]="context" path="documents"
+      <app-comp-table #table [collaborationId]="collaborationId" [context]="context" fabIcon="add" path="documents"
         [mapper]="documentMapper" [fields]="Fields_Documents">
       </app-comp-table>
+      <lib-flexible-section-action action="addFolder" icon="create_new_folder"></lib-flexible-section-action>
     </ng-template>
-    <lib-flexible-section-action action="addFolder" icon="create_new_folder"></lib-flexible-section-action>
   </lib-flexible-page-section>
 </lib-flexible-page>
 <!--[path]="{path: 'members', joinScope: 'R', join: {id: 'users'}}" [mapper]="memberMapper"-->

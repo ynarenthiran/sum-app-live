@@ -5,10 +5,9 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { map } from 'rxjs/operators';
 import {
   TableColumnType, PathObject, DataReader, DataMapper, TableColumn,
-  GenericDataReader,
-  ActionColumn,
-  ViewHandler
+  GenericDataReader, ActionColumn
 } from '../util/common';
+import { ViewHandler } from '../util/handlers';
 
 @Component({
   selector: 'app-comp-base'
@@ -18,6 +17,8 @@ class ComponentBase implements OnInit, OnChanges {
   collaborationId: string;
   @Input()
   context: any;
+  @Input()
+  fabIcon: string;
 
   @Input()
   path?: string | PathObject;
@@ -67,7 +68,8 @@ class ComponentBase implements OnInit, OnChanges {
 
 @Component({
   selector: 'app-comp-table',
-  templateUrl: './table.html'
+  templateUrl: './table.html',
+  styleUrls: ['./components.scss']
 })
 export class ComponentTable extends ComponentBase {
   private columnType = TableColumnType;
@@ -140,7 +142,8 @@ export class ComponentListTemplate {
 }
 @Component({
   selector: 'app-comp-list',
-  templateUrl: './list.html'
+  templateUrl: './list.html',
+  styleUrls: ['./components.scss']
 })
 export class ComponentList extends ComponentBase {
   @ContentChild(ComponentListTemplate)

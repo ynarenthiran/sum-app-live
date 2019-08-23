@@ -11,15 +11,7 @@
   </button>
 </div>
 <div *ngIf="_expanded" class="spacer vbox anchor">
-  <div *ngIf="fabIcon" class="panel-fab">
-    <button mat-fab color="accent" (click)="onFab()">
-      <mat-icon>{{fabIcon}}</mat-icon>
-    </button>
-  </div>
   <div [libDropArea]="droppable" (dropped)="onDropped($event)" class="spacer vbox">
     <ng-container #contentContainer></ng-container>
-  </div>
-  <div class="panel-header">
-    <ng-container #footerContainer></ng-container>
   </div>
 </div>

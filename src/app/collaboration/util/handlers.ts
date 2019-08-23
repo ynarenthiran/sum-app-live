@@ -1,6 +1,4 @@
-import { CollaborationService } from '../collaboration.service';
-import { ValueTransformer } from '@angular/compiler/src/util';
-import { CollaborationRoutingModule } from '../collaboration-routing.module';
+import { CollaborationService, User } from '../collaboration.service';
 import { map } from 'rxjs/operators';
 import { ObjectTypeClass } from 'src/app/object/object.service';
 
@@ -14,6 +12,12 @@ interface UpdateIdentificationOptions extends IdentitficationOptions {
 }
 interface CreateIdentificationOptions extends UpdateIdentificationOptions {
     objectTypePath: string;
+    template?: any;
+    idField?: string;
+}
+
+abstract class DisplayObject {
+    abstract toValue(): string;
 }
 export abstract class ViewHandler {
     collaborationId: string;
@@ -56,7 +60,7 @@ export abstract class ViewHandler {
             });
     }
 
-    protected createRecord(path: string, information: CreateIdentificationOptions, idField?: string) {
+    protected createRecord(path: string, information: CreateIdentificationOptions, record?: any) {
         var objectType$ =
             this.srv.objSrv.getObjectTypes(information.objectTypePath)
                 .pipe(map(types => types.map(type => new ObjectTypeClass(type))));
@@ -67,19 +71,29 @@ export abstract class ViewHandler {
             values: information.values
         }
         var input = {};
+        var labels = {};
         if (information.fields) {
-            var labels = {};
-            input = {};
             Object.keys(information.fields).forEach((key) => {
                 labels[key] = information.fields[key];
-                input[key] = "";
+                input[key] =
+                    (information.template && information.template[key]) ? information.template[key] : ""
             });
+        }
+        if (record) {
+            input = Object.assign(input, record);
         }
         input['typeId'] = ""; // Add Type field
         labels['typeId'] = "Type";
+        if (!options.values) options.values = {};
         options.values['typeId'] = objectType$;
+        options['labels'] = labels;
         this.srv.dialog.openDialog(input, options)
             .subscribe((result) => {
+                // Resolve object to fields
+                Object.keys(result).forEach((key) => {
+                    if (result[key].toValue) // instanceof DisplayObject doesn't work
+                        result[key] = result[key].toValue();
+                });
                 result.typeId = result.typeId.id;
                 if (result.typeId) {
                     this.srv.objSrv.getObjectType(information.objectTypePath, result.typeId).subscribe((type) => {
@@ -92,25 +106,40 @@ export abstract class ViewHandler {
                                 })
                                 .subscribe((attributes) => {
                                     result['attributes'] = attributes;
-                                    this.srv.createRecord(this.collaborationId, path, result);
+                                    this.setOrAddRecord(path, result, information.idField);
                                 });
                         }
                         else {
-                            this.srv.createRecord(this.collaborationId, path, result);
+                            this.setOrAddRecord(path, result, information.idField);
                         }
                     });
                 }
                 else {
-                    this.srv.createRecord(this.collaborationId, path, result);
+                    this.setOrAddRecord(path, result, information.idField);
                 }
             });
-
+    }
+    private setOrAddRecord(path, record, idField) {
+        if (idField) {
+            if (record[idField]) {
+                const id = record[idField];
+                delete record[idField];
+                this.srv.updateRecord(this.collaborationId, path, id, record);
+            }
+            else {
+                this.srv.createRecord(this.collaborationId, path, record);
+            }
+        }
+        else {
+            this.srv.createRecord(this.collaborationId, path, record);
+        }
     }
 }
-
+/*******************************************************
+ Members
+ *******************************************************/
 export class MemberViewHandler extends ViewHandler {
     action(action: string, record?: any) {
-        debugger;
         switch (action) {
             case 'edit': this.editMember(record); break;
             case 'remove': this.removeMember(record); break;
@@ -140,21 +169,55 @@ export class MemberViewHandler extends ViewHandler {
         var users$ =
             this.srv.getUsers()
                 .pipe(
-                    map(users => users.map(user => Object.assign({
-                        value: user.id,
-                        text: `${user.displayName} (${user.email})`
-                    }))));
+                    map(users => users.map(
+                        user => new (class UserDisplayObject implements DisplayObject {
+                            user: User;
+                            constructor(user: User) { this.user = user; }
+                            toString(): string { return `${this.user.displayName} (${this.user.email})`; }
+                            toValue(): string { return this.user.id; }
+                        })(user)
+                    )));
         super.createRecord('members', {
             entityTypeName: 'Member',
             fields: {
-                user: users$,
+                user: 'User',
                 roles: 'Roles',
                 tags: 'Tags'
             },
             values: {
+                user: users$,
                 roles: ['Administrator', 'Contributor', 'Reader']
             },
-            objectTypePath: 'memberTypes'
+            objectTypePath: 'memberTypes',
+            template: { roles: [], tags: [] },
+            idField: 'user'
         });
+    }
+}
+/*******************************************************
+ Posts
+ *******************************************************/
+export class PostViewHandler extends ViewHandler {
+    action(action: string, record?: any) {
+        switch (action) {
+            case 'send': this.postText(record); break;
+        }
+    }
+    private postText(text) {
+        const record = {
+            text: text
+        };
+        super.createRecord('posts', {
+            entityTypeName: 'Post',
+            objectTypePath: 'postTypes'
+        }, record);
+    }
+}
+/*******************************************************
+ Documents
+ *******************************************************/
+export class DocumentViewHandler extends ViewHandler {
+    action(action: string, record?: any) {
+        debugger;
     }
 }

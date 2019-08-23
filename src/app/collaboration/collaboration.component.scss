@@ -27,6 +27,13 @@
     color: $color-primary;
     margin-right: 8px;
 }
+.section-footer {
+    border-radius: 4px;
+    background-color: $color-secondary;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
 /* Posts */
 .post-entry-other {
     align-self: flex-start;
@@ -85,5 +92,4 @@
 .post-input-send {
     display: flex;
     margin: .25em 0;
-    padding-bottom: 1.34375em;
 }

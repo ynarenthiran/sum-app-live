@@ -1,5 +1,5 @@
 import {
-  Component, OnInit, Input, ContentChild, TemplateRef, Output, EventEmitter, Directive, ElementRef, HostListener, OnChanges, OnDestroy, ViewChild, ViewContainerRef, AfterContentChecked
+  Component, OnInit, Input, ContentChild, TemplateRef, Output, EventEmitter, Directive, ElementRef, HostListener, OnChanges, OnDestroy, ViewChild, ViewContainerRef, AfterContentChecked, NgZone
 } from '@angular/core';
 import { FlexiblePageSectionContainer } from '../layout/page2.component';
 
@@ -23,41 +23,23 @@ export class PanelComponent implements AfterContentChecked {
   }
 
   @Input()
-  fabIcon: string = 'add';
-  @Output()
-  fabClick: EventEmitter<void> = new EventEmitter<void>();
-
-  @Input()
   droppable: boolean
   @Output()
   droppped: EventEmitter<any> = new EventEmitter<any>();
 
   @ContentChild('content')
   content: TemplateRef<any>;
-  @ContentChild('footer')
-  footer: TemplateRef<any>;
 
   @ViewChild('contentContainer', { read: ViewContainerRef })
   contentContainer: ViewContainerRef;
-  @ViewChild('footerContainer', { read: ViewContainerRef })
-  footerContainer: ViewContainerRef;
 
   private _expanded = true;
   private _expanderIcon: string = 'expand_less'
 
-  constructor() { }
+  constructor(private zone: NgZone) { }
 
   ngAfterContentChecked() {
-    if (this.contentContainer) {
-      if (this.contentContainer.length < 1) {
-        this.contentContainer.createEmbeddedView(this.content);
-      }
-    }
-    if (this.footerContainer) {
-      if (this.footerContainer.length < 1) {
-        this.footerContainer.createEmbeddedView(this.footer);
-      }
-    }
+    this.initializeContainer();
   }
 
   toggleExpanded() {
@@ -65,12 +47,16 @@ export class PanelComponent implements AfterContentChecked {
     this._expanderIcon = this._expanded ? 'expand_less' : 'expand_more';
   }
 
-  onFab() {
-    this.fabClick.emit();
-  }
-
   onDropped(event: any) {
     this.droppped.emit(event);
+  }
+
+  private initializeContainer() {
+    if (this.contentContainer) {
+      if (this.contentContainer.length < 1) {
+        this.contentContainer.createEmbeddedView(this.content);
+      }
+    }
   }
 }
 

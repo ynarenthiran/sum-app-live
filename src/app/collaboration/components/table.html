@@ -1,3 +1,8 @@
+<div *ngIf="fabIcon" class="comp-fab">
+    <button mat-fab color="accent" (click)="onAction('fab')">
+        <mat-icon>{{fabIcon}}</mat-icon>
+    </button>
+</div>
 <mat-table [dataSource]="records$">
     <ng-container *ngFor="let column of columns" matColumnDef="{{column.field}}">
         <mat-header-cell *matHeaderCellDef>{{column.label}}</mat-header-cell>

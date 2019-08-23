@@ -4,12 +4,13 @@ import { map, switchMap } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from 'src/app/authentication/auth.service';
 import {
-  FIELDS_POSTS, FIELDS_MEMBERS, FIELDS_DOCUMENTS, DataMapper, DataReader, ACTIONS_MEMBERS, ViewHandler
+  FIELDS_POSTS, FIELDS_MEMBERS, FIELDS_DOCUMENTS, DataMapper, DataReader,
+  ACTIONS_MEMBERS
 } from './util/common';
 import { Status, Collaboration, CollaborationService } from './collaboration.service';
 import { MatSnackBar } from '@angular/material';
 import { SectionInstanceAddEvent } from '../layout/page2.component';
-import { ViewHandler, MemberViewHandler } from './util/handlers';
+import { ViewHandler, MemberViewHandler, PostViewHandler, DocumentViewHandler } from './util/handlers';
 
 interface StatusValue extends Status {
   value: string;
@@ -24,16 +25,16 @@ const TEST_DATA = [
     id: 'container1', label: 'Container One', x: 0, y: 0,
     instances: [
       {
+        sectionId: 'posts', title: 'Posts', description: 'Posts in the collaboration',
+        context: { text: "Manish's Posts" }
+      },
+      {
         sectionId: 'members', title: 'Members', description: 'Members of the collaboration',
         context: { text: "Manish's Members" }
       },
       {
         sectionId: 'documents', title: 'Documents', description: 'Documents in the collaboration',
         context: { text: "Manish's Documents" }
-      },
-      {
-        sectionId: 'posts', title: 'Posts', description: 'Posts in the collaboration',
-        context: { text: "Manish's Posts" }
       },
     ]
   },
@@ -148,6 +149,7 @@ export class CollaborationComponent implements OnInit {
       return Object.assign(input, { icon: input.isFolder ? 'folder' : 'description' });
     }
   })();
+  private documentHandler: ViewHandler = new DocumentViewHandler(this.srv);
   // Posts
   private postMapper = new (class PostDataMapper extends DataMapper {
     constructor(private auth: AuthService) { super(); }
@@ -155,8 +157,11 @@ export class CollaborationComponent implements OnInit {
       return Object.assign(input, { postedBySelf: (input.authorUid == this.auth.currentUserId) ? true : false });
     }
   })(this.auth);
+  private postHandler: ViewHandler = new PostViewHandler(this.srv);
 
   private initializeHandlers() {
     this.memberHandler.collaborationId = this.collaborationId;
+    this.postHandler.collaborationId = this.collaborationId;
+    this.documentHandler.collaborationId = this.collaborationId;
   }
 }

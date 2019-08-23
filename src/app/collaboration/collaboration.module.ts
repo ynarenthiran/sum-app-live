@@ -19,14 +19,12 @@ import { CreateComponent } from './create/create.component';
 import { LayoutModule } from '../layout/layout.module';
 import { DialogModule } from '../dialog/dialog.module';
 import { CollaborationService } from './collaboration.service';
-import { MemberComponent } from './member/member.component';
 import {
   DocumentComponent,
   DocumentDropArea
 } from './document/document.component';
 import { ListComponent } from './list/list.component';
 import { ObjectModule } from '../object/object.module';
-import { PostComponent } from './post/post.component';
 import { MomentModule } from 'ngx-moment';
 import { TextFieldModule } from '@angular/cdk/text-field';
 import { FormsModule } from '@angular/forms';
@@ -38,11 +36,9 @@ import { ComponentTable, ComponentList, ComponentListTemplate } from './componen
   declarations: [
     CreateComponent,
     CollaborationComponent,
-    MemberComponent,
     DocumentComponent,
     DocumentDropArea,
     ListComponent,
-    PostComponent,
     ComponentTable,
     ComponentList,
     ComponentListTemplate
