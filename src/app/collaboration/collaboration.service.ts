@@ -459,5 +459,4 @@ export class CollaborationService {
     };
     this.db.collection(`accounts/${accountId}/collaborations/${id}/posts`).add(obj);
   }
-
 }

@@ -154,7 +154,7 @@ export class CollaborationComponent implements OnInit {
   private postMapper = new (class PostDataMapper extends DataMapper {
     constructor(private auth: AuthService) { super(); }
     map(input: any) {
-      return Object.assign(input, { postedBySelf: (input.authorUid == this.auth.currentUserId) ? true : false });
+      return Object.assign(input, { postedBySelf: (input.createdByUid == this.auth.currentUserId) ? true : false });
     }
   })(this.auth);
   private postHandler: ViewHandler = new PostViewHandler(this.srv);

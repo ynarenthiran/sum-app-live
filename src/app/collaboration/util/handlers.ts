@@ -44,10 +44,7 @@ export abstract class ViewHandler {
         }
         this.srv.dialog.openDialog(JSON.parse(JSON.stringify(input)), options)
             .subscribe((result) => {
-                const data = Object.assign(result, {
-                    changedByUid: this.srv.auth.currentUserId,
-                    changedOn: new Date()
-                });
+                const data = this.handleAdminFields(result, false);
                 this.srv.updateRecord(this.collaborationId, path, record.id, data);
             });
     }
@@ -93,6 +90,9 @@ export abstract class ViewHandler {
         options['labels'] = labels;
         this.srv.dialog.openDialog(input, options)
             .subscribe((result) => {
+                if (record) {
+                    result = Object.assign(record, result);
+                }
                 // Resolve object to fields
                 Object.keys(result).forEach((key) => {
                     if (result[key].toValue) // instanceof DisplayObject doesn't work
@@ -124,10 +124,7 @@ export abstract class ViewHandler {
             });
     }
     private setOrAddRecord(path, record, idField) {
-        const data = Object.assign(record, {
-            createdByUid: this.srv.auth.currentUserId,
-            createdOn: new Date()
-        });
+        const data = this.handleAdminFields(record, true);
         if (idField) {
             if (record[idField]) {
                 const id = record[idField];
@@ -140,6 +137,22 @@ export abstract class ViewHandler {
         }
         else {
             this.srv.createRecord(this.collaborationId, path, record);
+        }
+    }
+    private handleAdminFields(record: any, isCreate: boolean): any {
+        if (isCreate) {
+            return Object.assign(record, {
+                createdByUid: this.srv.auth.currentUserId,
+                createdOn: new Date(),
+                //processNotification: true
+            });
+        }
+        else {
+            return Object.assign(record, {
+                changedByUid: this.srv.auth.currentUserId,
+                changedOn: new Date(),
+                //processNotification: true
+            });
         }
     }
 }
