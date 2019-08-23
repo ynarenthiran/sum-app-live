@@ -44,7 +44,11 @@ export abstract class ViewHandler {
         }
         this.srv.dialog.openDialog(JSON.parse(JSON.stringify(input)), options)
             .subscribe((result) => {
-                this.srv.updateRecord(this.collaborationId, path, record.id, result);
+                const data = Object.assign(result, {
+                    changedByUid: this.srv.auth.currentUserId,
+                    changedOn: new Date()
+                });
+                this.srv.updateRecord(this.collaborationId, path, record.id, data);
             });
     }
 
@@ -120,6 +124,10 @@ export abstract class ViewHandler {
             });
     }
     private setOrAddRecord(path, record, idField) {
+        const data = Object.assign(record, {
+            createdByUid: this.srv.auth.currentUserId,
+            createdOn: new Date()
+        });
         if (idField) {
             if (record[idField]) {
                 const id = record[idField];

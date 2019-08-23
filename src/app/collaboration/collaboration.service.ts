@@ -72,7 +72,7 @@ export interface Post extends AbstractObject {
 })
 export class CollaborationService {
   constructor(private db: AngularFirestore, private storage: AngularFireStorage, private func: AngularFireFunctions,
-    private config: AppConfigService, private auth: AuthService, public dialog: DialogService, public objDialogSrv: ObjectDialogService,
+    private config: AppConfigService, public auth: AuthService, public dialog: DialogService, public objDialogSrv: ObjectDialogService,
     public objSrv: ObjectService, private router: Router) { }
 
   getUsers(): Observable<User[]> {
