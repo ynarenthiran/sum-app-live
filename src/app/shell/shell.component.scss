@@ -24,6 +24,24 @@ mat-toolbar {
     z-index: 5;
 }
 
+.shell-notif-list {
+    list-style-type:none;
+    padding: 0;
+}
+.shell-notif-list li {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-left: solid 3px $color-primary;
+    padding-left: 10px;
+}
+.shell-notif-list span {
+    margin: 0;
+}
+.shell-notif-list .mat-small {
+    color: $color-disabled
+}
+
 .app-header {
     display: flex;
     flex-direction: column;

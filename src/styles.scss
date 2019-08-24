@@ -22,6 +22,9 @@
     flex-direction: row;
     padding: 5px;
 }
+.center {
+    align-items: center;
+}
 .anchor {
     position: relative;
 }
@@ -48,6 +51,7 @@
 .cursor {
     cursor: pointer;
 }
+
 /* Global classes because of view encapsulation issues */
 .sidebar-nav-list-item {
     border-radius: 0px 24px 24px 0px;

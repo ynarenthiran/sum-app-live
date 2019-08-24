@@ -1,5 +1,5 @@
 <mat-sidenav-container autosize>
-    <mat-sidenav opened mode="side" [ngClass]="{'app-panel-min':isPanelMin}">
+    <mat-sidenav opened mode="side" position="start" [ngClass]="{'app-panel-min':isPanelMin}">
         <div class="app-header mat-title">
             <div matRipple (click)="isPanelMin = !isPanelMin" class="app-item">
                 <span class="spacer left">Applications</span>
@@ -21,19 +21,62 @@
             </div>
         </div>
     </mat-sidenav>
-    <div class="app-content">
-        <mat-toolbar class="mat-elevation-z2">
-            <div class="app-conent-header toolbar-spacer">
-                <span class="mat-headline no-margin">{{this.srv.title}}</span>
-                <span class="mat-subheading-1 no-margin">{{this.srv.subtitle}}</span>
-            </div>
-            <button mat-icon-button [matMenuTriggerFor]="accountMenu">
-                <mat-icon>account_circle</mat-icon>
-            </button>
-            <mat-menu #accountMenu="matMenu">
-                <button mat-menu-item (click)="logoff()">Logoff</button>
-            </mat-menu>
-        </mat-toolbar>
-        <router-outlet></router-outlet>
-    </div>
+    <mat-sidenav-content>
+        <div class="app-content">
+            <mat-toolbar class="mat-elevation-z2">
+                <div class="app-conent-header toolbar-spacer">
+                    <span class="mat-headline no-margin">{{this.srv.title}}</span>
+                    <span class="mat-subheading-1 no-margin">{{this.srv.subtitle}}</span>
+                </div>
+                <button mat-icon-button (click)="openNotificationPanel()">
+                    <mat-icon [matBadge]="notificationsCount" matBadgeColor="warn">notifications</mat-icon>
+                </button>
+                <button mat-icon-button [matMenuTriggerFor]="accountMenu">
+                    <mat-icon>account_circle</mat-icon>
+                </button>
+                <mat-menu #accountMenu="matMenu">
+                    <button mat-menu-item (click)="logoff()">Logoff</button>
+                </mat-menu>
+            </mat-toolbar>
+            <router-outlet></router-outlet>
+        </div>
+    </mat-sidenav-content>
+    <mat-sidenav [(opened)]="isRightPanelVisible" mode="over" position="end">
+        <mat-accordion>
+            <!--Notifications-->
+            <mat-expansion-panel expanded>
+                <mat-expansion-panel-header>
+                    Notifications
+                </mat-expansion-panel-header>
+                <ul class="shell-notif-list">
+                    <li *ngFor="let notif of notifications$ | async" class="mat-typography">
+                        <div class="vbox">
+                            <mat-icon mat-list-icon>account_circle</mat-icon>
+                        </div>
+                        <div class="vbox">
+                            <span class="mat-title">{{notif.who?.displayName}}</span>
+                            <span class="mat-small">{{notif.collaborationId}}</span>
+                            <span class="mat-body">{{notif.objId}}</span>
+                        </div>
+                        <div class="vbox center">
+                            <span class="mat-small">{{notif.when.toDate() | amTimeAgo}}</span>
+                            <button mat-icon-button (click)="openNotificationPanel()">
+                                <mat-icon>{{notif.whatIcon}}</mat-icon>
+                            </button>
+                        </div>
+                    </li>
+                </ul>
+                <div>
+                </div>
+                <!--<mat-list>
+                    <mat-list-item *ngFor="let notif of notifications$ | async">
+                        <mat-icon mat-list-icon>account_circle</mat-icon>
+                        <h4 mat-line>{{notif.who?.displayName}}</h4>
+                        <p mat-line>{{notif.when.toDate() | amTimeAgo}}</p>
+                        <mat-icon mat-list-icon>{{notif.whatIcon}}</mat-icon>
+                    </mat-list-item>
+                </mat-list>-->
+            </mat-expansion-panel>
+        </mat-accordion>
+    </mat-sidenav>
 </mat-sidenav-container>

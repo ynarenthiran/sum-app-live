@@ -12,7 +12,10 @@ import {
   MatIconModule,
   MatRippleModule,
   MatToolbarModule,
-  MatMenuModule
+  MatMenuModule,
+  MatExpansionModule,
+  MatListModule,
+  MatBadgeModule
 } from '@angular/material';
 import { GridsterModule } from 'angular2gridster';
 
@@ -22,6 +25,7 @@ import { environment } from '../environments/environment';
 import { AppConfigService } from './services/app.config';
 import { LayoutModule } from './layout/layout.module';
 import { ShellComponent, ShellService } from './shell/shell.component';
+import { MomentModule } from 'ngx-moment';
 
 const appInitializerFn = (appConfig: AppConfigService) => {
   return () => {
@@ -47,6 +51,10 @@ const appInitializerFn = (appConfig: AppConfigService) => {
     MatRippleModule,
     MatToolbarModule,
     MatMenuModule,
+    MatExpansionModule,
+    MatListModule,
+    MatBadgeModule,
+    MomentModule,
     GridsterModule.forRoot(),
     AppRoutingModule
   ],
