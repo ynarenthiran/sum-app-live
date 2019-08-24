@@ -17,6 +17,7 @@ import {
   MatListModule,
   MatBadgeModule
 } from '@angular/material';
+import { DragulaModule } from 'ng2-dragula';
 import { GridsterModule } from 'angular2gridster';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -55,6 +56,7 @@ const appInitializerFn = (appConfig: AppConfigService) => {
     MatListModule,
     MatBadgeModule,
     MomentModule,
+    DragulaModule.forRoot(),
     GridsterModule.forRoot(),
     AppRoutingModule
   ],

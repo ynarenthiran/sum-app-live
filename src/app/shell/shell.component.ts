@@ -101,6 +101,10 @@ export class ShellComponent implements OnInit {
     this.isRightPanelVisible = true;
   }
 
+  openAdmin() {
+    window.open('https://admin.sum-app.com', '_blank')
+  }
+
   private updateAppStatus() {
     this.apps.forEach((app) => {
       const route =

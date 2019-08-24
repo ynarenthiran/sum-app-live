@@ -1,7 +1,9 @@
 import {
-  Component, OnInit, Input, ContentChild, TemplateRef, Output, EventEmitter, Directive, ElementRef, HostListener, OnChanges, OnDestroy, ViewChild, ViewContainerRef, AfterContentChecked, NgZone
+  Component, Input, ContentChild, TemplateRef, Output,
+  EventEmitter, Directive, ElementRef, HostListener,
+  ViewChild, ViewContainerRef, AfterContentChecked
 } from '@angular/core';
-import { FlexiblePageSectionContainer } from '../layout/page2.component';
+import { copy } from 'angular6-json-schema-form';
 
 @Component({
   selector: 'lib-panel',
@@ -36,7 +38,7 @@ export class PanelComponent implements AfterContentChecked {
   private _expanded = true;
   private _expanderIcon: string = 'expand_less'
 
-  constructor(private zone: NgZone) { }
+  constructor() { }
 
   ngAfterContentChecked() {
     this.initializeContainer();
@@ -60,8 +62,6 @@ export class PanelComponent implements AfterContentChecked {
   }
 }
 
-const DRAG_EFFECT: string = 'link';
-
 @Directive({
   selector: '[libDropArea]'
 })
@@ -70,6 +70,8 @@ export class UIDropArea {
   libDropArea: boolean;
   @Input()
   dropTargetClass: string = 'drop-target';
+  @Input()
+  dropEffect: string = "copy"
   @Output()
   dropped: EventEmitter<any> = new EventEmitter<any>();
 
@@ -82,7 +84,7 @@ export class UIDropArea {
       if (e.preventDefault) {
         e.preventDefault();
       }
-      e.dataTransfer.dropEffect = DRAG_EFFECT;
+      e.dataTransfer.dropEffect = this.dropEffect;
       if (this.dropTargetClass)
         this.el.nativeElement.classList.add(this.dropTargetClass);
       return false;
@@ -130,6 +132,10 @@ export class UIDragEntity {
   libDragEntity: boolean = true;
   @Input()
   dragData: any;
+  @Input()
+  dragEffect: string = "copy";
+  @Input()
+  dragLive: boolean = false;
 
   constructor(private el: ElementRef) {
     this.el.nativeElement.draggable = "true";
@@ -138,7 +144,7 @@ export class UIDragEntity {
   @HostListener('dragstart', ['$event'])
   onDragStart(e: any) {
     if (this.libDragEntity) {
-      e.dataTransfer.effectAllowed = DRAG_EFFECT;
+      e.dataTransfer.effectAllowed = this.dragEffect;
       e.dataTransfer.setData('application/json', JSON.stringify(this.dragData));
       // TODO: Notify parent that we are taking this from you
     }

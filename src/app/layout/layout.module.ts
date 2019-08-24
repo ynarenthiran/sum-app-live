@@ -13,6 +13,7 @@ import {
   MatExpansionModule,
   MatSidenavModule
 } from '@angular/material';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { GridsterModule } from 'angular2gridster';
 
 import {
@@ -34,6 +35,7 @@ import {
 } from './page2.component';
 import { DialogModule } from '../dialog/dialog.module';
 import { UIModule } from '../ui/ui.module';
+import { DragulaModule } from 'ng2-dragula';
 
 @NgModule({
   imports: [
@@ -49,6 +51,7 @@ import { UIModule } from '../ui/ui.module';
     MatTreeModule,
     MatExpansionModule,
     MatSidenavModule,
+    DragulaModule,
     GridsterModule,
     DialogModule,
     UIModule

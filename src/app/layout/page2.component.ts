@@ -4,6 +4,7 @@ import {
 import { GridsterComponent } from 'angular2gridster';
 import { FormComponent } from '../dialog/form.component';
 import { ShellService } from '../shell/shell.component';
+import { DragulaService } from 'ng2-dragula';
 
 @Directive({
     selector: 'lib-flexible-section-instance'
@@ -137,7 +138,14 @@ export class FlexiblePageComponent implements AfterContentInit, AfterContentChec
     @ViewChild('gridOptionsForm')
     gridOptionsForm: FormComponent;
 
-    constructor(private shellSrv: ShellService) { }
+    constructor(private shellSrv: ShellService, private dragulaService: DragulaService) {
+        dragulaService.createGroup("INSTANCE_CONTAINER", {
+            removeOnSpill: true,
+            moves: (el, container, handle) => {
+                return handle.classList.contains('panel-drag-handle');
+            }
+        });
+    }
 
     ngAfterContentInit(): void {
         this.grid.reload();

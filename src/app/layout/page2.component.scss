@@ -10,16 +10,16 @@
     bottom: 32px;
     z-index: 5;
 }
+mat-sidenav-content {
+    position: relative;
+    overflow: auto;
+}
 .page-grid-container {
     display: block;
-    position: fixed;
+    position: absolute;
     height: 100%;
     width: 100%;
     z-index: 10;
-}
-.page-grid-container-inner {
-    overflow: auto;
-    height: 100%; 
 }
 .page-section2-container-header {
     user-select: none;
@@ -37,10 +37,15 @@
     flex-direction: column;
     border-radius: 4px;
 }
-.page-section2-container lib-panel {
+.page-section2-container-inner {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+}
+.page-section2-container-inner lib-panel {
     margin-bottom: 16px;
 }
-.page-section2-container lib-panel:last-child {
+.page-section2-container-inner lib-panel:last-child {
     margin-bottom: 0;
 }
 .page-section2-container-edit {

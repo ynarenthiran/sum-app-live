@@ -10,22 +10,22 @@
       <mat-sidenav-container class="spacer no-background" autosize hasBackdrop="false">
         <mat-sidenav-content>
           <div class="page-grid-container">
-            <div class="page-grid-container-inner">
-              <!--Grid assembly here-->
-              <ngx-gridster [options]="gridsterOptions"
-                [draggableOptions]="{ handlerClass: 'page-section2-container-header' }">
-                <ngx-gridster-item *ngFor="let container of sectionContainers" [(x)]="container.x" [(y)]="container.y"
-                  [(w)]="container.width" [(h)]="container.height">
-                  <div
-                    [ngClass]="{'page-section2-container': true, 'page-section2-container-edit': this.isEditMode, 'page-section2-container-run': !this.isEditMode}"
-                    [libDropArea]="isEditMode" (dropped)="onSectionDrop(container.id, $event)">
-                    <div *ngIf="isEditMode" class="page-section2-container-header mat-typography">
-                      {{container.label}}
-                    </div>
+            <!--Grid assembly here-->
+            <ngx-gridster [options]="gridsterOptions"
+              [draggableOptions]="{ handlerClass: 'page-section2-container-header' }">
+              <ngx-gridster-item *ngFor="let container of sectionContainers" [(x)]="container.x" [(y)]="container.y"
+                [(w)]="container.width" [(h)]="container.height">
+                <div
+                  [ngClass]="{'page-section2-container': true, 'page-section2-container-edit': this.isEditMode, 'page-section2-container-run': !this.isEditMode}"
+                  [libDropArea]="isEditMode" (dropped)="onSectionDrop(container.id, $event)">
+                  <div *ngIf="isEditMode" class="page-section2-container-header mat-typography">
+                    {{container.label}}
+                  </div>
+                  <div class="page-section2-container-inner" [dragula]="isEditMode ? 'INSTANCE_CONTAINER' : undefined">
                     <lib-panel *ngFor="let instance of container.instances" [icon]="instance.definition.icon"
                       [title]="instance.title" [description]="instance.description"
                       [droppable]="instance.definition.droppable"
-                      (droppped)="instance.definition.onDrop('drop', $event)">
+                      (droppped)="instance.definition.onDrop('drop', $event)" [libDragEntity]="isEditMode">
                       <ng-template #content>
                         <ng-container
                           *ngTemplateOutlet="instance.definition.content; context: {$implicit: instance.context}">
@@ -33,9 +33,9 @@
                       </ng-template>
                     </lib-panel>
                   </div>
-                </ngx-gridster-item>
-              </ngx-gridster>
-            </div>
+                </div>
+              </ngx-gridster-item>
+            </ngx-gridster>
           </div>
         </mat-sidenav-content>
         <mat-sidenav mode="over" position="end" [opened]="isEditMode">

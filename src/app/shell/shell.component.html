@@ -1,4 +1,4 @@
-<mat-sidenav-container autosize>
+<mat-sidenav-container autosize class="sidebar-drawer-maximized">
     <mat-sidenav opened mode="side" position="start" [ngClass]="{'app-panel-min':isPanelMin}">
         <div class="app-header mat-title">
             <div matRipple (click)="isPanelMin = !isPanelMin" class="app-item">
@@ -16,6 +16,19 @@
                 [ngClass]="{'app-item':true, 'app-item-active':app.active}">
                 <mat-icon>{{app.icon}}</mat-icon>
                 <span class="spacer right">{{app.label}}</span>
+                <!--TODO: This is screwing my ripple effect-->
+                <div class="app-item-decorator"></div>
+            </div>
+            <div class="spacer"></div>
+            <div matRipple class="app-item">
+                <mat-icon>help</mat-icon>
+                <span class="spacer right">Documentation</span>
+                <!--TODO: This is screwing my ripple effect-->
+                <div class="app-item-decorator"></div>
+            </div>
+            <div matRipple (click)="openAdmin()" class="app-item">
+                <mat-icon>extension</mat-icon>
+                <span class="spacer right">Cockpit</span>
                 <!--TODO: This is screwing my ripple effect-->
                 <div class="app-item-decorator"></div>
             </div>

@@ -20,6 +20,13 @@
     flex-direction: row;
     align-items: center;
 }
+.panel-drag-handle {
+    user-select: none;
+    cursor: pointer;
+}
+.panel-drag-handle > * {
+    pointer-events: none;
+}
 /* Check this one if needed */
 .dummy {
     pointer-events: none;
