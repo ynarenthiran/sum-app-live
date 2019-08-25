@@ -13,6 +13,7 @@ import {
 import { ViewHandler } from '../util/handlers';
 import { File, CollaborationService } from '../collaboration.service';
 import { FlexiblePageSectionAction } from 'src/app/layout/page2.component';
+import { AngularFireStorage } from '@angular/fire/storage';
 
 @Directive({
   selector: 'app-comp-ext'
@@ -46,8 +47,8 @@ export class ComponentBase implements OnInit, OnChanges, AfterViewChecked {
   private records$: Observable<any[]> = of([]);
   protected queryFunction: QueryFn;
 
-  constructor(private config: AppConfigService, private db: AngularFirestore,
-    private genReader: GenericDataReader, protected srv: CollaborationService) { }
+  constructor(private config: AppConfigService, private db: AngularFirestore, private genReader: GenericDataReader,
+    protected srv: CollaborationService) { }
 
   ngOnInit() {
   }
@@ -59,9 +60,9 @@ export class ComponentBase implements OnInit, OnChanges, AfterViewChecked {
   ngAfterViewChecked(): void {
   }
 
-  onAction(action: string, element?: any, uicontext?: any) {
+  onAction(action: string, element?: any) {
     if (this.handler)
-      this.handler.action(action, element, uicontext);
+      this.handler.action(action, element);
   }
 
   protected initialize() {
@@ -234,7 +235,6 @@ export class ComponentDocument extends ComponentTable {
   }
 
   private openFolder(file: any) {
-    debugger;
     if (file) {
       this.filePath.push(file);
       this.parent = file;
@@ -250,6 +250,18 @@ export class ComponentDocument extends ComponentTable {
   };
 
   private uploadFiles(files: any[]) {
-    this.onAction('addFile', files);
+    let records = [];
+    for (var file of files) {
+      const filePath = this.parent ? this.parent.path + "/" + file.name : file.name;
+      records.push({
+        name: file.name,
+        description: file.name,
+        path: filePath,
+        parentId: this.parent ? this.parent.id : "",
+        isFolder: false
+      });
+      this.srv.saveFile(this.collaborationId, file, filePath);
+    }
+    this.onAction('addFile', records);
   }
 }

@@ -25,7 +25,7 @@ export abstract class ViewHandler {
 
     constructor(protected srv: CollaborationService) { }
 
-    abstract action(action: string, record?: any, uicontext?: any);
+    abstract action(action: string, record?: any);
 
     protected updateRecord(path: string, record: any, information: UpdateIdentificationOptions) {
         var options = {
@@ -125,6 +125,13 @@ export abstract class ViewHandler {
             });
     }
     private setOrAddRecord(path, record, idField) {
+        if (record.entries) {
+            const records: any[] = record.entries;
+            records.forEach((entry) => {
+                this.setOrAddRecord(path, entry, idField);
+            });
+            return;
+        }
         const data = this.handleAdminFields(record, true);
         if (idField) {
             if (record[idField]) {
@@ -220,7 +227,7 @@ export class MemberViewHandler extends ViewHandler {
  Posts
  *******************************************************/
 export class PostViewHandler extends ViewHandler {
-    action(action: string, record?: any, uicontext?: any) {
+    action(action: string, record?: any) {
         switch (action) {
             case 'send': this.postText(record); break;
         }
@@ -241,12 +248,15 @@ export class PostViewHandler extends ViewHandler {
 export class DocumentViewHandler extends ViewHandler {
     action(action: string, record?: any) {
         switch (action) {
-            case 'addFile': this.addFiles(record);
-            case 'addFolder': this.addFolder(record);
+            case 'addFile': this.addFiles(record); break;
+            case 'addFolder': this.addFolder(record); break;
         }
     }
     private addFiles(files: any[]) {
-
+        this.createRecord('documents', {
+            entityTypeName: 'File',
+            objectTypePath: 'documentTypes'
+        }, { entries: files });
     }
     private addFolder(folder) {
         this.createRecord('documents', {

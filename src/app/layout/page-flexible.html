@@ -28,9 +28,7 @@
                   </div>
                   <div class="page-section2-container-inner" [dragula]="isEditMode ? 'INSTANCE_CONTAINER' : undefined">
                     <lib-panel *ngFor="let instance of container.instances" [icon]="instance.definition.icon"
-                      [title]="instance.title" [description]="instance.description"
-                      [droppable]="instance.definition.droppable"
-                      (droppped)="instance.definition.onDrop('drop', $event)" [libDragEntity]="isEditMode">
+                      [title]="instance.title" [description]="instance.description" [libDragEntity]="isEditMode">
                       <ng-template #content>
                         <ng-container
                           *ngTemplateOutlet="instance.definition.content; context: {$implicit: instance.context}">

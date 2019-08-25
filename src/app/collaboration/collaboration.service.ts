@@ -459,4 +459,10 @@ export class CollaborationService {
     };
     this.db.collection(`accounts/${accountId}/collaborations/${id}/posts`).add(obj);
   }
+
+  saveFile(collaborationId: string, file: any, filePath: string) {
+    const accountId = this.config.getConfig().accountId;
+    const path = `accounts/${accountId}/collaborations/${collaborationId}/documents/${filePath}`;
+    this.storage.upload(path, file);
+  }
 }

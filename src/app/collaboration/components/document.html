@@ -17,7 +17,7 @@
 <input #uploadInput hidden type="file" (change)="onFileSelected()" />
 <a #downloadLink download="file" class="hidden"></a>
 <ng-content select="app-comp-ext"></ng-content>
-<mat-table [dataSource]="records$">
+<mat-table [dataSource]="records$" droppable="true" (droppped)="onFileDropped($event)">
     <ng-container *ngFor="let column of columns" matColumnDef="{{column.field}}">
         <mat-header-cell *matHeaderCellDef>{{column.label}}</mat-header-cell>
         <mat-cell *matCellDef="let element" [ngSwitch]="column.type">

@@ -48,8 +48,7 @@
   </lib-flexible-page-section>
   <!--Documents-->
   <lib-flexible-page-section id="documents" icon="insert_drive_file" title="Documents"
-    [context]="{objTypePath: 'documentTypes'}" droppable="true" (dropped)="table.onAction('drop', $event)"
-    (action)="table.onAction($event)">
+    [context]="{objTypePath: 'documentTypes'}">
     <ng-template #content let-context>
       <app-comp-doc #table [collaborationId]="collaborationId" [context]="context" path="documents"
         [mapper]="documentMapper" [fields]="Fields_Documents" [handler]="documentHandler">

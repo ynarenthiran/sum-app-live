@@ -36,6 +36,7 @@ import {
   ComponentBase,
   ComponentDocument
 } from './components/components';
+import { UIModule } from '../ui/ui.module';
 
 @NgModule({
   declarations: [
@@ -57,6 +58,7 @@ import {
     LayoutModule,
     DialogModule,
     ObjectModule,
+    UIModule,
     MatIconModule,
     MatTableModule,
     MatButtonModule,
