@@ -1,9 +1,8 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { CreateComponent } from './create/create.component';
-import { DocumentComponent } from './document/document.component';
 import { ListComponent } from './list/list.component';
-import { CollaborationComponent } from './collaboration.component';
+import { CollaborationComponent } from './collaboration/collaboration.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'list', pathMatch: 'full' },

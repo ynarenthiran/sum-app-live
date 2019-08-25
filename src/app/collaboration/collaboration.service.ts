@@ -34,7 +34,6 @@ export interface Member extends AbstractObject {
   id: string;
   user: User;
   roles: string[];
-  tags: string[];
 }
 export interface User {
   id: string;
@@ -52,7 +51,6 @@ export interface File extends AbstractObject {
   changedOn: Date;
   parentId: string;
   isFolder: boolean;
-  tags: string[];
 }
 export interface FileExt extends File {
   createdBy: User;
@@ -239,7 +237,6 @@ export class CollaborationService {
   postMember(id: string, member: Member) {
     const obj = {
       roles: member.roles,
-      tags: member.tags,
       typeId: (member.typeId) ? member.typeId : "",
       attributes: (member.attributes) ? member.attributes : {}
     }
@@ -276,38 +273,6 @@ export class CollaborationService {
           const id = a.payload.doc.id;
           return Object.assign(file, { id: id }) as File;
         }))
-      );
-  }
-
-  getFilesByTags(id: string, tags: string[], parent: string): Observable<File[]> {
-    const accountId = this.config.getConfig().accountId;
-    let aObservables: Observable<string[]>[] = [];
-    tags.forEach(tag => {
-      aObservables.push(
-        this.db.collection(`accounts/${accountId}/collaborations/${id}/documentTags`,
-          ref => ref.where('tag', '==', tag))
-          .snapshotChanges()
-          .pipe(
-            map(actions => actions.map(a => {
-              const obj: any = a.payload.doc.data();
-              const fileId: string = obj.documentId;
-              return fileId;
-            }))
-          ));
-    });
-    return combineLatest(aObservables)
-      .pipe(
-        map(arr => arr.reduce((acc, arr) => acc.concat(arr))),
-        distinct(fileIds => fileIds),
-        map(fileIds => fileIds.map(fileId => this.db.doc<File>(`accounts/${accountId}/collaborations/${id}/documents/${fileId}`)
-          .snapshotChanges()
-          .pipe(
-            map(action => {
-              const file = action.payload.data() as File;
-              return Object.assign(file, { id: action.payload.id }) as File;
-            })
-          ))),
-        flatMap(files => combineLatest(files))
       );
   }
 
@@ -376,7 +341,6 @@ export class CollaborationService {
       changedOn: new Date(),
       parentId: file.parentId,
       isFolder: true,
-      tags: [],
       typeId: (file.typeId) ? file.typeId : "",
       attributes: (file.attributes) ? file.attributes : {}
     }
@@ -400,22 +364,11 @@ export class CollaborationService {
         changedOn: new Date(),
         parentId: folder == null ? "" : folder.id,
         isFolder: false,
-        tags: [],
         typeId: (typeId) ? typeId : "",
         attributes: (attributes) ? attributes : {}
       };
       this.db.collection(`accounts/${accountId}/collaborations/${id}/documents`).add(obj);
     }
-  }
-
-  updateFileTags(id: string, file: File) {
-    const accountId = this.config.getConfig().accountId;
-    const obj = {
-      changedByUid: this.auth.currentUserId,
-      changedOn: new Date(),
-      tags: file.tags
-    };
-    this.db.doc(`accounts/${accountId}/collaborations/${id}/documents/${file.id}`).update(obj);
   }
 
   getFileUrl(id: string, file: File): Observable<any> {

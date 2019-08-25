@@ -6,11 +6,11 @@ import { AuthService } from 'src/app/authentication/auth.service';
 import {
   FIELDS_POSTS, FIELDS_MEMBERS, FIELDS_DOCUMENTS, DataMapper, DataReader,
   ACTIONS_MEMBERS
-} from './util/common';
-import { Status, Collaboration, CollaborationService } from './collaboration.service';
+} from '../util/common';
+import { Status, Collaboration, CollaborationService } from '../collaboration.service';
 import { MatSnackBar } from '@angular/material';
-import { ViewHandler, MemberViewHandler, PostViewHandler, DocumentViewHandler } from './util/handlers';
-import { FlexibleContainer } from '../layout/page2.component';
+import { ViewHandler, MemberViewHandler, PostViewHandler, DocumentViewHandler } from '../util/handlers';
+import { FlexibleContainer } from '../../layout/page2.component';
 
 interface StatusValue extends Status {
   value: string;
@@ -20,19 +20,27 @@ interface ActionValue {
   name: string;
 }
 
-const TEST_DATA: FlexibleContainer[] = [
+const CONTAINERS: FlexibleContainer[] = [
   {
-    id: 'container1', label: 'Container One', width: 1, height: 1,
+    label: 'Main Container', width: 8, height: 1,
     instances: [
       {
-        sectionId: 'documents', title: 'Documents', description: 'Documents in the collaboration',
-        context: { text: "Manish's Documents" }
+        sectionId: 'documents', title: 'Documents', description: 'All documents in the collaboration',
+        context: { typeId: '' }
       },
     ]
   },
   {
-    id: 'container2', label: 'Container One', width: 1, height: 1,
+    label: 'Secondary Container', width: 4, height: 1,
     instances: [
+      {
+        sectionId: 'members', title: 'Members', description: 'All members of the collaboration',
+        context: { typeId: '' }
+      },
+      {
+        sectionId: 'posts', title: 'Posts', description: 'All posts in the collaboration',
+        context: { typeId: '' }
+      },
     ]
   }
 ];
@@ -43,7 +51,7 @@ const TEST_DATA: FlexibleContainer[] = [
   styleUrls: ['./collaboration.component.scss']
 })
 export class CollaborationComponent implements OnInit {
-  private containers = TEST_DATA;
+  private containers = CONTAINERS;
 
   private Fields_Posts: any = FIELDS_POSTS;
   private Fields_Members: any = FIELDS_MEMBERS;

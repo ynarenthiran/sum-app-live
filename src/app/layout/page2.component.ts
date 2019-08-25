@@ -70,7 +70,6 @@ export interface FlexibleSectionInstance {
     definition?: FlexiblePageSection;
 }
 export interface FlexibleContainer {
-    id: string;
     label: string;
     width?: number;
     height?: number;
@@ -84,7 +83,7 @@ export interface FlexibleContainer {
 })
 export class FlexiblePageComponent implements AfterContentInit, AfterContentChecked {
     private gridsterOptions = {
-        lanes: 2,
+        lanes: 12,
         direction: 'vertical',
         dragAndDrop: false,
         resizable: false,
@@ -163,7 +162,7 @@ export class FlexiblePageComponent implements AfterContentInit, AfterContentChec
         }
     }
 
-    onSectionDrop(containerId: string, event: any) {
+    onSectionDrop(containerIndex: number, event: any) {
         const data = JSON.parse(event.getData('application/json'));
         const sectionId = data.sectionId;
         const sectionDef = this.sectionDefinitions.find((item, i, a) => item.id == sectionId)
@@ -180,7 +179,7 @@ export class FlexiblePageComponent implements AfterContentInit, AfterContentChec
             }
         }).subscribe((result) => {
             this.zone.run(() => {
-                this.containers.find((item, i, a) => item.id == containerId).instances.push({
+                this.containers[containerIndex].instances.push({
                     sectionId: sectionId,
                     title: result.Title,
                     description: result.Description,
@@ -192,13 +191,12 @@ export class FlexiblePageComponent implements AfterContentInit, AfterContentChec
     }
 
     addContainer(index: number, containerId: string) {
-        this.dialog.openDialog({ Id: "new_container", Label: "New Container", ColSpan: 1, RowSpan: 1 }, {
+        this.dialog.openDialog({ Label: "New Container", ColSpan: 1, RowSpan: 1 }, {
             title: `Add Container`,
             width: "400px",
             button: { ok: "Add", cancel: "Cancel" }
         }).subscribe((result) => {
             this.containers.splice(index, 0, {
-                id: result.Id,
                 label: result.Label,
                 width: result.ColSpan,
                 height: result.RowSpan,

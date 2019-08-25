@@ -181,7 +181,6 @@ export class MemberViewHandler extends ViewHandler {
             entityTypeName: 'Member',
             fields: {
                 roles: 'Roles',
-                tags: 'Tags'
             },
             values: {
                 roles: ['Administrator', 'Contributor', 'Reader']
@@ -211,14 +210,13 @@ export class MemberViewHandler extends ViewHandler {
             fields: {
                 user: 'User',
                 roles: 'Roles',
-                tags: 'Tags'
             },
             values: {
                 user: users$,
                 roles: ['Administrator', 'Contributor', 'Reader']
             },
             objectTypePath: 'memberTypes',
-            template: { roles: [], tags: [] },
+            template: { roles: [] },
             idField: 'user'
         });
     }

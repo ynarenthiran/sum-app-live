@@ -19,16 +19,12 @@ import { CreateComponent } from './create/create.component';
 import { LayoutModule } from '../layout/layout.module';
 import { DialogModule } from '../dialog/dialog.module';
 import { CollaborationService } from './collaboration.service';
-import {
-  DocumentComponent,
-  DocumentDropArea
-} from './document/document.component';
 import { ListComponent } from './list/list.component';
 import { ObjectModule } from '../object/object.module';
 import { MomentModule } from 'ngx-moment';
 import { TextFieldModule } from '@angular/cdk/text-field';
 import { FormsModule } from '@angular/forms';
-import { CollaborationComponent } from './collaboration.component';
+import { CollaborationComponent } from './collaboration/collaboration.component';
 import { GenericDataReader } from './util/common';
 import {
   ComponentTable, ComponentList, ComponentListTemplate,
@@ -42,8 +38,6 @@ import { UIModule } from '../ui/ui.module';
   declarations: [
     CreateComponent,
     CollaborationComponent,
-    DocumentComponent,
-    DocumentDropArea,
     ListComponent,
     ComponentBase,
     ComponentTable,

@@ -37,7 +37,6 @@ export const FIELDS_MEMBERS = {
   displayName: 'Name',
   email: 'Email',
   roles: { label: 'Roles', type: TableColumnType.Chips },
-  tags: { label: 'Tags', type: TableColumnType.Chips },
 }
 
 export const ACTIONS_MEMBERS = {
