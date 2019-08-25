@@ -9,8 +9,8 @@ import {
 } from './util/common';
 import { Status, Collaboration, CollaborationService } from './collaboration.service';
 import { MatSnackBar } from '@angular/material';
-import { SectionInstanceAddEvent } from '../layout/page2.component';
 import { ViewHandler, MemberViewHandler, PostViewHandler, DocumentViewHandler } from './util/handlers';
+import { FlexibleContainer } from '../layout/page2.component';
 
 interface StatusValue extends Status {
   value: string;
@@ -20,18 +20,10 @@ interface ActionValue {
   name: string;
 }
 
-const TEST_DATA = [
+const TEST_DATA: FlexibleContainer[] = [
   {
-    id: 'container1', label: 'Container One', x: 0, y: 0,
+    id: 'container1', label: 'Container One', width: 1, height: 1,
     instances: [
-      {
-        sectionId: 'posts', title: 'Posts', description: 'Posts in the collaboration',
-        context: { text: "Manish's Posts" }
-      },
-      {
-        sectionId: 'members', title: 'Members', description: 'Members of the collaboration',
-        context: { text: "Manish's Members" }
-      },
       {
         sectionId: 'documents', title: 'Documents', description: 'Documents in the collaboration',
         context: { text: "Manish's Documents" }
@@ -39,7 +31,7 @@ const TEST_DATA = [
     ]
   },
   {
-    id: 'container2', label: 'Container One', x: 1, y: 0,
+    id: 'container2', label: 'Container One', width: 1, height: 1,
     instances: [
     ]
   }
@@ -81,14 +73,6 @@ export class CollaborationComponent implements OnInit {
 
   completeAction(action: ActionValue) {
     this.srv.triggerAction(this.collaborationId, action.id);
-  }
-
-  onSectionInstanceAdded(event: SectionInstanceAddEvent) {
-    const container = this.containers.find((item, a, i) => item.id == event.containerId);
-    container.instances.push({
-      sectionId: event.sectionId, title: 'New', description: 'New',
-      context: { text: "New's New" }
-    });
   }
 
   private loadCollaboration(id: string) {

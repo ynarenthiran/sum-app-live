@@ -37,7 +37,7 @@
 }
 .column {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
 }
 
 
@@ -50,6 +50,9 @@
 }
 .cursor {
     cursor: pointer;
+}
+.hidden {
+    display: none;
 }
 
 /* Global classes because of view encapsulation issues */

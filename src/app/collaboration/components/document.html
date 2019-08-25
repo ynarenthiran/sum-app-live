@@ -1,8 +1,21 @@
-<div *ngIf="fabIcon" class="comp-fab">
-    <button mat-fab color="accent" (click)="onAction('fab')">
-        <mat-icon>{{fabIcon}}</mat-icon>
+<div class="comp-fab">
+    <button mat-fab color="accent" (click)="uploadInput.click()">
+        <mat-icon>add</mat-icon>
     </button>
 </div>
+<div class="section-bar">
+    <div class="nav-list mat-subheading-2 no-margin">
+        <a (click)="onItemNavigate(-1)" class="cursor item">
+            <mat-icon>home</mat-icon>
+        </a>
+        <div *ngFor="let item of filePath; index as i" class="item">
+            <mat-icon>keyboard_arrow_right</mat-icon>
+            <a (click)="onItemNavigate(i)" class="cursor">{{item.name}}</a>
+        </div>
+    </div>
+</div>
+<input #uploadInput hidden type="file" (change)="onFileSelected()" />
+<a #downloadLink download="file" class="hidden"></a>
 <ng-content select="app-comp-ext"></ng-content>
 <mat-table [dataSource]="records$">
     <ng-container *ngFor="let column of columns" matColumnDef="{{column.field}}">
@@ -28,6 +41,11 @@
     </ng-container>
     <mat-header-row mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row mat-row *matRowDef="let row; columns: displayedColumns;" class="list-row" matRipple
-        [matRippleDisabled]="(rowAction) ? false: true" (click)="onClick(row)">
+        (click)="onOpenDocumentItem(row)">
     </mat-row>
 </mat-table>
+<div class="section-bar">
+    <button mat-icon-button (click)="addFolder()">
+        <mat-icon>create_new_folder</mat-icon>
+    </button>
+</div>

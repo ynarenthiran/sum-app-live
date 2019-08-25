@@ -1,6 +1,26 @@
+@import "../../../global";
+
 .comp-fab {
     position: absolute;
     right: 33px;
     top: -21px;
     z-index: 2;
+}
+.nav-list {
+    display: flex;
+    flex-direction: row;
+    line-height: 64px;
+    height: 64px;
+}
+.nav-list .item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.section-bar {
+    border-radius: 4px;
+    background-color: $color-secondary;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }

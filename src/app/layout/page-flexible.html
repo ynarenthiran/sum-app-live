@@ -13,13 +13,18 @@
             <!--Grid assembly here-->
             <ngx-gridster [options]="gridsterOptions"
               [draggableOptions]="{ handlerClass: 'page-section2-container-header' }">
-              <ngx-gridster-item *ngFor="let container of sectionContainers" [(x)]="container.x" [(y)]="container.y"
-                [(w)]="container.width" [(h)]="container.height">
+              <ngx-gridster-item *ngFor="let container of containers; let i = index" [(w)]="container.width" [(h)]="container.height">
                 <div
                   [ngClass]="{'page-section2-container': true, 'page-section2-container-edit': this.isEditMode, 'page-section2-container-run': !this.isEditMode}"
                   [libDropArea]="isEditMode" (dropped)="onSectionDrop(container.id, $event)">
-                  <div *ngIf="isEditMode" class="page-section2-container-header mat-typography">
-                    {{container.label}}
+                  <div *ngIf="isEditMode" class="page-section2-container-header mat-typography row">
+                    <span class="spacer">{{container.label}}</span>
+                    <button mat-icon-button (click)="addContainer(i, container.containerId)">
+                      <mat-icon>add</mat-icon>
+                    </button>
+                    <button mat-icon-button (click)="removeContainer(i, container.containerId)">
+                      <mat-icon>remove</mat-icon>
+                    </button>
                   </div>
                   <div class="page-section2-container-inner" [dragula]="isEditMode ? 'INSTANCE_CONTAINER' : undefined">
                     <lib-panel *ngFor="let instance of container.instances" [icon]="instance.definition.icon"

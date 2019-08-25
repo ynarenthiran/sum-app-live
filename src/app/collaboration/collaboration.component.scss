@@ -27,7 +27,7 @@
     color: $color-primary;
     margin-right: 8px;
 }
-.section-footer {
+.section-bar {
     border-radius: 4px;
     background-color: $color-secondary;
     display: flex;
@@ -93,3 +93,11 @@
     display: flex;
     margin: .25em 0;
 }
+/* Documents */
+.doc-fab {
+    position: absolute;
+    right: 33px;
+    top: -21px;
+    z-index: 2;
+}
+

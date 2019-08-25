@@ -1,6 +1,6 @@
 import { Observable, of, forkJoin } from 'rxjs';
 import { AppConfigService } from 'src/app/services/app.config';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFirestore, QueryFn } from '@angular/fire/firestore';
 import { map, tap, mergeAll, mergeMap, combineAll, combineLatest, toArray, flatMap, concatMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 
@@ -65,17 +65,20 @@ export interface PathObject {
 export class GenericDataReader {
   constructor(private config: AppConfigService, private db: AngularFirestore) { }
 
-  read(path: string | PathObject, id: string): Observable<any[]> {
+  read(path: string | PathObject, id: string, queryFn?: QueryFn): Observable<any[]> {
     if (typeof path == 'string') {
-      return this.readDirect(path, id);
+      return this.readDirect(path, id, queryFn);
     } else {
-      return this.readJoin(path, id);
+      return this.readJoin(path, id, queryFn);
     }
   }
 
-  private readDirect(path: string, id: string): Observable<any[]> {
+  private readDirect(path: string, id: string, queryFn?: QueryFn): Observable<any[]> {
     const accountId = this.config.getConfig().accountId;
-    return this.db.collection(`accounts/${accountId}/collaborations/${id}/${path}`)
+    const args = [];
+    if (queryFn)
+      args.push(queryFn);
+    return this.db.collection(`accounts/${accountId}/collaborations/${id}/${path}`, ...args)
       .snapshotChanges()
       .pipe(
         map(actions => actions.map(a => {
@@ -87,7 +90,7 @@ export class GenericDataReader {
       );
   }
 
-  private readJoin(path: PathObject, id: string): Observable<any[]> {
+  private readJoin(path: PathObject, id: string, queryFn?: QueryFn): Observable<any[]> {
     const accountId = this.config.getConfig().accountId;
     /*return this.db.collection(`accounts/${accountId}/collaborations/${id}/${path.path}`)
       .snapshotChanges()

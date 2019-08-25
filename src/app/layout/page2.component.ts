@@ -1,44 +1,15 @@
 import {
-    Component, Directive, TemplateRef, ViewChild, QueryList, ContentChildren, Input, AfterContentInit, Output, EventEmitter, ContentChild, AfterContentChecked
+    Component, Directive, TemplateRef, ViewChild, QueryList,
+    ContentChildren, Input, AfterContentInit, Output,
+    EventEmitter, ContentChild, AfterContentChecked, NgZone
 } from '@angular/core';
 import { GridsterComponent } from 'angular2gridster';
 import { FormComponent } from '../dialog/form.component';
 import { ShellService } from '../shell/shell.component';
 import { DragulaService } from 'ng2-dragula';
-
-@Directive({
-    selector: 'lib-flexible-section-instance'
-})
-export class FlexiblePageSectionInstance {
-    @Input()
-    sectionId: string;
-    @Input()
-    title: string;
-    @Input()
-    description: string;
-    @Input()
-    context?: string;
-
-    definition: FlexiblePageSection;
-}
-@Directive({
-    selector: 'lib-flexible-section-container'
-})
-export class FlexiblePageSectionContainer {
-    @Input()
-    id: string;
-    @Input()
-    label: string;
-
-    @Input() x: number; @Input() y: number
-    @Input() width: number = 1; @Input() height: number = 1;
-
-    @Input()
-    direction: string = 'column'; // TODO user it for display: flex; flex-direction: column;
-
-    @ContentChildren(FlexiblePageSectionInstance)
-    instances: QueryList<FlexiblePageSectionInstance>;
-}
+import { DialogService } from '../dialog/dialog.component';
+import { ObjectService, ObjectTypeClass } from '../object/object.service';
+import { map } from 'rxjs/operators';
 
 @Directive({
     selector: 'lib-flexible-section-action'
@@ -66,6 +37,8 @@ export class FlexiblePageSection {
     fabIcon: string
     @Input()
     droppable: boolean;
+    @Input()
+    context?: any;
 
     @Output()
     action: EventEmitter<string> = new EventEmitter<string>();
@@ -89,10 +62,21 @@ export class FlexiblePageSection {
     }
 }
 
-export interface SectionInstanceAddEvent {
-    containerId: string;
+export interface FlexibleSectionInstance {
     sectionId: string;
+    title: string;
+    description: string;
+    context?: any;
+    definition?: FlexiblePageSection;
 }
+export interface FlexibleContainer {
+    id: string;
+    label: string;
+    width?: number;
+    height?: number;
+    instances: FlexibleSectionInstance[];
+}
+
 @Component({
     selector: 'lib-flexible-page',
     templateUrl: './page-flexible.html',
@@ -112,7 +96,8 @@ export class FlexiblePageComponent implements AfterContentInit, AfterContentChec
     private isEditMode = false;
     private gridEditOptions: any;
 
-    private indices = new Array(100).fill({ index: 1 });
+    @Input()
+    containers: FlexibleContainer[];
 
     @Input()
     set title(value: string) {
@@ -123,14 +108,8 @@ export class FlexiblePageComponent implements AfterContentInit, AfterContentChec
         this.shellSrv.subtitle = value;
     }
 
-    @Output()
-    sectionInstanceAdded: EventEmitter<SectionInstanceAddEvent> = new EventEmitter<SectionInstanceAddEvent>();
-
     @ContentChildren(FlexiblePageSection)
     sectionDefinitions: QueryList<FlexiblePageSection>;
-
-    @ContentChildren(FlexiblePageSectionContainer)
-    sectionContainers: QueryList<FlexiblePageSectionContainer>;
 
     @ViewChild(GridsterComponent)
     grid: GridsterComponent;
@@ -138,13 +117,21 @@ export class FlexiblePageComponent implements AfterContentInit, AfterContentChec
     @ViewChild('gridOptionsForm')
     gridOptionsForm: FormComponent;
 
-    constructor(private shellSrv: ShellService, private dragulaService: DragulaService) {
-        dragulaService.createGroup("INSTANCE_CONTAINER", {
-            removeOnSpill: true,
-            moves: (el, container, handle) => {
-                return handle.classList.contains('panel-drag-handle');
-            }
+    constructor(private shellSrv: ShellService, private dragulaService: DragulaService, private dialog: DialogService,
+        public objSrv: ObjectService, private zone: NgZone) {
+        let group = dragulaService.find("INSTANCE_CONTAINER");
+        if (!group) {
+            group = dragulaService.createGroup("INSTANCE_CONTAINER", {
+                revertOnSpill: true,
+                moves: (el, container, handle) => {
+                    return handle.classList.contains('panel-drag-handle');
+                }
+            });
+        }
+        group.drake.on('drop', (el, target, source, sibling) => {
         });
+        group.drake.on('remove', (el, container, source) => {
+        })
     }
 
     ngAfterContentInit(): void {
@@ -178,11 +165,53 @@ export class FlexiblePageComponent implements AfterContentInit, AfterContentChec
 
     onSectionDrop(containerId: string, event: any) {
         const data = JSON.parse(event.getData('application/json'));
-        this.sectionInstanceAdded.emit({ containerId: containerId, sectionId: data.sectionId });
+        const sectionId = data.sectionId;
+        const sectionDef = this.sectionDefinitions.find((item, i, a) => item.id == sectionId)
+        const context = sectionDef.context;
+        var objectType$ =
+            this.objSrv.getObjectTypes(context.objTypePath)
+                .pipe(map(types => types.map(type => new ObjectTypeClass(type))));
+        this.dialog.openDialog({ Title: "", Description: "", Type: "" }, {
+            title: `Add Section`,
+            width: "400px",
+            button: { ok: "Add", cancel: "Cancel" },
+            values: {
+                Type: objectType$
+            }
+        }).subscribe((result) => {
+            this.zone.run(() => {
+                this.containers.find((item, i, a) => item.id == containerId).instances.push({
+                    sectionId: sectionId,
+                    title: result.Title,
+                    description: result.Description,
+                    context: { typeId: result.Type.id },
+                    definition: sectionDef
+                });
+            })
+        });
+    }
+
+    addContainer(index: number, containerId: string) {
+        this.dialog.openDialog({ Id: "new_container", Label: "New Container", ColSpan: 1, RowSpan: 1 }, {
+            title: `Add Container`,
+            width: "400px",
+            button: { ok: "Add", cancel: "Cancel" }
+        }).subscribe((result) => {
+            this.containers.splice(index, 0, {
+                id: result.Id,
+                label: result.Label,
+                width: result.ColSpan,
+                height: result.RowSpan,
+                instances: []
+            });
+        });
+    }
+    removeContainer(index: number, containerId: string) {
+        this.containers.splice(index, 1);
     }
 
     private initializeSectionInstances() {
-        this.sectionContainers.forEach((container) => {
+        this.containers.forEach((container) => {
             container.instances.forEach((instance) => {
                 instance.definition = this.sectionDefinitions.find((item, i, a) => item.id == instance.sectionId);
             });

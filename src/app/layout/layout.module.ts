@@ -30,8 +30,7 @@ import {
   PageHeader
 } from './page.component';
 import {
-  FlexiblePageComponent, FlexiblePageSection, FlexiblePageSectionAction,
-  FlexiblePageSectionContainer, FlexiblePageSectionInstance
+  FlexiblePageComponent, FlexiblePageSection, FlexiblePageSectionAction
 } from './page2.component';
 import { DialogModule } from '../dialog/dialog.module';
 import { UIModule } from '../ui/ui.module';
@@ -69,9 +68,7 @@ import { DragulaModule } from 'ng2-dragula';
     PageSectionToolbar,
     PageSectionDetail,
     PageNode,
-    FlexiblePageSectionAction,
-    FlexiblePageSectionContainer,
-    FlexiblePageSectionInstance
+    FlexiblePageSectionAction
   ],
   exports: [
     PageComponent,
@@ -86,9 +83,7 @@ import { DragulaModule } from 'ng2-dragula';
     PageSectionToolbar,
     PageSectionDetail,
     PageNode,
-    FlexiblePageSectionAction,
-    FlexiblePageSectionContainer,
-    FlexiblePageSectionInstance
+    FlexiblePageSectionAction
   ],
   providers: [
     PageService

@@ -1,6 +1,7 @@
 import { CollaborationService, User } from '../collaboration.service';
 import { map } from 'rxjs/operators';
 import { ObjectTypeClass } from 'src/app/object/object.service';
+import { NavigationEnd } from '@angular/router';
 
 interface IdentitficationOptions {
     entityTypeName: string,
@@ -24,7 +25,7 @@ export abstract class ViewHandler {
 
     constructor(protected srv: CollaborationService) { }
 
-    abstract action(action: string, record?: any);
+    abstract action(action: string, record?: any, uicontext?: any);
 
     protected updateRecord(path: string, record: any, information: UpdateIdentificationOptions) {
         var options = {
@@ -219,7 +220,7 @@ export class MemberViewHandler extends ViewHandler {
  Posts
  *******************************************************/
 export class PostViewHandler extends ViewHandler {
-    action(action: string, record?: any) {
+    action(action: string, record?: any, uicontext?: any) {
         switch (action) {
             case 'send': this.postText(record); break;
         }
@@ -239,6 +240,22 @@ export class PostViewHandler extends ViewHandler {
  *******************************************************/
 export class DocumentViewHandler extends ViewHandler {
     action(action: string, record?: any) {
-        debugger;
+        switch (action) {
+            case 'addFile': this.addFiles(record);
+            case 'addFolder': this.addFolder(record);
+        }
+    }
+    private addFiles(files: any[]) {
+
+    }
+    private addFolder(folder) {
+        this.createRecord('documents', {
+            entityTypeName: 'Folder',
+            fields: {
+                name: 'Name',
+                description: 'Description'
+            },
+            objectTypePath: 'documentTypes'
+        }, folder);
     }
 }

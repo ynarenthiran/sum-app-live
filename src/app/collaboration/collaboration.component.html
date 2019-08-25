@@ -1,6 +1,5 @@
 <lib-flexible-page title="{{collaboration?.name}}" subTitle="{{collaboration?.description}}"
-  (sectionInstanceAdded)="onSectionInstanceAdded($event)">
-  <!--title="{{collaboration?.name}}" subTitle="{{collaboration?.description}}">-->
+  [(containers)]="containers">
   <lib-page-header class="collaboration-header">
     <div *ngIf="statusValues$" class="status-list mat-subheading-2">
       <span *ngFor="let statusVal of statusValues$ | async">
@@ -11,15 +10,10 @@
       <button mat-raised-button *ngFor="let action of actions" (click)="completeAction(action)">{{action.name}}</button>
     </div>
   </lib-page-header>
-  <!--Section containers-->
-  <lib-flexible-section-container *ngFor="let container of containers" [id]="container.id" [label]="container.label"
-    [x]="container.x" [y]="container.y">
-    <lib-flexible-section-instance *ngFor="let instance of container.instances" [sectionId]="instance.sectionId"
-      [title]="instance.title" [description]="instance.description" [context]="instance.context">
-    </lib-flexible-section-instance>
-  </lib-flexible-section-container>
   <!--Members-->
-  <lib-flexible-page-section id="members" icon="person" title="Members" (action)="table.onAction($event)">
+  <!--[path]="{path: 'members', joinScope: 'R', join: {id: 'users'}}" [mapper]="memberMapper"-->
+  <lib-flexible-page-section id="members" icon="person" title="Members" [context]="{objTypePath: 'memberTypes'}"
+    (action)="table.onAction($event)">
     <ng-template #content let-context>
       <app-comp-table #table [collaborationId]="collaborationId" [context]="context" fabIcon="add"
         [reader]="memberReader" [mapper]="memberMapper" [fields]="Fields_Members" [actions]="Actions_Members"
@@ -28,7 +22,7 @@
     </ng-template>
   </lib-flexible-page-section>
   <!--Posts-->
-  <lib-flexible-page-section id="posts" icon="comment" title="Posts">
+  <lib-flexible-page-section id="posts" icon="comment" title="Posts" [context]="{objTypePath: 'postTypes'}">
     <ng-template #content let-context>
       <app-comp-list #list [collaborationId]="collaborationId" [context]="context" path="posts" [mapper]="postMapper"
         [handler]="postHandler" class="spacer">
@@ -37,7 +31,7 @@
           <p class="post-time">{{post.createdOn.toDate() | amTimeAgo}}</p> <!-- https://github.com/urish/ngx-moment -->
         </div>
       </app-comp-list>
-      <div class="section-footer">
+      <div class="section-bar">
         <div class="spacer row">
           <mat-form-field appearance="outline" class="spacer no-hint">
             <input #text matInput placeholder="Enter message" />
@@ -53,14 +47,14 @@
     </ng-template>
   </lib-flexible-page-section>
   <!--Documents-->
-  <lib-flexible-page-section id="documents" icon="insert_drive_file" title="Documents" fabIcon="add" droppable="true"
-    (dropped)="table.onAction('drop', $event)" (action)="table.onAction($event)">
+  <lib-flexible-page-section id="documents" icon="insert_drive_file" title="Documents"
+    [context]="{objTypePath: 'documentTypes'}" droppable="true" (dropped)="table.onAction('drop', $event)"
+    (action)="table.onAction($event)">
     <ng-template #content let-context>
-      <app-comp-table #table [collaborationId]="collaborationId" [context]="context" fabIcon="add" path="documents"
-        [mapper]="documentMapper" [fields]="Fields_Documents">
-      </app-comp-table>
+      <app-comp-doc #table [collaborationId]="collaborationId" [context]="context" path="documents"
+        [mapper]="documentMapper" [fields]="Fields_Documents" [handler]="documentHandler">
+      </app-comp-doc>
       <lib-flexible-section-action action="addFolder" icon="create_new_folder"></lib-flexible-section-action>
     </ng-template>
   </lib-flexible-page-section>
 </lib-flexible-page>
-<!--[path]="{path: 'members', joinScope: 'R', join: {id: 'users'}}" [mapper]="memberMapper"-->
