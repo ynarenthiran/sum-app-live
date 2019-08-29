@@ -62,6 +62,22 @@ export class PanelComponent implements AfterContentChecked {
   }
 }
 
+@Component({
+  selector: 'lib-frame',
+  templateUrl: './frame.component.html',
+  styleUrls: ['./ui.component.scss']
+})
+export class FrameComponent {
+  @Input()
+  icon: string;
+  @Input()
+  title: string;
+  @Input()
+  description: string;
+
+  constructor() { }
+}
+
 @Directive({
   selector: '[libDropArea]'
 })
@@ -138,7 +154,7 @@ export class UIDragEntity {
   dragLive: boolean = false;
 
   constructor(private el: ElementRef) {
-    this.el.nativeElement.draggable = "true";
+    this.el.nativeElement.draggable = "true"; // TODO: Mark this false for libDragEntity=false
   }
 
   @HostListener('dragstart', ['$event'])

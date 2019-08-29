@@ -1,0 +1,4 @@
+<ng-template #content>
+    <ngx-charts-bar-vertical *ngFor="let series of seriesList" [results]="series.records$ | async">
+    </ngx-charts-bar-vertical>
+</ng-template>

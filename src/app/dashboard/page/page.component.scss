@@ -1,0 +1,10 @@
+:host {
+    position: relative;
+    flex: 1 0 auto;
+    display: flex;
+}
+
+.grid-item {
+    flex: 1 1 auto;
+    margin: 10px;
+}

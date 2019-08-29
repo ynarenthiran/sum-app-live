@@ -1,0 +1,21 @@
+<app-dashboard-page>
+  <!--Tile Instances-->
+  <!--<app-dashboard-page-tile icon="comment" title="Posts" description="All posts in my collaborations"
+    definitionId="posts">
+  </app-dashboard-page-tile>
+  <app-dashboard-page-tile icon="pie_chart" title="Collaborations" description="My collaborations by status"
+    definitionId="collaborations">
+  </app-dashboard-page-tile>-->
+  <app-dashboard-page-tile icon="pie_chart" title="Posts" description="All posts in my collaborations"
+    definitionId="posts">
+  </app-dashboard-page-tile>
+  <!--Tile definitions-->
+  <!--<app-tile-list id="posts" [dataSet]="{entityPath: '/posts'}">
+    <span *appTileListTemplate="let post">
+      {{post.text}}
+    </span>
+  </app-tile-list>-->
+  <app-tile-chart id="posts" [dataSet]="{entityPath: '/posts'}">
+    <app-tile-chart-series groupBy="createdByUid"></app-tile-chart-series>
+  </app-tile-chart>
+</app-dashboard-page>

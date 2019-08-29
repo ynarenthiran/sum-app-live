@@ -27,6 +27,10 @@
 .panel-drag-handle > * {
     pointer-events: none;
 }
+.frame-rule {
+    border: 1px inset $color-secondary;
+    height: 0;
+}
 /* Check this one if needed */
 .dummy {
     pointer-events: none;

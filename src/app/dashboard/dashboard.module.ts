@@ -13,43 +13,29 @@ import {
   MatCardModule
 } from '@angular/material';
 import { MomentModule } from 'ngx-moment';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import {
-  DashboardComponent,
-  DashboardSection,
-  DashboardTile,
-  DashboardTileItem,
-  DashboardTileOutlet
-} from './page/dashboard.component';
-import {
-  TileUser,
-  TileUserTemplate
-} from './tiles/user.tile';
-import {
-  TileCollection,
-  TileCollectionTemplate
-} from './tiles/collection.tile';
-import { TemplateComponent } from './template/template.component';
-import {
-  TileList,
-  TileListTemplate
-} from './tiles/list.tile';
+  TileBase, TileList, TileListTemplate, TileChart,
+  TileChartSeries
+} from './tiles/tiles.component';
+import { DashboardComponent } from './dashboard.component';
+import { DashboardPage, PageTileInstance, PageTileHost } from './page/page.component';
+import { GridsterModule } from 'angular2gridster';
+import { UIModule } from '../ui/ui.module';
 
 @NgModule({
   declarations: [
     DashboardComponent,
-    DashboardSection,
-    DashboardTile,
-    DashboardTileItem,
-    DashboardTileOutlet,
-    TileUser,
-    TileUserTemplate,
-    TileCollection,
-    TileCollectionTemplate,
+    DashboardPage,
+    PageTileInstance,
+    PageTileHost,
+    TileBase,
     TileList,
     TileListTemplate,
-    TemplateComponent
+    TileChart,
+    TileChartSeries
   ],
   imports: [
     CommonModule,
@@ -64,18 +50,14 @@ import {
     MatInputModule,
     MatCardModule,
     DashboardRoutingModule,
-    MomentModule
+    UIModule,
+    MomentModule,
+    GridsterModule,
+    NgxChartsModule
   ],
   exports: [
-    DashboardComponent,
-    DashboardSection,
-    DashboardTile,
-    TileUser,
-    TileUserTemplate,
-    TileCollection,
-    TileCollectionTemplate,
-    TileList,
-    TileListTemplate
+  ],
+  providers: [
   ]
 })
 export class DashboardModule { }
