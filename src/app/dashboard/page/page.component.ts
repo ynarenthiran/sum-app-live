@@ -53,20 +53,6 @@ export class PageTileInstance {
   styleUrls: ['./page.component.scss']
 })
 export class DashboardPage implements OnInit {
-  private gridsterOptions = {
-    lanes: 12,
-    direction: 'vertical',
-    dragAndDrop: true,
-    resizable: true,
-    shrink: true,
-    useCSSTransforms: true,
-    responsiveView: true,
-    responsiveToParent: true,
-  };
-
-  @ViewChild(GridsterComponent)
-  grid: GridsterComponent;
-
   @ContentChildren(PageTileInstance)
   tileInstances: QueryList<PageTileInstance>;
 
@@ -82,12 +68,10 @@ export class DashboardPage implements OnInit {
   }
 
   ngAfterContentInit() {
-    this.grid.reload();
   }
 
   ngAfterContentChecked() {
     this.initializeTileInstances();
-    this.layoutTiles();
   }
 
   private initializeTileInstances() {
@@ -96,9 +80,5 @@ export class DashboardPage implements OnInit {
         instance.definition = this.tileDefinitions.find((item) => item.id == instance.definitionId);
       }
     });
-  }
-
-  private layoutTiles() {
-
   }
 }

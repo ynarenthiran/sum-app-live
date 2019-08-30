@@ -1,8 +1,9 @@
 import {
   Component, Input, ContentChild, TemplateRef, Output,
   EventEmitter, Directive, ElementRef, HostListener,
-  ViewChild, ViewContainerRef, AfterContentChecked, OnChanges
+  ViewChild, ViewContainerRef, AfterContentChecked, OnChanges, ContentChildren, QueryList
 } from '@angular/core';
+import { GridsterOptions } from 'angular2gridster';
 
 export interface UIResizeNotification {
   width: number;
@@ -194,5 +195,66 @@ export class UINotifyResize {
     debugger;
     const dims = this.el.nativeElement.getBoundingClientRect();
     this.libNotifyResize.emit({ width: dims.width, height: dims.height });
+  }
+}
+
+export interface GridOptions {
+  rowHeight: string | number;
+  gap: string;
+}
+interface GridTile {
+  cols: number;
+  rows: number;
+  item: UIGridItem;
+}
+@Component({
+  selector: 'lib-grid-item',
+  template: `<ng-template><ng-content></ng-content></ng-template>`
+})
+export class UIGridItem {
+  @Input()
+  width: number
+  @Input()
+  height: number
+
+  @ViewChild(TemplateRef)
+  content: TemplateRef<any>;
+}
+@Component({
+  selector: 'lib-grid',
+  templateUrl: './grid.component.html',
+  styleUrls: ['./ui.component.scss']
+})
+export class GridComponent implements OnChanges, AfterContentChecked {
+  @Input()
+  columns: number;
+  @Input()
+  options: GridOptions;
+
+  @ContentChildren(UIGridItem)
+  items: QueryList<UIGridItem>;
+
+  private _columns: number = 12;
+  private _options: GridOptions = { rowHeight: "1:1", gap: "10px" }
+  private _tiles: GridTile[] = [];
+
+  constructor() { }
+
+  ngOnChanges() {
+    if (this.columns) {
+      this._columns = this.columns;
+    }
+    this._options = Object.assign(this._options, this.options);
+  }
+
+  ngAfterContentChecked() {
+    this.initializeTiles();
+  }
+
+  private initializeTiles() {
+    this._tiles = [];
+    this.items.forEach((item) => {
+      this._tiles.push({ cols: item.width, rows: item.height, item: item });
+    });
   }
 }

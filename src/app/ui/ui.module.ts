@@ -1,8 +1,14 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatToolbarModule, MatIconModule, MatRippleModule, MatButtonModule } from '@angular/material';
+import {
+  MatToolbarModule, MatIconModule, MatRippleModule,
+  MatGridListModule, MatButtonModule
+} from '@angular/material';
 import { AngularResizedEventModule } from 'angular-resize-event';
-import { PanelComponent, UIDropArea, UIDragEntity, FrameComponent, UINotifyResize } from './ui.component';
+import {
+  PanelComponent, UIDropArea, UIDragEntity, FrameComponent,
+  UINotifyResize, GridComponent, UIGridItem
+} from './ui.component';
 
 @NgModule({
   declarations: [
@@ -10,7 +16,9 @@ import { PanelComponent, UIDropArea, UIDragEntity, FrameComponent, UINotifyResiz
     FrameComponent,
     UIDropArea,
     UIDragEntity,
-    UINotifyResize
+    UINotifyResize,
+    GridComponent,
+    UIGridItem
   ],
   imports: [
     CommonModule,
@@ -18,6 +26,7 @@ import { PanelComponent, UIDropArea, UIDragEntity, FrameComponent, UINotifyResiz
     MatIconModule,
     MatRippleModule,
     MatButtonModule,
+    MatGridListModule,
     AngularResizedEventModule
   ],
   exports: [
@@ -25,7 +34,9 @@ import { PanelComponent, UIDropArea, UIDragEntity, FrameComponent, UINotifyResiz
     FrameComponent,
     UIDropArea,
     UIDragEntity,
-    UINotifyResize
+    UINotifyResize,
+    GridComponent,
+    UIGridItem
   ]
 })
 export class UIModule { }

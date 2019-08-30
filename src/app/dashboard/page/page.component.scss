@@ -3,7 +3,13 @@
     flex: 1 0 auto;
     display: flex;
 }
-
+lib-grid {
+    flex: 1 1 auto;
+}
+lib-frame {
+    align-self: stretch;
+    justify-self: stretch;
+}
 .grid-item {
     flex: 1 1 auto;
     margin: 10px;
