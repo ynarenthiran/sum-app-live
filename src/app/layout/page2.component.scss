@@ -1,6 +1,7 @@
 @import "../../global";
 
 .page-content2 {
+    position: relative;
     flex: 1 1 auto;
     display: flex;
 }
@@ -8,7 +9,7 @@
     position: absolute;
     right: 32px;
     bottom: 32px;
-    z-index: 5;
+    z-index: 10;
 }
 mat-sidenav-content {
     position: relative;
@@ -20,6 +21,30 @@ mat-sidenav-content {
     height: 100%;
     width: 100%;
     z-index: 10;
+}
+.page-options2-container {
+    display: flex;
+    flex-direction: row;
+}
+.page-options2-decorator {
+    display: flex;
+    width: 20px;
+    background: $color-primary;
+}
+.page-options2-decorator div {
+    flex: 1 1 auto;
+    border-top-right-radius: 20px;
+    background: $color-main;
+}
+.page-options2 {
+    flex: 1 1 auto;
+    background: $color-primary;
+    padding: 20px;
+    border-bottom-left-radius: 20px;
+}
+.page-options2>span {
+    color: $color-primary-text;
+    margin-bottom: 10px;
 }
 .page-section2-container-header {
     user-select: none;

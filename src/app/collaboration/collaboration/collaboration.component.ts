@@ -117,9 +117,12 @@ export class CollaborationComponent implements OnInit {
   }
 
   private loadAction() {
-    this.actions = Object.keys(this.collaboration.action).map(key => {
-      return { id: key, name: this.collaboration.action[key] };
-    });
+    this.actions = [];
+    if (this.collaboration.action) {
+      this.actions = Object.keys(this.collaboration.action).map(key => {
+        return { id: key, name: this.collaboration.action[key] };
+      });
+    }
   }
 
   // Members

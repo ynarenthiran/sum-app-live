@@ -1,6 +1,6 @@
-import { Component, OnInit, ContentChildren, ViewChild, Directive, Input, QueryList, ViewContainerRef, OnChanges } from '@angular/core';
+import { Component, OnInit, ContentChildren, ViewChild, Directive, Input, QueryList, ViewContainerRef, OnChanges, ElementRef } from '@angular/core';
 import { TileBase } from '../tiles/tiles.component';
-import { GridsterComponent } from 'angular2gridster';
+import { TableColumnType } from 'src/app/collaboration/util/common';
 
 @Directive({
   selector: '[appDashboardPageHost]'
@@ -29,6 +29,10 @@ export class PageTileInstance {
   title: string;
   @Input()
   description: string;
+  @Input()
+  width: number;
+  @Input()
+  height: number;
 
   @Input()
   definitionId: string;
@@ -48,37 +52,23 @@ export class PageTileInstance {
   styleUrls: ['./page.component.scss']
 })
 export class DashboardPage implements OnInit {
-  private gridsterOptions = {
-    lanes: 12,
-    direction: 'vertical',
-    dragAndDrop: true,
-    resizable: true,
-    shrink: true,
-    useCSSTransforms: true,
-    responsiveView: true,
-    responsiveToParent: true,
-  };
-
-  @ViewChild(GridsterComponent)
-  grid: GridsterComponent;
-
   @ContentChildren(PageTileInstance)
   tileInstances: QueryList<PageTileInstance>;
 
   @ContentChildren(TileBase)
   tileDefinitions: QueryList<TileBase>;
 
+  @ViewChild('table')
+  table: ElementRef<HTMLElement>;
+
   constructor() { }
 
   ngOnInit() {
   }
 
-  ngAfterContentInit() {
-    this.grid.reload();
-  }
-
   ngAfterContentChecked() {
     this.initializeTileInstances();
+    this.layoutTiles();
   }
 
   private initializeTileInstances() {
@@ -87,5 +77,9 @@ export class DashboardPage implements OnInit {
         instance.definition = this.tileDefinitions.find((item) => item.id == instance.definitionId);
       }
     });
+  }
+
+  private layoutTiles() {
+
   }
 }

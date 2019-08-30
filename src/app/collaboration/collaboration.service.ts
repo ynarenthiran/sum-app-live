@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { AppConfigService } from '../services/app.config';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Subscription, Observable, combineLatest } from 'rxjs';
@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 import { AngularFireFunctions } from '@angular/fire/functions';
 import { ObjectDialogService } from '../object/object.component';
 import { ObjectService, ObjectTypeClass } from '../object/object.service';
+import { MatSnackBar } from '@angular/material';
 
 export interface Status {
   id: string;
@@ -71,7 +72,7 @@ export interface Post extends AbstractObject {
 export class CollaborationService {
   constructor(private db: AngularFirestore, private storage: AngularFireStorage, private func: AngularFireFunctions,
     private config: AppConfigService, public auth: AuthService, public dialog: DialogService, public objDialogSrv: ObjectDialogService,
-    public objSrv: ObjectService, private router: Router) { }
+    public objSrv: ObjectService, private router: Router, private zone: NgZone, private snackBar: MatSnackBar) { }
 
   getUsers(): Observable<User[]> {
     return this.db.collection<User>(`users`)
@@ -194,10 +195,14 @@ export class CollaborationService {
     const collaboration: Collaboration = Object.assign({} as Collaboration, data);
     this.postCollaboration(collaboration,
       (id) => {
-        this.router.navigate(['collaboration', id]);
+        this.zone.run(() => {
+          this.router.navigate(['collaboration', id]);
+        });
       },
       (e) => {
-        window.alert("Error: " + e);
+        this.snackBar.open("Error: " + e, undefined, {
+          duration: 5000,
+        });
       });
   }
 

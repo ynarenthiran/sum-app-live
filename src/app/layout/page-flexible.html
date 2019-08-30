@@ -7,41 +7,57 @@
       <ng-content select="lib-page-header"></ng-content>
     </div>
     <div #bounds class="page-content2">
-      <mat-sidenav-container class="spacer no-background" autosize hasBackdrop="false">
-        <mat-sidenav-content>
-          <div class="page-grid-container">
-            <!--Grid assembly here-->
-            <ngx-gridster [options]="gridsterOptions"
-              [draggableOptions]="{ handlerClass: 'page-section2-container-header' }">
-              <ngx-gridster-item *ngFor="let container of containers; let i = index" [(w)]="container.width" [(h)]="container.height">
-                <div
-                  [ngClass]="{'page-section2-container': true, 'page-section2-container-edit': this.isEditMode, 'page-section2-container-run': !this.isEditMode}"
-                  [libDropArea]="isEditMode" (dropped)="onSectionDrop(container.id, $event)">
-                  <div *ngIf="isEditMode" class="page-section2-container-header mat-typography row">
-                    <span class="spacer">{{container.label}}</span>
-                    <button mat-icon-button (click)="addContainer(i, container.containerId)">
-                      <mat-icon>add</mat-icon>
-                    </button>
-                    <button mat-icon-button (click)="removeContainer(i, container.containerId)">
-                      <mat-icon>remove</mat-icon>
-                    </button>
-                  </div>
-                  <div class="page-section2-container-inner" [dragula]="isEditMode ? 'INSTANCE_CONTAINER' : undefined">
-                    <lib-panel *ngFor="let instance of container.instances" [icon]="instance.definition.icon"
-                      [title]="instance.title" [description]="instance.description" [libDragEntity]="isEditMode">
-                      <ng-template #content>
-                        <ng-container
-                          *ngTemplateOutlet="instance.definition.content; context: {$implicit: instance.context}">
-                        </ng-container>
-                      </ng-template>
-                    </lib-panel>
-                  </div>
-                </div>
-              </ngx-gridster-item>
-            </ngx-gridster>
-          </div>
-        </mat-sidenav-content>
-        <mat-sidenav mode="over" position="end" [opened]="isEditMode">
+      <div class="page-grid-container">
+        <!--Grid assembly here-->
+        <ngx-gridster [options]="gridsterOptions"
+          [draggableOptions]="{ handlerClass: 'page-section2-container-header' }">
+          <ngx-gridster-item *ngFor="let container of containers; let i = index" [(w)]="container.width"
+            [(h)]="container.height">
+            <div
+              [ngClass]="{'page-section2-container': true, 'page-section2-container-edit': this.isEditMode, 'page-section2-container-run': !this.isEditMode}"
+              [libDropArea]="isEditMode" (dropped)="onSectionDrop(container.id, $event)">
+              <div *ngIf="isEditMode" class="page-section2-container-header mat-typography row">
+                <span class="spacer">{{container.label}}</span>
+                <button mat-icon-button (click)="addContainer(i, container.containerId)">
+                  <mat-icon>add</mat-icon>
+                </button>
+                <button mat-icon-button (click)="removeContainer(i, container.containerId)">
+                  <mat-icon>remove</mat-icon>
+                </button>
+              </div>
+              <div class="page-section2-container-inner" [dragula]="isEditMode ? 'INSTANCE_CONTAINER' : undefined">
+                <lib-panel *ngFor="let instance of container.instances" [icon]="instance.definition.icon"
+                  [title]="instance.title" [description]="instance.description" [libDragEntity]="isEditMode">
+                  <ng-template #content>
+                    <ng-container
+                      *ngTemplateOutlet="instance.definition.content; context: {$implicit: instance.context}">
+                    </ng-container>
+                  </ng-template>
+                </lib-panel>
+              </div>
+            </div>
+          </ngx-gridster-item>
+        </ngx-gridster>
+      </div>
+      <div class="page-floating-button">
+        <!--Floating Buttons Here-->
+        <button mat-fab color="accent" (click)="toggleEditMode()">
+          <mat-icon>settings</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="page-rightbar" [ngClass]="{'page-sidebar-visible': isEditMode, 'page-sidebar-invisible': !isEditMode}">
+    <div class="page-sidebar-header">
+    </div>
+    <div class="page-sidebar-content">
+      <!--Customize layout here [opened]="isEditMode"-->
+      <div class="page-options2-container">
+        <div class="page-options2-decorator">
+          <div></div>
+        </div>
+        <div class="page-options2">
+          <span class="mat-title">Customize Layout</span>
           <mat-accordion>
             <!--Available sections here-->
             <mat-expansion-panel>
@@ -72,13 +88,7 @@
               </div>
             </mat-expansion-panel>
           </mat-accordion>
-        </mat-sidenav>
-      </mat-sidenav-container>
-      <div class="page-floating-button">
-        <!--Floating Buttons Here-->
-        <button mat-fab color="accent" (click)="toggleEditMode()">
-          <mat-icon>settings</mat-icon>
-        </button>
+        </div>
       </div>
     </div>
   </div>

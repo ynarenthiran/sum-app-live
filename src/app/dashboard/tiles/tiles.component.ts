@@ -33,12 +33,23 @@ export class TileBase implements OnInit, OnChanges {
   }
 }
 
+@Component({
+  selector: 'app-tile-text',
+  templateUrl: './text.html',
+  styleUrls: ['./tiles.component.scss'],
+  providers: [{ provide: TileBase, useExisting: TileText }]
+})
+export class TileText extends TileBase {
+  protected refresh() {
+    // Do not fetch data
+  }
+}
+
 @Directive({
   selector: '[appTileListTemplate]'
 })
 export class TileListTemplate {
-  constructor(public templateRef: TemplateRef<any>) {
-  }
+  constructor(public templateRef: TemplateRef<any>) { }
 }
 @Component({
   selector: 'app-tile-list',
@@ -56,6 +67,9 @@ export class TileList extends TileBase {
 })
 export class TileChartSeries {
   protected records$: Observable<any[]>
+
+  @Input()
+  label: string;
 
   @Input()
   groupBy: string;

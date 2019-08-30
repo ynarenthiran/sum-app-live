@@ -1,4 +1,19 @@
 <app-dashboard-page>
+  <app-dashboard-page-tile icon="not_interested" title="TODO Header (Without frame)"
+    description="Tiles to be implemented" definitionId="mlheader" width="12" height="2">
+  </app-dashboard-page-tile>
+  <!--<app-dashboard-page-tile icon="not_interested" title="TODO Collaborations" description="Tiles to be implemented"
+    definitionId="count" width="3" height="1">
+  </app-dashboard-page-tile>-->
+  <!--<app-dashboard-page-tile icon="not_interested" title="TODO Tasks" description="Tiles to be implemented"
+    definitionId="count" width="3" height="1">
+  </app-dashboard-page-tile>
+  <app-dashboard-page-tile icon="not_interested" title="TODO Documents" description="Tiles to be implemented"
+    definitionId="count" width="3" height="1">
+  </app-dashboard-page-tile>
+  <app-dashboard-page-tile icon="not_interested" title="TODO Posts" description="Tiles to be implemented"
+    definitionId="count" width="3" height="1">
+  </app-dashboard-page-tile>-->
   <!--Tile Instances-->
   <!--<app-dashboard-page-tile icon="comment" title="Posts" description="All posts in my collaborations"
     definitionId="posts">
@@ -7,15 +22,29 @@
     definitionId="collaborations">
   </app-dashboard-page-tile>-->
   <app-dashboard-page-tile icon="pie_chart" title="Posts" description="All posts in my collaborations"
-    definitionId="posts">
+    definitionId="postsGroupByUser" width="4" height="4">
   </app-dashboard-page-tile>
   <!--Tile definitions-->
-  <!--<app-tile-list id="posts" [dataSet]="{entityPath: '/posts'}">
+  <app-tile-text id="mlheader">
+    <p class="mat-title">&lt;Salutation&gt;</p>
+    <p class="mat-body">&lt;ML Example&gt;</p>
+    <p class="mat-body">You have 5 important tasks today, some messages and notifications. Finish them all or you can
+      also Edit Tasks</p>
+    <div class="hbox">
+      <button mat-button>Collaborations</button>
+      <button mat-button>Tasks</button>
+      <button mat-button>...</button>
+    </div>
+  </app-tile-text>
+  <app-tile-text id="count">
+    <p class="mat-body">10% UP Icon, Small Bar/Line Chart</p>
+  </app-tile-text>
+  <app-tile-list id="posts" [dataSet]="{entityPath: '/posts'}">
     <span *appTileListTemplate="let post">
       {{post.text}}
     </span>
-  </app-tile-list>-->
-  <app-tile-chart id="posts" [dataSet]="{entityPath: '/posts'}">
-    <app-tile-chart-series groupBy="createdByUid"></app-tile-chart-series>
+  </app-tile-list>
+  <app-tile-chart id="postsGroupByUser" [dataSet]="{entityPath: '/posts', joinBy: {createdByUid: 'users'}}">
+    <app-tile-chart-series label="UserId" groupBy="createdByUid.displayName"></app-tile-chart-series>
   </app-tile-chart>
 </app-dashboard-page>

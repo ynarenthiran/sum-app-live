@@ -1,9 +1,13 @@
 import {
   Component, Input, ContentChild, TemplateRef, Output,
   EventEmitter, Directive, ElementRef, HostListener,
-  ViewChild, ViewContainerRef, AfterContentChecked
+  ViewChild, ViewContainerRef, AfterContentChecked, OnChanges
 } from '@angular/core';
-import { copy } from 'angular6-json-schema-form';
+
+export interface UIResizeNotification {
+  width: number;
+  height: number
+}
 
 @Component({
   selector: 'lib-panel',
@@ -143,7 +147,7 @@ export class UIDropArea {
 @Directive({
   selector: '[libDragEntity]'
 })
-export class UIDragEntity {
+export class UIDragEntity implements OnChanges {
   @Input()
   libDragEntity: boolean = true;
   @Input()
@@ -153,8 +157,10 @@ export class UIDragEntity {
   @Input()
   dragLive: boolean = false;
 
-  constructor(private el: ElementRef) {
-    this.el.nativeElement.draggable = "true"; // TODO: Mark this false for libDragEntity=false
+  constructor(private el: ElementRef) { }
+
+  ngOnChanges() {
+    this.el.nativeElement.draggable = this.libDragEntity;
   }
 
   @HostListener('dragstart', ['$event'])
@@ -171,5 +177,22 @@ export class UIDragEntity {
     if (this.libDragEntity) {
       // TODO: Notify parent that we have taken this from you
     }
+  }
+}
+
+@Directive({
+  selector: '[libNotifyResize]'
+})
+export class UINotifyResize {
+  @Output()
+  libNotifyResize: EventEmitter<UIResizeNotification> = new EventEmitter<UIResizeNotification>();
+
+  constructor(private el: ElementRef) { }
+
+  @HostListener('onresize')
+  onResize() {
+    debugger;
+    const dims = this.el.nativeElement.getBoundingClientRect();
+    this.libNotifyResize.emit({ width: dims.width, height: dims.height });
   }
 }
