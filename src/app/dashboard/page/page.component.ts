@@ -1,6 +1,7 @@
 import { Component, OnInit, ContentChildren, ViewChild, Directive, Input, QueryList, ViewContainerRef, OnChanges, ElementRef } from '@angular/core';
 import { TileBase } from '../tiles/tiles.component';
 import { TableColumnType } from 'src/app/collaboration/util/common';
+import { GridsterComponent } from 'angular2gridster';
 
 @Directive({
   selector: '[appDashboardPageHost]'
@@ -52,6 +53,20 @@ export class PageTileInstance {
   styleUrls: ['./page.component.scss']
 })
 export class DashboardPage implements OnInit {
+  private gridsterOptions = {
+    lanes: 12,
+    direction: 'vertical',
+    dragAndDrop: true,
+    resizable: true,
+    shrink: true,
+    useCSSTransforms: true,
+    responsiveView: true,
+    responsiveToParent: true,
+  };
+
+  @ViewChild(GridsterComponent)
+  grid: GridsterComponent;
+
   @ContentChildren(PageTileInstance)
   tileInstances: QueryList<PageTileInstance>;
 
@@ -64,6 +79,10 @@ export class DashboardPage implements OnInit {
   constructor() { }
 
   ngOnInit() {
+  }
+
+  ngAfterContentInit() {
+    this.grid.reload();
   }
 
   ngAfterContentChecked() {
