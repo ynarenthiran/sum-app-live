@@ -9,14 +9,11 @@
   <app-dashboard-page-tile icon="not_interested" title="TODO Tasks" description="Tiles to be implemented"
     definitionId="count" width="3" height="1">
   </app-dashboard-page-tile>
-  <app-dashboard-page-tile icon="not_interested" title="TODO Documents" description="Tiles to be implemented"
-    definitionId="count" width="3" height="1">
-  </app-dashboard-page-tile>
-  <app-dashboard-page-tile icon="not_interested" title="TODO Posts" description="Tiles to be implemented"
-    definitionId="count" width="3" height="1">
+  <app-dashboard-page-tile icon="insert_drive_file" title="Documents" description="All documents in my collaborations"
+    definitionId="trendDocuments" width="3" height="1">
   </app-dashboard-page-tile>
   <app-dashboard-page-tile icon="comment" title="Posts" description="All posts in my collaborations"
-    definitionId="posts">
+    definitionId="trendPosts" width="3" height="1">
   </app-dashboard-page-tile>
   <app-dashboard-page-tile icon="pie_chart" title="Posts" description="All posts in my collaborations"
     definitionId="postsGroupByUser" width="4" height="4">
@@ -42,6 +39,10 @@
     </span>
   </app-tile-list>
   <app-tile-chart id="postsGroupByUser" [dataSet]="{entityPath: '/posts', joinBy: {createdByUid: 'users'}}">
-    <app-tile-chart-series label="UserId" groupBy="createdByUid.displayName"></app-tile-chart-series>
+    <app-tile-chart-series label="User" groupBy="createdByUid.displayName"></app-tile-chart-series>
   </app-tile-chart>
+  <app-tile-trend id="trendPosts" [dataSet]="{entityPath: '/posts'}">
+  </app-tile-trend>
+  <app-tile-trend id="trendDocuments" [dataSet]="{entityPath: '/documents'}">
+  </app-tile-trend>
 </app-dashboard-page>

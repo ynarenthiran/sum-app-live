@@ -15,7 +15,7 @@ export class PageTileHost implements OnChanges {
 
   ngOnChanges() {
     if (this.vc.length < 1) {
-      this.vc.createEmbeddedView(this.tile.definition.content, { '$implicit': this.tile.context });
+      this.vc.createEmbeddedView(this.tile.definition.content, { '$implicit': this.tile });
     }
   }
 }

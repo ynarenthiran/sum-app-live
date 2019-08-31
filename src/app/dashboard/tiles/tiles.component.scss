@@ -1,7 +1,24 @@
+@import "../../../global";
+
 .chart {
     position: absolute;
     left: 0;
     right: 0;
     top: 0;
     bottom: 0;
+}
+.chart-icon-large {
+    font-size: 56px;
+    width: 56px;
+    height: 56px;
+}
+.chart-kpi {
+    padding: 20px;
+    font-size: 48px;
+}
+.chart-kpi-secondary {
+    color: rgba($color-main-text, 0.5)
+}
+.chart-kpi-description {
+    font-size: 16px;
 }

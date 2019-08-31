@@ -7,7 +7,7 @@ import { map, tap, share, shareReplay } from 'rxjs/operators';
   selector: 'app-tile-base',
   template: '<div></div>'
 })
-export class TileBase implements OnInit, OnChanges {
+export class TileBase implements OnChanges {
   protected records$: Observable<any[]>
 
   @Input()
@@ -16,13 +16,12 @@ export class TileBase implements OnInit, OnChanges {
   @Input()
   dataSet: TileDataSet;
 
+  protected withoutFrame: boolean = false;
+
   @ViewChild('content')
   content: TemplateRef<any>;
 
   constructor(private srv: DashboardService) { }
-
-  ngOnInit() {
-  }
 
   ngOnChanges(): void {
     this.refresh();
@@ -103,5 +102,33 @@ export class TileChart extends TileBase implements AfterContentChecked {
 
   protected refresh() {
     // Do not fetch data
+  }
+}
+
+@Component({
+  selector: 'app-tile-trend',
+  templateUrl: './trend.html',
+  styleUrls: ['./tiles.component.scss'],
+  providers: [{ provide: TileBase, useExisting: TileTrend }]
+})
+export class TileTrend extends TileBase implements OnInit {
+  private count$: Observable<number>;
+
+  ngOnInit() {
+    this.withoutFrame = true;
+  }
+
+  protected refresh() {
+    super.refresh();
+    this.count$ = this.records$.pipe(
+      map((records) => {
+        var count = 0;
+        records.forEach(() => {
+          count++;
+        });
+        return count;
+      }),
+      tap((value) => console.log(value))
+    );
   }
 }

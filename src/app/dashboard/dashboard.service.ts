@@ -3,7 +3,7 @@ import { Observable, combineLatest, observable } from 'rxjs';
 import { AppConfigService } from '../services/app.config';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AuthService } from '../authentication/auth.service';
-import { map, flatMap, tap, share, mergeMap, concatAll } from 'rxjs/operators';
+import { map, flatMap, tap, share, mergeMap, concatAll, shareReplay } from 'rxjs/operators';
 import _ from "lodash";
 
 export const ENTITYPATHS = {

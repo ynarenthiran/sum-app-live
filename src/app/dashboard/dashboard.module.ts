@@ -19,7 +19,8 @@ import { DashboardRoutingModule } from './dashboard-routing.module';
 import {
   TileBase, TileList, TileListTemplate, TileChart,
   TileChartSeries,
-  TileText
+  TileText,
+  TileTrend
 } from './tiles/tiles.component';
 import { DashboardComponent } from './dashboard.component';
 import { DashboardPage, PageTileInstance, PageTileHost } from './page/page.component';
@@ -37,7 +38,8 @@ import { UIModule } from '../ui/ui.module';
     TileList,
     TileListTemplate,
     TileChart,
-    TileChartSeries
+    TileChartSeries,
+    TileTrend
   ],
   imports: [
     CommonModule,
