@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Observable, combineLatest, observable } from 'rxjs';
 import { AppConfigService } from '../services/app.config';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFirestore, DocumentChangeAction } from '@angular/fire/firestore';
 import { AuthService } from '../authentication/auth.service';
 import { map, flatMap, tap, share, mergeMap, concatAll, shareReplay } from 'rxjs/operators';
 import _ from "lodash";
+import * as moment from 'moment';
+import { FormComponent } from '../configuration/form/form.component';
 
 export const ENTITYPATHS = {
   MEMBER: "/members",
@@ -57,26 +59,48 @@ export class DashboardService {
   private readSingle(entityPath: string): Observable<any[]> {
     const accountId = this.config.getConfig().accountId;
     const userId = this.auth.currentUserId;
-    return this.db.collection(`accounts/${accountId}/users/${userId}/collaborations`)
-      .snapshotChanges()
-      .pipe(
-        map(actionsColl => actionsColl.map(aColl => {
-          const collaborationId = aColl.payload.doc.id;
-          return this.db.collection(`accounts/${accountId}/collaborations/${collaborationId}${entityPath}`)
-            .snapshotChanges()
-            .pipe(
-              map(actionsPos => actionsPos.map(aPos => {
-                const dataPos: any = aPos.payload.doc.data();
-                const objPos: any = Object.assign(dataPos, { id: aPos.payload.doc.id });
-                return Object.assign(objPos, { collaborationId: collaborationId });
-              }))
-            );
-        })),
-        flatMap(records => combineLatest(records).pipe(
-          map(aRecord => aRecord.reduce((arr, cur, ind) => arr.concat(cur)))
-        )),
-        //share()
-      );
+    if (entityPath == "") {
+      return this.db.collection(`accounts/${accountId}/users/${userId}/collaborations`)
+        .snapshotChanges()
+        .pipe(
+          map(actionsColl => actionsColl.map(aColl => {
+            const collaborationId = aColl.payload.doc.id;
+            return this.db.doc(`accounts/${accountId}/collaborations/${collaborationId}`)
+              .snapshotChanges()
+              .pipe(
+                map(aPos => {
+                  const dataPos: any = aPos.payload.data();
+                  const objPos: any = Object.assign(dataPos, { id: aPos.payload.id });
+                  return Object.assign(objPos, { collaborationId: collaborationId });
+                })
+              );
+          })),
+          flatMap(records => combineLatest(records)),
+          //share()
+        );
+    }
+    else {
+      return this.db.collection(`accounts/${accountId}/users/${userId}/collaborations`)
+        .snapshotChanges()
+        .pipe(
+          map(actionsColl => actionsColl.map(aColl => {
+            const collaborationId = aColl.payload.doc.id;
+            return this.db.collection(`accounts/${accountId}/collaborations/${collaborationId}${entityPath}`)
+              .snapshotChanges()
+              .pipe(
+                map(actionsPos => actionsPos.map(aPos => {
+                  const dataPos: any = aPos.payload.doc.data();
+                  const objPos: any = Object.assign(dataPos, { id: aPos.payload.doc.id });
+                  return Object.assign(objPos, { collaborationId: collaborationId });
+                }))
+              );
+          })),
+          flatMap(records => combineLatest(records).pipe(
+            map(aRecord => aRecord.reduce((arr, cur, ind) => arr.concat(cur)))
+          )),
+          //share()
+        );
+    }
   }
 
   readSummary(dataSet: TileDataSet, groupBy: string): Observable<any[]> {
@@ -86,5 +110,16 @@ export class DashboardService {
           return { name: key, value: arr.length/*reduce((cum, cur) => cum + cur)*/ };
         }).value()),
       );
+  }
+
+  getOffsetMoment(startOffset: number, unit: string, fromMoment?: moment.Moment) {
+    const startMoment = (fromMoment) ? fromMoment : moment();
+    var duration = {};
+    duration[unit] = startOffset;
+    return startMoment.subtract(duration);
+  }
+
+  getMoment(date: any) {
+    return moment(date.toDate());
   }
 }

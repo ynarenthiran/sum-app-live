@@ -1,7 +1,6 @@
 import { Component, OnInit, Directive, TemplateRef, ContentChild, Input, OnChanges, ViewChild, ContentChildren, QueryList, AfterContentChecked, NgZone, AfterContentInit } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { DashboardService, TileDataSet } from '../dashboard.service';
-import { map, tap, share, shareReplay } from 'rxjs/operators';
 
 @Component({
   selector: 'app-tile-base',
@@ -21,7 +20,7 @@ export class TileBase implements OnChanges {
   @ViewChild('content')
   content: TemplateRef<any>;
 
-  constructor(private srv: DashboardService) { }
+  constructor(protected srv: DashboardService) { }
 
   ngOnChanges(): void {
     this.refresh();
@@ -112,7 +111,18 @@ export class TileChart extends TileBase implements AfterContentChecked {
   providers: [{ provide: TileBase, useExisting: TileTrend }]
 })
 export class TileTrend extends TileBase implements OnInit {
-  private count$: Observable<number>;
+  @Input()
+  unit: string; // See https://momentjs.com/docs/#/manipulating/add/
+
+  @Input()
+  startOffset: number;
+
+  @Input()
+  endOffset: number;
+
+  private total: number;
+  private increased: boolean;
+  private percent: number;
 
   ngOnInit() {
     this.withoutFrame = true;
@@ -120,15 +130,31 @@ export class TileTrend extends TileBase implements OnInit {
 
   protected refresh() {
     super.refresh();
-    this.count$ = this.records$.pipe(
-      map((records) => {
-        var count = 0;
-        records.forEach(() => {
-          count++;
-        });
-        return count;
-      }),
-      tap((value) => console.log(value))
-    );
+    this.records$.subscribe((records) => {
+      const startMoment = this.srv.getOffsetMoment(this.startOffset, this.unit);
+      const prevMoment = this.srv.getOffsetMoment(this.endOffset, this.unit, startMoment);
+      const endMoment = this.srv.getOffsetMoment(this.endOffset, this.unit, prevMoment);
+      this.total = 0;
+      var current = 0, previous = 0;
+      records.forEach((record) => {
+        const createdOn = this.srv.getMoment(record.createdOn);
+        if (createdOn.isAfter(endMoment)) {
+          if (createdOn.isAfter(prevMoment)) {
+            current++;
+          }
+          else if (createdOn.isBefore(startMoment)) {
+            previous++;
+          }
+        }
+        this.total++;
+      });
+      if (current > previous) {
+        this.increased = true;
+      }
+      else {
+        this.increased = false;
+      }
+      this.percent = (previous == 0) ? current * 100 : Math.round((previous - current) * 100 / previous);
+    });
   }
 }

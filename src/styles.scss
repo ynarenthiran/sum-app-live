@@ -60,6 +60,11 @@
 .hidden {
     display: none;
 }
+.link {
+    text-decoration: none;
+    cursor: pointer;
+    color: $color-primary;
+}
 
 /* Global classes because of view encapsulation issues */
 .sidebar-nav-list-item {
