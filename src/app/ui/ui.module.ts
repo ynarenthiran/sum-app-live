@@ -7,7 +7,7 @@ import {
 import { AngularResizedEventModule } from 'angular-resize-event';
 import {
   PanelComponent, UIDropArea, UIDragEntity, FrameComponent,
-  UINotifyResize, GridComponent, UIGridItem
+  UINotifyResize, GridComponent, UIGridItem, FlipComponent, UIFlipFront, UIFlipBack
 } from './ui.component';
 
 @NgModule({
@@ -18,7 +18,10 @@ import {
     UIDragEntity,
     UINotifyResize,
     GridComponent,
-    UIGridItem
+    UIGridItem,
+    FlipComponent,
+    UIFlipFront,
+    UIFlipBack
   ],
   imports: [
     CommonModule,
@@ -36,7 +39,10 @@ import {
     UIDragEntity,
     UINotifyResize,
     GridComponent,
-    UIGridItem
+    UIGridItem,
+    FlipComponent,
+    UIFlipFront,
+    UIFlipBack
   ]
 })
 export class UIModule { }

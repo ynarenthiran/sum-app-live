@@ -3,7 +3,7 @@ import { AppConfigService } from '../services/app.config';
 import { AngularFireFunctions } from '@angular/fire/functions';
 import { Observable } from 'rxjs';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { map } from 'rxjs/operators';
+import { map, flatMap, combineLatest } from 'rxjs/operators';
 
 export interface ObjectType {
   id: string;
@@ -49,6 +49,21 @@ export class ObjectService {
           const id = a.payload.doc.id;
           return Object.assign(type, { id: id }) as ObjectType;
         }))
+      );
+  }
+
+  getObjectTypeByName(typePath: string, typeName: string): Observable<ObjectType> {
+    const accountId = this.config.getConfig().accountId;
+    return this.db.collection<ObjectType>(`accounts/${accountId}/${typePath}`,
+      ref => ref.where('name', '==', typeName))
+      .snapshotChanges()
+      .pipe(
+        map(actions => {
+          let a = actions[0];
+          const type = a.payload.doc.data() as ObjectType;
+          const id = a.payload.doc.id;
+          return Object.assign(type, { id: id }) as ObjectType;
+        })
       );
   }
 

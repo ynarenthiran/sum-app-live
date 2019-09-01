@@ -15,8 +15,11 @@
   <app-dashboard-page-tile icon="comment" title="Posts" description="All posts in my collaborations"
     definitionId="trendPosts" width="3" height="1">
   </app-dashboard-page-tile>
-  <app-dashboard-page-tile icon="pie_chart" title="Posts" description="All posts in my collaborations"
-    definitionId="postsGroupByUser" width="4" height="4">
+  <app-dashboard-page-tile icon="pie_chart" title="Collaborations (Change Management)"
+    description="All collaborations of type change management" definitionId="collaborationByType" width="4" height="4">
+  </app-dashboard-page-tile>
+  <app-dashboard-page-tile icon="pie_chart" title="Contributions" description="All contributions in my collaborations"
+    definitionId="contributionsGroupByUser" width="12" height="4">
   </app-dashboard-page-tile>
   <!--Tile definitions-->
   <app-tile-text id="mlheader">
@@ -38,13 +41,20 @@
       {{post.text}}
     </span>
   </app-tile-list>
-  <app-tile-chart id="postsGroupByUser" [dataSet]="{entityPath: '/posts', joinBy: {createdByUid: 'users'}}">
-    <app-tile-chart-series label="User" groupBy="createdByUid.displayName"></app-tile-chart-series>
-  </app-tile-chart>
   <app-tile-trend id="trendPosts" [dataSet]="{entityPath: '/posts'}" unit="days" startOffset="0" endOffset="7">
   </app-tile-trend>
   <app-tile-trend id="trendDocuments" [dataSet]="{entityPath: '/documents'}" unit="days" startOffset="0" endOffset="7">
   </app-tile-trend>
   <app-tile-trend id="trendCollaborations" [dataSet]="{entityPath: ''}" unit="days" startOffset="0" endOffset="7">
   </app-tile-trend>
+  <app-tile-chart-status #collaborationByType id="collaborationByType" [dataSet]="{entityPath: ''}"
+    objType="collaborationTypes" typeId="dE0paRXGu9S39P8Zks8b">
+    <app-tile-chart-series *ngFor="let status of collaborationByType.statuses$ | async" [label]="status.description"
+      [groupBy]="'status.'+status.name"></app-tile-chart-series>
+  </app-tile-chart-status>
+  <app-tile-chart id="contributionsGroupByUser" [dataSet]="{entityPath: '', joinBy: {createdByUid: 'users'}}">
+    <app-tile-chart-group-series label="User" groupBy="createdByUid.displayName"
+      [components]="[{path: '/posts', filter: { createdByUid: 'createdByUid.id' }},{path: '/documents', filter: { createdByUid: 'createdByUid.id' }}]">
+    </app-tile-chart-group-series>
+  </app-tile-chart>
 </app-dashboard-page>

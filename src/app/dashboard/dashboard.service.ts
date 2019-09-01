@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Observable, combineLatest, observable } from 'rxjs';
+import { Observable, combineLatest, observable, of } from 'rxjs';
 import { AppConfigService } from '../services/app.config';
-import { AngularFirestore, DocumentChangeAction } from '@angular/fire/firestore';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { AuthService } from '../authentication/auth.service';
 import { map, flatMap, tap, share, mergeMap, concatAll, shareReplay } from 'rxjs/operators';
 import _ from "lodash";
 import * as moment from 'moment';
-import { FormComponent } from '../configuration/form/form.component';
+import { identifierModuleUrl } from '@angular/compiler';
 
 export const ENTITYPATHS = {
   MEMBER: "/members",
@@ -15,7 +15,21 @@ export const ENTITYPATHS = {
 }
 export interface TileDataSet {
   entityPath: string;
-  joinBy: any;
+  joinBy?: any;
+}
+export interface ObjectType {
+  id: string;
+  name: string;
+  description: string;
+}
+export interface Status {
+  id: string;
+  name: string;
+  description: string;
+}
+export interface ComponentDescr {
+  path: string;
+  filter: any;
 }
 
 @Injectable({
@@ -25,11 +39,11 @@ export class DashboardService {
 
   constructor(private config: AppConfigService, private db: AngularFirestore, private auth: AuthService) { }
 
-  read(dataSet: TileDataSet): Observable<any[]> {
+  read(dataSet: TileDataSet, filter?: any): Observable<any[]> {
     const accountId = this.config.getConfig().accountId;
     const userId = this.auth.currentUserId;
     if (dataSet.joinBy) {
-      let records$ = this.readSingle(dataSet.entityPath);
+      let records$ = this.readSingle(dataSet.entityPath, filter);
       Object.keys(dataSet.joinBy).forEach((key) => {
         records$ = records$.pipe(
           map((records: any[]) => {
@@ -52,11 +66,11 @@ export class DashboardService {
       return records$;
     }
     else {
-      return this.readSingle(dataSet.entityPath);
+      return this.readSingle(dataSet.entityPath, filter);
     }
   }
 
-  private readSingle(entityPath: string): Observable<any[]> {
+  private readSingle(entityPath: string, filter?: any): Observable<any[]> {
     const accountId = this.config.getConfig().accountId;
     const userId = this.auth.currentUserId;
     if (entityPath == "") {
@@ -76,6 +90,19 @@ export class DashboardService {
               );
           })),
           flatMap(records => combineLatest(records)),
+          map((records) => {
+            return (filter) ?
+              records.filter((record) => {
+                Object.keys(filter).forEach((key) => {
+                  if (!record[key])
+                    return false;
+                  if (record[key] != filter[key])
+                    return false;
+                });
+                return true;
+              })
+              : records;
+          })
           //share()
         );
     }
@@ -103,8 +130,8 @@ export class DashboardService {
     }
   }
 
-  readSummary(dataSet: TileDataSet, groupBy: string): Observable<any[]> {
-    return this.read(dataSet)
+  readSummary(dataSet: TileDataSet, groupBy: string, filter?: any): Observable<any[]> {
+    return this.read(dataSet, filter)
       .pipe(
         map((records) => _.chain(records).groupBy(groupBy).map((arr: any[], key) => {
           return { name: key, value: arr.length/*reduce((cum, cur) => cum + cur)*/ };
@@ -112,8 +139,27 @@ export class DashboardService {
       );
   }
 
+  readSummaryWithComponents(dataSet: TileDataSet, groupBy: string, components: ComponentDescr[], filter?: any): Observable<any[]> {
+    return this.read(dataSet, filter)
+      .pipe(
+        map((records) => {
+          return records.map((record) => {
+            return components.map((component) => {
+              let filter = _.clone(component.filter);
+              Object.keys(filter).forEach((key) => {
+                const idValue = _.get(record, filter[key])
+                filter[key] = idValue;
+              });
+              return this.read({ entityPath: component.path }, filter)
+            });
+          });
+        }),
+        tap((records) => console.log(records))
+      );
+  }
+
   getOffsetMoment(startOffset: number, unit: string, fromMoment?: moment.Moment) {
-    const startMoment = (fromMoment) ? fromMoment : moment();
+    const startMoment = (fromMoment) ? fromMoment.clone() : moment();
     var duration = {};
     duration[unit] = startOffset;
     return startMoment.subtract(duration);
@@ -121,5 +167,35 @@ export class DashboardService {
 
   getMoment(date: any) {
     return moment(date.toDate());
+  }
+
+  getObjectType(objTypePath: string, typeName: string): Observable<ObjectType> {
+    const accountId = this.config.getConfig().accountId;
+    return this.db.collection<ObjectType>(`accounts/${accountId}/${objTypePath}`)
+      .snapshotChanges()
+      .pipe(
+        map(actionsType => {
+          const type = actionsType.find((item) => {
+            var aType = item.payload.doc.data();
+            return aType.name == typeName;
+          })
+          const data = type.payload.doc.data();
+          const typeId = type.payload.doc.id;
+          return { id: typeId, ...data };
+        }),
+      );
+  }
+
+  getStatuses(typeId: string): Observable<Status[]> {
+    const accountId = this.config.getConfig().accountId;
+    return this.db.collection<Status>(`accounts/${accountId}/collaborationTypes/${typeId}/statuses`)
+      .snapshotChanges()
+      .pipe(
+        map(actions => actions.map(a => {
+          const status = a.payload.doc.data() as Status;
+          const id = a.payload.doc.id;
+          return Object.assign(status, { id: id }) as Status;
+        }))
+      );
   }
 }

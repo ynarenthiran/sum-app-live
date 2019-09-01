@@ -4,6 +4,7 @@ import {
   ViewChild, ViewContainerRef, AfterContentChecked, OnChanges, ContentChildren, QueryList
 } from '@angular/core';
 import { GridsterOptions } from 'angular2gridster';
+import { NoneComponent } from 'angular6-json-schema-form';
 
 export interface UIResizeNotification {
   width: number;
@@ -223,7 +224,7 @@ export class UIGridItem {
 @Component({
   selector: 'lib-grid',
   templateUrl: './grid.component.html',
-  styleUrls: ['./ui.component.scss']
+  styleUrls: ['./ui.component.scss'],
 })
 export class GridComponent implements OnChanges, AfterContentChecked {
   @Input()
@@ -257,4 +258,28 @@ export class GridComponent implements OnChanges, AfterContentChecked {
       this._tiles.push({ cols: item.width, rows: item.height, item: item });
     });
   }
+}
+
+@Directive({
+  selector: 'lib-flip-front',
+  host: {
+    '[style.flex]': '"1 1 auto"'
+  }
+})
+export class UIFlipFront {
+}
+@Directive({
+  selector: 'lib-flip-back',
+  host: {
+    '[style.flex]': '"1 1 auto"'
+  }
+})
+export class UIFlipBack {
+}
+@Component({
+  selector: 'lib-flip',
+  templateUrl: './flip.component.html',
+  styleUrls: ['./ui.component.scss'],
+})
+export class FlipComponent {
 }

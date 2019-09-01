@@ -1,21 +1,29 @@
 <ng-template #content let-tile>
-    <div class="spacer row chart-trend">
-        <div class="vbox center-items">
-            <span class="chart-kpi">{{total}}</span>
-        </div>
-        <div class="vbox center-items spacer chart-kpi-description">
-            <span>{{tile.description}}</span>
-            <div class="row center">
-                <mat-icon *ngIf="increased" class="chart-positive">trending_up</mat-icon>
-                <mat-icon *ngIf="!increased" class="chart-negative">trending_down</mat-icon>
-                <span class="chart-kpi-secondary">&nbsp;{{percent}} % </span>
+    <lib-flip class="spacer">
+        <lib-flip-front>
+            <div class="spacer row chart-trend">
+                <div class="vbox center-items">
+                    <span class="chart-kpi">{{total}}</span>
+                </div>
+                <div class="vbox center-items spacer chart-kpi-description">
+                    <span>{{tile.description}}</span>
+                    <div class="row center">
+                        <mat-icon *ngIf="increased" class="chart-positive">trending_up</mat-icon>
+                        <mat-icon *ngIf="!increased" class="chart-negative">trending_down</mat-icon>
+                        <span class="chart-kpi-secondary">&nbsp;{{percent}} % </span>
+                    </div>
+                </div>
+                <div class="vbox center-items">
+                    <div>
+                        <mat-icon class="chart-icon-large">{{tile.icon}}</mat-icon>
+                    </div>
+                    <span class="mat-caption center-text">{{tile.title}}</span>
+                </div>
             </div>
-        </div>
-        <div class="vbox center-items">
-            <div>
-                <mat-icon class="chart-icon-large">{{tile.icon}}</mat-icon>
-            </div>
-            <span class="mat-caption center-text">{{tile.title}}</span>
-        </div>
-    </div>
+        </lib-flip-front>
+        <lib-flip-back>
+            <ngx-charts-bar-vertical [results]="trends" class="chart">
+            </ngx-charts-bar-vertical>
+        </lib-flip-back>
+    </lib-flip>
 </ng-template>

@@ -21,6 +21,7 @@
 }
 .chart-kpi-description {
     font-size: 16px;
+    text-align: left
 }
 .chart-trend {
     cursor: pointer;
@@ -34,4 +35,10 @@
 }
 .chart-negative {
     color: $color-warn
+}
+.chart-fab {
+    position: absolute;
+    right: 14px;
+    bottom: 14px;
+    z-index: 10;
 }

@@ -387,7 +387,9 @@ export class CollaborationService {
     const accountId = this.config.getConfig().accountId;
     const result$ = callable({ accountId: accountId, objectId: id, actionId: actionId });
     result$.subscribe(() => {
-      alert("Action completed");
+      this.snackBar.open("Action completed", undefined, {
+        duration: 5000,
+      });
     })
   }
 

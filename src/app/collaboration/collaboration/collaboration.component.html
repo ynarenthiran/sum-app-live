@@ -38,8 +38,8 @@
             <mat-icon matSuffix (click)="list.onAction('editor'); text.value = ''" class="cursor">open_in_new</mat-icon>
           </mat-form-field>
           <div class="post-input-send">
-            <button mat-stroked-button color="primary">
-              <mat-icon (click)="list.onAction('send', text.value)">send</mat-icon>
+            <button mat-stroked-button color="primary" (click)="list.onAction('send', text.value)">
+              <mat-icon>send</mat-icon>
             </button>
           </div>
         </div>
