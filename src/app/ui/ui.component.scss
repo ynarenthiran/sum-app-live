@@ -31,6 +31,10 @@
     border: 1px inset $color-disabled;
     height: 0;
 }
+.form-core {  
+    display: flex;
+    flex-direction: column;
+}
 /* Styles for flip component                                                                             */
 /*********************************************************************************************************/
 .flip-card {

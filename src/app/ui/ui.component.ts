@@ -1,14 +1,29 @@
 import {
   Component, Input, ContentChild, TemplateRef, Output,
   EventEmitter, Directive, ElementRef, HostListener,
-  ViewChild, ViewContainerRef, AfterContentChecked, OnChanges, ContentChildren, QueryList
+  ViewChild, ViewContainerRef, AfterContentChecked, OnChanges,
+  ContentChildren, QueryList
 } from '@angular/core';
-import { GridsterOptions } from 'angular2gridster';
-import { NoneComponent } from 'angular6-json-schema-form';
+import { Observable } from 'rxjs';
+import { FormGroup, FormControl } from '@angular/forms';
 
 export interface UIResizeNotification {
   width: number;
   height: number
+}
+
+export interface FormParameterValuesDef {
+  values: Observable<any[]> | any[]
+  textField?: string;
+  valueField?: string;
+}
+export interface FormParameterDef {
+  label?: string;
+  type?: string;
+  values?: FormParameterValuesDef
+}
+export interface FormDef {
+  [key: string]: FormParameterDef;
 }
 
 @Component({
@@ -282,4 +297,45 @@ export class UIFlipBack {
   styleUrls: ['./ui.component.scss'],
 })
 export class FlipComponent {
+}
+
+@Component({
+  selector: 'lib-form-adv',
+  templateUrl: './form.component.html',
+  styleUrls: ['./ui.component.scss'],
+})
+export class FormAdvancedComponent {
+  @Input()
+  model: any;
+
+  @Input()
+  definition: FormDef;
+
+  private group: FormGroup = null;
+  private elements: FormParameterDef[] = [];
+
+  ngOnChanges() {
+    this.buildForm();
+  }
+
+  getData() {
+    return this.group.value;
+  }
+
+  private buildForm() {
+    let controls: any = {};
+    Object.keys(this.definition).forEach((field) => {
+      const param: FormParameterDef = this.definition[field];
+      if (!this.model[field]) {
+        this.model[field] = ""; // TODO create initial value according to the type
+      }
+      if (!param.label)
+        param.label = field;
+      if (!param.type)
+        param.type = "text";
+      controls[field] = new FormControl(this.model[field]);
+      this.elements.push(param);
+    });
+    this.group = new FormGroup(controls);
+  }
 }
