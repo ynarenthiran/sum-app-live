@@ -183,17 +183,24 @@ export class PageComponent implements OnInit, OnDestroy, AfterContentInit, DoChe
   }
 }
 
+@Directive({
+  selector: 'lib-page-sidebar-header'
+})
+export class PageSidebarHeader { }
+@Directive({
+  selector: 'lib-page-sidebar-content'
+})
+export class PageSidebarContent { }
+@Directive({
+  selector: 'lib-page-content'
+})
+export class PageContent { }
 @Component({
-  selector: 'lib-page-list',
-  templateUrl: './page-list.html',
+  selector: 'lib-page-basic',
+  templateUrl: './page-basic.html',
   styleUrls: ['./page.component.scss']
 })
-export class PageListComponent implements OnInit {
-  constructor() {
-  }
-
-  ngOnInit() {
-  }
+export class PageBasicComponent { 
 }
 
 @Component({

@@ -1,9 +1,10 @@
 import {
   Component, OnInit, ContentChildren, ViewChild,
   Directive, Input, QueryList, ViewContainerRef, OnChanges,
-  ElementRef, NgZone
+  ElementRef, NgZone, Inject, AfterContentInit, AfterContentChecked
 } from '@angular/core';
 import { TileBase } from '../tiles/tiles.component';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 @Directive({
   selector: '[appDashboardPageHost]'
@@ -12,8 +13,7 @@ export class PageTileHost implements OnChanges {
   @Input()
   tile: PageTileInstance;
 
-  constructor(private vc: ViewContainerRef) {
-  }
+  constructor(private vc: ViewContainerRef) { }
 
   ngOnChanges() {
     if (this.vc.length < 1) {
@@ -25,31 +25,63 @@ export class PageTileHost implements OnChanges {
 @Directive({
   selector: 'app-dashboard-page-tile'
 })
-export class PageTileInstance {
+export class PageTileInstance implements OnChanges, AfterContentChecked {
   @Input()
-  icon: string;
+  icon?: string;
   @Input()
-  title: string;
+  title?: string;
   @Input()
-  description: string;
+  description?: string;
   @Input()
-  width: number;
+  width?: number = 1;
   @Input()
-  height: number;
+  height?: number = 1;
 
   @Input()
   definitionId: string;
 
   @Input()
-  context?: string;
+  context?: any;
 
-  definition: TileBase;
+  private data: any = {};
+  private isDataValid = false;
 
-  constructor() {
+  set definition(value: TileBase) {
+    this._definition = value;
+    this._definition.refresh.subscribe(() => {
+      this.isDataValid = false;
+    });
+  }
+  get definition(): TileBase {
+    return this._definition;
+  }
+  private _definition: TileBase;
+
+  constructor(private dialog: MatDialog) { }
+
+  ngOnChanges() {
+    this.isDataValid = false;
+  }
+
+  ngAfterContentChecked() {
+    if (!this.isDataValid) {
+      this.refresh();
+    }
   }
 
   customize() {
-    window.alert(this.title);
+    const dialogRef = this.dialog.open(PageTileSettingsDialog, {
+      width: '400px'
+    });
+    dialogRef.afterClosed().subscribe(() => {
+    });
+  }
+
+  private refresh() {
+    if (this.definition) {
+      this.data = this.definition.getData(this.context);
+      this.isDataValid = true;
+    }
   }
 }
 
@@ -58,23 +90,14 @@ export class PageTileInstance {
   templateUrl: './page.html',
   styleUrls: ['./page.component.scss']
 })
-export class DashboardPage implements OnInit {
+export class DashboardPage implements AfterContentChecked {
   @ContentChildren(PageTileInstance)
   tileInstances: QueryList<PageTileInstance>;
 
   @ContentChildren(TileBase)
   tileDefinitions: QueryList<TileBase>;
 
-  @ViewChild('table')
-  table: ElementRef<HTMLElement>;
-
-  constructor(private zone: NgZone) { }
-
-  ngOnInit() {
-  }
-
-  ngAfterContentInit() {
-  }
+  constructor() { }
 
   ngAfterContentChecked() {
     this.initializeTileInstances();
@@ -86,5 +109,18 @@ export class DashboardPage implements OnInit {
         instance.definition = this.tileDefinitions.find((item) => item.id == instance.definitionId);
       }
     });
+  }
+}
+
+@Component({
+  selector: 'app-dashboard-tile-settings',
+  templateUrl: './settings.html',
+})
+export class PageTileSettingsDialog {
+
+  constructor(private dialogRef: MatDialogRef<PageTileSettingsDialog>, @Inject(MAT_DIALOG_DATA) private data: any) { }
+
+  onOk() {
+    this.dialogRef.close();
   }
 }

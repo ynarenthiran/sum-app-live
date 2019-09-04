@@ -12,3 +12,9 @@ lib-grid {
     align-self: stretch;
     justify-self: stretch;
 }
+.grid-fab {
+    position: absolute;
+    right: 14px;
+    bottom: 14px;
+    z-index: 10;
+}

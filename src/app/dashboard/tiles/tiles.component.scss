@@ -1,5 +1,13 @@
 @import "../../../global";
 
+.tile-fab {
+    position: absolute;
+    right: 14px;
+    bottom: 14px;
+    z-index: 10;
+}
+
+/* trent.html */
 .chart {
     position: absolute;
     left: 0;
@@ -35,10 +43,4 @@
 }
 .chart-negative {
     color: $color-warn
-}
-.chart-fab {
-    position: absolute;
-    right: 14px;
-    bottom: 14px;
-    z-index: 10;
 }

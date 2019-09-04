@@ -27,6 +27,7 @@ import { AppConfigService } from './services/app.config';
 import { LayoutModule } from './layout/layout.module';
 import { ShellComponent, ShellService } from './shell/shell.component';
 import { MomentModule } from 'ngx-moment';
+import { UserProfileComponent } from './user-profile/user-profile.component';
 
 const appInitializerFn = (appConfig: AppConfigService) => {
   return () => {
@@ -37,7 +38,8 @@ const appInitializerFn = (appConfig: AppConfigService) => {
 @NgModule({
   declarations: [
     AppComponent,
-    ShellComponent
+    ShellComponent,
+    UserProfileComponent
   ],
   imports: [
     BrowserModule,

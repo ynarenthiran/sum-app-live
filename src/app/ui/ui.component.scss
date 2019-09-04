@@ -35,6 +35,19 @@
     display: flex;
     flex-direction: column;
 }
+.tile-n,.tile-s {
+    cursor: ns-resize;
+}
+.tile-e,.tile-w {
+    cursor: ew-resize;
+}
+.tile-nw,.tile-se {
+    cursor: nwse-resize;
+}
+.tile-ne,.tile-sw {
+    cursor: nesw-resize;
+}
+
 /* Styles for flip component                                                                             */
 /*********************************************************************************************************/
 .flip-card {

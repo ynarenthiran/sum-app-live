@@ -1,4 +1,0 @@
-<ng-template #content>
-    <ng-container *ngFor="let record of records$ | async" [ngTemplateOutlet]="template?.templateRef"
-        [ngTemplateOutletContext]="{$implicit: record}"></ng-container>
-</ng-template>

@@ -208,7 +208,6 @@ export class UINotifyResize {
 
   @HostListener('onresize')
   onResize() {
-    debugger;
     const dims = this.el.nativeElement.getBoundingClientRect();
     this.libNotifyResize.emit({ width: dims.width, height: dims.height });
   }
@@ -324,6 +323,8 @@ export class FormAdvancedComponent {
 
   private buildForm() {
     let controls: any = {};
+    if (!this.model)
+      this.model = {};
     Object.keys(this.definition).forEach((field) => {
       const param: FormParameterDef = this.definition[field];
       if (!this.model[field]) {

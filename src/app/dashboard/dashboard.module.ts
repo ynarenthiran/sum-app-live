@@ -10,18 +10,18 @@ import {
   MatMenuModule,
   MatFormFieldModule,
   MatInputModule,
-  MatCardModule
+  MatCardModule,
+  MatDialogModule
 } from '@angular/material';
 import { MomentModule } from 'ngx-moment';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import {
-  TileBase, TileList, TileListTemplate, TileChart,
-  TileChartSeries, TileText, TileTrend, TileChartStatus, TileChartGroupSeries
+  TileBase, TileText, TileListTemplate, TileList, TileTrend
 } from './tiles/tiles.component';
 import { DashboardComponent } from './dashboard.component';
-import { DashboardPage, PageTileInstance, PageTileHost } from './page/page.component';
+import { DashboardPage, PageTileInstance, PageTileHost, PageTileSettingsDialog } from './page/page.component';
 import { GridsterModule } from 'angular2gridster';
 import { UIModule } from '../ui/ui.module';
 
@@ -30,15 +30,12 @@ import { UIModule } from '../ui/ui.module';
     DashboardComponent,
     DashboardPage,
     PageTileInstance,
+    PageTileSettingsDialog,
     PageTileHost,
     TileBase,
     TileText,
     TileList,
     TileListTemplate,
-    TileChart,
-    TileChartSeries,
-    TileChartGroupSeries,
-    TileChartStatus,
     TileTrend
   ],
   imports: [
@@ -53,6 +50,7 @@ import { UIModule } from '../ui/ui.module';
     MatFormFieldModule,
     MatInputModule,
     MatCardModule,
+    MatDialogModule,
     DashboardRoutingModule,
     UIModule,
     MomentModule,
@@ -62,6 +60,9 @@ import { UIModule } from '../ui/ui.module';
   exports: [
   ],
   providers: [
+  ],
+  entryComponents: [
+    PageTileSettingsDialog
   ]
 })
 export class DashboardModule { }

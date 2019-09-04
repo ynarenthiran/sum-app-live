@@ -18,7 +18,7 @@ import { GridsterModule } from 'angular2gridster';
 
 import {
   PageComponent,
-  PageListComponent,
+  PageBasicComponent,
   PageSection,
   PageSectionContent,
   PageSectionToolbar,
@@ -27,7 +27,10 @@ import {
   PageService,
   PageTreeComponent,
   PageNode,
-  PageHeader
+  PageHeader,
+  PageContent,
+  PageSidebarContent,
+  PageSidebarHeader
 } from './page.component';
 import {
   FlexiblePageComponent, FlexiblePageSection, FlexiblePageSectionAction
@@ -58,7 +61,10 @@ import { DragulaModule } from 'ng2-dragula';
   declarations: [
     PageComponent,
     FlexiblePageComponent,
-    PageListComponent,
+    PageBasicComponent,
+    PageContent,
+    PageSidebarContent,
+    PageSidebarHeader,
     PageTreeComponent,
     PageHeader,
     PageSection,
@@ -72,7 +78,10 @@ import { DragulaModule } from 'ng2-dragula';
   ],
   exports: [
     PageComponent,
-    PageListComponent,
+    PageBasicComponent,
+    PageContent,
+    PageSidebarContent,
+    PageSidebarHeader,
     PageTreeComponent,
     FlexiblePageComponent,
     PageHeader,

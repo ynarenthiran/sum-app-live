@@ -1,6 +1,6 @@
 <lib-grid>
     <lib-grid-item *ngFor="let tile of tileInstances" [width]="tile.width" [height]="tile.height">
-        <ng-container [ngSwitch]="tile.definition.withoutFrame">
+        <ng-container [ngSwitch]="tile.definition?.withoutFrame">
             <ng-container *ngSwitchCase="true">
                 <div class="grid-item hbox mat-elevation-z2 mat-typography">
                     <div appDashboardPageHost [tile]="tile"></div>

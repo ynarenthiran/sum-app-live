@@ -1,60 +1,28 @@
 <app-dashboard-page>
   <!--Tile Instances-->
-  <app-dashboard-page-tile icon="not_interested" title="TODO Header (Without frame)"
-    description="Tiles to be implemented" definitionId="mlheader" width="12" height="2">
+  <app-dashboard-page-tile icon="not_interested" title="First" description="First" definitionId="first" width="2"
+    height="2">
   </app-dashboard-page-tile>
-  <app-dashboard-page-tile icon="question_answer" title="Collaborations" description="My collaborations"
-    definitionId="trendCollaborations" width="3" height="1">
+  <app-dashboard-page-tile icon="not_interested" title="Second" description="Second" definitionId="second" width="2"
+    height="2">
   </app-dashboard-page-tile>
-  <app-dashboard-page-tile icon="not_interested" title="TODO Tasks" description="Tiles to be implemented"
-    definitionId="count" width="3" height="1">
+  <app-dashboard-page-tile icon="not_interested" title="Posts" description="All posts in my collaborations" definitionId="posts" width="4"
+    height="4">
   </app-dashboard-page-tile>
-  <app-dashboard-page-tile icon="insert_drive_file" title="Documents" description="All documents in my collaborations"
-    definitionId="trendDocuments" width="3" height="1">
-  </app-dashboard-page-tile>
-  <app-dashboard-page-tile icon="comment" title="Posts" description="All posts in my collaborations"
-    definitionId="trendPosts" width="3" height="1">
-  </app-dashboard-page-tile>
-  <app-dashboard-page-tile icon="pie_chart" title="Collaborations (Change Management)"
-    description="All collaborations of type change management" definitionId="collaborationByType" width="4" height="4">
-  </app-dashboard-page-tile>
-  <app-dashboard-page-tile icon="pie_chart" title="Contributions" description="All contributions in my collaborations"
-    definitionId="contributionsGroupByUser" width="12" height="4">
+  <app-dashboard-page-tile icon="question_answer" title="Collaborations" description="My collaborations" definitionId="trendCollaborations" width="4"
+    height="1" [context]="{unit: 'days', startOffset: '0', endOffset: '7'}">
   </app-dashboard-page-tile>
   <!--Tile definitions-->
-  <app-tile-text id="mlheader">
-    <p class="mat-title">&lt;Salutation&gt;</p>
-    <p class="mat-body">&lt;ML Example&gt;</p>
-    <p class="mat-body">You have 5 important tasks today, some messages and notifications. Finish them all or you can
-      also <a [routerLink]="['/collaboration/create']" class="link">Create</a> a collaboration</p>
-    <div class="hbox">
-      <button mat-button>Collaborations</button>
-      <button mat-button>Tasks</button>
-      <button mat-button>...</button>
+  <app-tile-base id="first">
+  </app-tile-base>
+  <app-tile-text id="second">
+    Hello World !!!
+  </app-tile-text>
+  <app-tile-list id="posts" [dataSet]="{entityPath: ''}">
+    <div *appTileListTemplate="let collaboration" class="vbox">
+      <span>{{collaboration.name}}</span>
     </div>
-  </app-tile-text>
-  <app-tile-text id="count">
-    <p class="mat-body">10% UP Icon, Small Bar/Line Chart</p>
-  </app-tile-text>
-  <app-tile-list id="posts" [dataSet]="{entityPath: '/posts'}">
-    <span *appTileListTemplate="let post">
-      {{post.text}}
-    </span>
   </app-tile-list>
-  <app-tile-trend id="trendPosts" [dataSet]="{entityPath: '/posts'}" unit="days" startOffset="0" endOffset="7">
+  <app-tile-trend id="trendCollaborations" [dataSet]="{entityPath: ''}">
   </app-tile-trend>
-  <app-tile-trend id="trendDocuments" [dataSet]="{entityPath: '/documents'}" unit="days" startOffset="0" endOffset="7">
-  </app-tile-trend>
-  <app-tile-trend id="trendCollaborations" [dataSet]="{entityPath: ''}" unit="days" startOffset="0" endOffset="7">
-  </app-tile-trend>
-  <app-tile-chart-status #collaborationByType id="collaborationByType" [dataSet]="{entityPath: ''}"
-    objType="collaborationTypes" typeId="dE0paRXGu9S39P8Zks8b">
-    <app-tile-chart-series *ngFor="let status of collaborationByType.statuses$ | async" [label]="status.description"
-      [groupBy]="'status.'+status.name"></app-tile-chart-series>
-  </app-tile-chart-status>
-  <app-tile-chart id="contributionsGroupByUser" [dataSet]="{entityPath: '', joinBy: {createdByUid: 'users'}}">
-    <app-tile-chart-group-series label="User" groupBy="createdByUid.displayName"
-      [components]="[{path: '/posts', filter: { createdByUid: 'createdByUid.id' }},{path: '/documents', filter: { createdByUid: 'createdByUid.id' }}]">
-    </app-tile-chart-group-series>
-  </app-tile-chart>
 </app-dashboard-page>

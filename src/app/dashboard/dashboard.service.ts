@@ -6,7 +6,6 @@ import { AuthService } from '../authentication/auth.service';
 import { map, flatMap, tap, share, mergeMap, concatAll, shareReplay } from 'rxjs/operators';
 import _ from "lodash";
 import * as moment from 'moment';
-import { identifierModuleUrl } from '@angular/compiler';
 
 export const ENTITYPATHS = {
   MEMBER: "/members",
@@ -40,8 +39,6 @@ export class DashboardService {
   constructor(private config: AppConfigService, private db: AngularFirestore, private auth: AuthService) { }
 
   read(dataSet: TileDataSet, filter?: any): Observable<any[]> {
-    const accountId = this.config.getConfig().accountId;
-    const userId = this.auth.currentUserId;
     if (dataSet.joinBy) {
       let records$ = this.readSingle(dataSet.entityPath, filter);
       Object.keys(dataSet.joinBy).forEach((key) => {
@@ -102,8 +99,8 @@ export class DashboardService {
                 return true;
               })
               : records;
-          })
-          //share()
+          }),
+          //shareReplay(1)
         );
     }
     else {
@@ -158,15 +155,19 @@ export class DashboardService {
       );
   }
 
-  getOffsetMoment(startOffset: number, unit: string, fromMoment?: moment.Moment) {
-    const startMoment = (fromMoment) ? fromMoment.clone() : moment();
-    var duration = {};
-    duration[unit] = startOffset;
-    return startMoment.subtract(duration);
-  }
-
-  getMoment(date: any) {
-    return moment(date.toDate());
+  readTrends(dataSet: TileDataSet, unit: string, startOffset: number, endOffset: number, filter?: any): Observable<any> {
+    return this.read(dataSet, filter)
+      .pipe(
+        tap((records) => console.log(records))
+      )
+    /*.pipe(
+      map((records) => {
+        const startMoment = this.getOffsetMoment(startOffset, unit);
+        const prevMoment = this.getOffsetMoment(endOffset, unit, startMoment);
+        const endMoment = this.getOffsetMoment(endOffset, unit, prevMoment);
+        return { total: 10, increased: true, percent: 50, trends: [1, 1, 1, 1, 1] };
+      })
+    );*/
   }
 
   getObjectType(objTypePath: string, typeName: string): Observable<ObjectType> {
@@ -197,5 +198,16 @@ export class DashboardService {
           return Object.assign(status, { id: id }) as Status;
         }))
       );
+  }
+
+  private getOffsetMoment(startOffset: number, unit: string, fromMoment?: moment.Moment) {
+    const startMoment = (fromMoment) ? fromMoment.clone() : moment();
+    var duration = {};
+    duration[unit] = startOffset;
+    return startMoment.subtract(duration);
+  }
+
+  private getMoment(date: any) {
+    return moment(date.toDate());
   }
 }

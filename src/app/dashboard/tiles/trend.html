@@ -1,16 +1,16 @@
 <ng-template #content let-tile>
-    <lib-flip class="spacer">
+    <lib-flip *ngIf="tile.data?.trend$ as trend" class="spacer">
         <lib-flip-front>
             <div class="spacer row chart-trend">
                 <div class="vbox center-items">
-                    <span class="chart-kpi">{{total}}</span>
+                    <span class="chart-kpi">{{trend.total}}</span>
                 </div>
                 <div class="vbox center-items spacer chart-kpi-description">
                     <span>{{tile.description}}</span>
                     <div class="row center">
-                        <mat-icon *ngIf="increased" class="chart-positive">trending_up</mat-icon>
-                        <mat-icon *ngIf="!increased" class="chart-negative">trending_down</mat-icon>
-                        <span class="chart-kpi-secondary">&nbsp;{{percent}} % </span>
+                        <mat-icon *ngIf="trend.increased" class="chart-positive">trending_up</mat-icon>
+                        <mat-icon *ngIf="!trend.increased" class="chart-negative">trending_down</mat-icon>
+                        <span class="chart-kpi-secondary">&nbsp;{{trend.percent}} % </span>
                     </div>
                 </div>
                 <div class="vbox center-items">
@@ -22,7 +22,7 @@
             </div>
         </lib-flip-front>
         <lib-flip-back>
-            <ngx-charts-bar-vertical [results]="trends" class="chart">
+            <ngx-charts-bar-vertical [results]="trend.trends" class="chart">
             </ngx-charts-bar-vertical>
         </lib-flip-back>
     </lib-flip>
