@@ -18,7 +18,7 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import {
-  TileBase, TileText, TileListTemplate, TileList, TileTrend
+  TileBase, TileText, TileListTemplate, TileList, TileTrend, TileChart, TileChartSeries, TileChartType
 } from './tiles/tiles.component';
 import { DashboardComponent } from './dashboard.component';
 import { DashboardPage, PageTileInstance, PageTileHost, PageTileSettingsDialog } from './page/page.component';
@@ -36,7 +36,10 @@ import { UIModule } from '../ui/ui.module';
     TileText,
     TileList,
     TileListTemplate,
-    TileTrend
+    TileTrend,
+    TileChart,
+    TileChartSeries,
+    TileChartType
   ],
   imports: [
     CommonModule,

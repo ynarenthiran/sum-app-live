@@ -1,27 +1,27 @@
-<lib-page-list>
-    <mat-table [dataSource]="collaborations$">
-        <!-- Name Column -->
-        <ng-container matColumnDef="name">
-            <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
-            <mat-cell *matCellDef="let element">{{element.name}}</mat-cell>
-        </ng-container>
-        <!-- Description Column -->
-        <ng-container matColumnDef="description">
-            <mat-header-cell *matHeaderCellDef>Description</mat-header-cell>
-            <mat-cell *matCellDef="let element">{{element.description}}</mat-cell>
-        </ng-container>
-        <!-- Actions Column -->
-        <ng-container matColumnDef="actions">
-            <mat-header-cell *matHeaderCellDef></mat-header-cell>
-            <mat-cell *matCellDef="let element" class="list-column-actions">
-                <mat-icon>chevron_right</mat-icon>
-            </mat-cell>
-        </ng-container>
-        <mat-header-row mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-        <mat-row mat-row *matRowDef="let row; columns: displayedColumns;" matRipple (click)="onDetailClick(row)"
-            class="list-row">
-        </mat-row>
-    </mat-table>
-    <lib-object>
-    </lib-object>
-</lib-page-list>
+<lib-page-basic>
+    <lib-page-content>
+        <mat-table [dataSource]="collaborations$">
+            <!-- Name Column -->
+            <ng-container matColumnDef="name">
+                <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{element.name}}</mat-cell>
+            </ng-container>
+            <!-- Description Column -->
+            <ng-container matColumnDef="description">
+                <mat-header-cell *matHeaderCellDef>Description</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{element.description}}</mat-cell>
+            </ng-container>
+            <!-- Actions Column -->
+            <ng-container matColumnDef="actions">
+                <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                <mat-cell *matCellDef="let element" class="list-column-actions">
+                    <mat-icon>chevron_right</mat-icon>
+                </mat-cell>
+            </ng-container>
+            <mat-header-row mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row mat-row *matRowDef="let row; columns: displayedColumns;" matRipple (click)="onDetailClick(row)"
+                class="list-row">
+            </mat-row>
+        </mat-table>
+    </lib-page-content>
+</lib-page-basic>

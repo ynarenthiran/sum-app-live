@@ -1,5 +1,5 @@
 <ng-template #content let-tile>
-    <lib-flip *ngIf="tile.data?.trend$ as trend" class="spacer">
+    <lib-flip *ngIf="tile.data.record$ as trend" class="spacer">
         <lib-flip-front>
             <div class="spacer row chart-trend">
                 <div class="vbox center-items">

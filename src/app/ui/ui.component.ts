@@ -29,7 +29,8 @@ export interface FormDef {
 @Component({
   selector: 'lib-panel',
   templateUrl: './panel.component.html',
-  styleUrls: ['./ui.component.scss']
+  styleUrls: ['./ui.component.scss', './ui2.component.scss'],
+  styles: ['background-color: $color-secondary']
 })
 export class PanelComponent implements AfterContentChecked {
   @Input()

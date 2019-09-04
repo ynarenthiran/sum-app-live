@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { style } from '@angular/animations';
+import { ObjectService, ObjectType } from '../object/object.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
@@ -7,9 +8,11 @@ import { style } from '@angular/animations';
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
+  collaborationTypes$: Observable<ObjectType[]>;
 
-  constructor() { }
+  constructor(private srvObj: ObjectService) { }
 
   ngOnInit() {
+    this.collaborationTypes$ = this.srvObj.getObjectTypes("collaborationTypes")
   }
 }

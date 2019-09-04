@@ -151,23 +151,17 @@ export class DashboardService {
             });
           });
         }),
-        tap((records) => console.log(records))
       );
   }
 
-  readTrends(dataSet: TileDataSet, unit: string, startOffset: number, endOffset: number, filter?: any): Observable<any> {
+  readTrend(dataSet: TileDataSet, unit: string, startOffset: number, endOffset: number, filter?: any): Observable<any> {
     return this.read(dataSet, filter)
       .pipe(
-        tap((records) => console.log(records))
-      )
-    /*.pipe(
-      map((records) => {
-        const startMoment = this.getOffsetMoment(startOffset, unit);
-        const prevMoment = this.getOffsetMoment(endOffset, unit, startMoment);
-        const endMoment = this.getOffsetMoment(endOffset, unit, prevMoment);
-        return { total: 10, increased: true, percent: 50, trends: [1, 1, 1, 1, 1] };
-      })
-    );*/
+        map((records) => {
+          return { total: records.length, increased: true, percent: records.length, trends: [] }
+        }),
+        tap((record) => console.log(record))
+      );
   }
 
   getObjectType(objTypePath: string, typeName: string): Observable<ObjectType> {

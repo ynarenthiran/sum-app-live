@@ -6,11 +6,19 @@
   <app-dashboard-page-tile icon="not_interested" title="Second" description="Second" definitionId="second" width="2"
     height="2">
   </app-dashboard-page-tile>
-  <app-dashboard-page-tile icon="not_interested" title="Posts" description="All posts in my collaborations" definitionId="posts" width="4"
-    height="4">
+  <app-dashboard-page-tile icon="not_interested" title="Posts" description="All posts in my collaborations"
+    definitionId="posts" width="4" height="4">
   </app-dashboard-page-tile>
-  <app-dashboard-page-tile icon="question_answer" title="Collaborations" description="My collaborations" definitionId="trendCollaborations" width="4"
-    height="1" [context]="{unit: 'days', startOffset: '0', endOffset: '7'}">
+  <app-dashboard-page-tile icon="question_answer" title="Collaborations" description="My collaborations"
+    definitionId="trendCollaborations" width="4" height="1"
+    [context]="{unit: 'days', startOffset: '0', endOffset: '7'}">
+  </app-dashboard-page-tile>
+  <app-dashboard-page-tile icon="question_answer" title="Collaborations" description="Collaborations by Users"
+    definitionId="collaborationsByUser" [context]="{seriesId: 'createdByUid'}" width="4" height="4">
+  </app-dashboard-page-tile>
+  <app-dashboard-page-tile icon="question_answer" title="Collaborations (Change Management)"
+    description="Collaborations by status" definitionId="collaborationByStatus.changeManagement"
+    [context]="{seriesId: 'default'}" width="4" height="4">
   </app-dashboard-page-tile>
   <!--Tile definitions-->
   <app-tile-base id="first">
@@ -25,4 +33,14 @@
   </app-tile-list>
   <app-tile-trend id="trendCollaborations" [dataSet]="{entityPath: ''}">
   </app-tile-trend>
+  <app-tile-chart id="collaborationsByUser" [dataSet]="{entityPath: '', joinBy: {createdByUid: 'users'}}">
+    <app-tile-chart-series id="createdByUid" label="User" groupBy="createdByUid.displayName">
+    </app-tile-chart-series>
+  </app-tile-chart>
+  <app-tile-chart-type #chartCollaborationType *ngFor="let collaborationType of collaborationTypes$ | async"
+    [id]="'collaborationByStatus.'+name" [dataSet]="{entityPath: ''}" [typeId]="collaborationType.id">
+    <app-tile-chart-series *ngFor="let status of chartCollaborationType.statuses$ | async" [id]="status.name"
+      [label]="status.description" [groupBy]="'status.'+status.name">
+    </app-tile-chart-series>
+  </app-tile-chart-type>
 </app-dashboard-page>

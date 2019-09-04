@@ -48,9 +48,11 @@ export class PageTileInstance implements OnChanges, AfterContentChecked {
 
   set definition(value: TileBase) {
     this._definition = value;
-    this._definition.refresh.subscribe(() => {
-      this.isDataValid = false;
-    });
+    if (value) {
+      this._definition.refresh.subscribe(() => {
+        this.isDataValid = false;
+      });
+    }
   }
   get definition(): TileBase {
     return this._definition;

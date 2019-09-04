@@ -1,0 +1,11 @@
+<ng-template #content let-tile>
+    <ng-container *ngFor="let series of seriesList">
+        <ngx-charts-pie-chart *ngIf="series.id==tile.context.seriesId" [results]="tile.data.records$ | async"
+            legend="true" labels="true" class="chart">
+        </ngx-charts-pie-chart>
+    </ng-container>
+    <!--<ngx-charts-bar-vertical *ngFor="let series of seriesList" [results]="series.records$ | async" legend="true"
+        xAxis="true" yAxis="true" showXAxisLabel="true" showYAxisLabel="true" [xAxisLabel]="series.label"
+        yAxisLabel="Count" class="chart">
+    </ngx-charts-bar-vertical>-->
+</ng-template>
