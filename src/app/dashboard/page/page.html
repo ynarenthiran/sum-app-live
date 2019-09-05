@@ -3,13 +3,13 @@
         <ng-container [ngSwitch]="tile.definition?.withoutFrame">
             <ng-container *ngSwitchCase="true">
                 <div class="grid-item hbox mat-elevation-z2 mat-typography">
-                    <div appDashboardPageHost [tile]="tile"></div>
+                    <div appDashboardTileHost [tile]="tile"></div>
                 </div>
             </ng-container>
             <ng-container *ngSwitchCase="false">
                 <lib-frame [icon]="tile.icon" [title]="tile.title" [description]="tile.description"
                     class="grid-item mat-elevation-z2 mat-typography">
-                    <div appDashboardPageHost [tile]="tile"></div>
+                    <div appDashboardTileHost [tile]="tile"></div>
                 </lib-frame>
             </ng-container>
         </ng-container>

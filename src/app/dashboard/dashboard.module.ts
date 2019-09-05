@@ -19,11 +19,12 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import {
   TileBase, TileText, TileListTemplate, TileList, TileTrend, TileChart,
-  TileChartSeries
+  TileChartSeries,
+  TileSettingsDialog
 } from './tiles/tiles.component';
 import { DashboardComponent } from './dashboard.component';
 import {
-  DashboardPage, PageTileInstance, PageTileHost, PageTileSettingsDialog
+  DashboardPage, PageTileInstance, PageTileHost, PageTileSettingsHost
 } from './page/page.component';
 import { GridsterModule } from 'angular2gridster';
 import { UIModule } from '../ui/ui.module';
@@ -33,15 +34,16 @@ import { UIModule } from '../ui/ui.module';
     DashboardComponent,
     DashboardPage,
     PageTileInstance,
-    PageTileSettingsDialog,
     PageTileHost,
+    PageTileSettingsHost,
     TileBase,
     TileText,
     TileList,
     TileListTemplate,
     TileTrend,
     TileChart,
-    TileChartSeries
+    TileChartSeries,
+    TileSettingsDialog
   ],
   imports: [
     CommonModule,
@@ -67,7 +69,7 @@ import { UIModule } from '../ui/ui.module';
   providers: [
   ],
   entryComponents: [
-    PageTileSettingsDialog
+    TileSettingsDialog
   ]
 })
 export class DashboardModule { }

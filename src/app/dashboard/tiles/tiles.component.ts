@@ -1,10 +1,12 @@
 import {
   Component, TemplateRef, Input, OnChanges, ViewChild, EventEmitter,
   Output, Directive, ContentChild, OnInit, AfterContentChecked,
-  ContentChildren, QueryList, AfterContentInit
+  ContentChildren, QueryList, AfterContentInit, Inject
 } from '@angular/core';
 import { DashboardService, TileDataSet, } from '../dashboard.service';
 import { Observable } from 'rxjs';
+import { PageTileInstance } from '../page/page.component';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 @Component({
   selector: 'app-tile-base',
@@ -27,7 +29,10 @@ export class TileBase implements OnChanges {
   @ViewChild('content')
   content: TemplateRef<any>;
 
-  constructor(protected srv: DashboardService) { }
+  @ViewChild('settings')
+  settings?: TemplateRef<any>;
+
+  constructor(protected srv: DashboardService, protected dialog: MatDialog) { }
 
   ngOnChanges(): void {
     this.refresh.emit();
@@ -35,6 +40,15 @@ export class TileBase implements OnChanges {
 
   getData(context: any): any {
     return {};
+  }
+
+  customize(instance: PageTileInstance) {
+    const dialogRef = this.dialog.open(TileSettingsDialog, {
+      width: '400px',
+      data: instance
+    });
+    dialogRef.afterClosed().subscribe(() => {
+    });
   }
 }
 
@@ -127,5 +141,22 @@ export class TileChart extends TileBase implements AfterContentInit {
   getData(context: any): any {
     const series = this.seriesList.find((item) => item.id == context.seriesId);
     return (series) ? { records$: series.getData(this.dataSet) } : undefined;
+  }
+}
+
+
+@Component({
+  selector: 'app-tile-settings',
+  templateUrl: './settings.html',
+})
+export class TileSettingsDialog {
+  private instance: PageTileInstance;
+
+  constructor(private dialogRef: MatDialogRef<TileSettingsDialog>, @Inject(MAT_DIALOG_DATA) private data: any) {
+    this.instance = data;
+  }
+
+  onOk() {
+    this.dialogRef.close();
   }
 }

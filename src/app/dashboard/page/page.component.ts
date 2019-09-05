@@ -4,11 +4,9 @@ import {
   ElementRef, NgZone, Inject, AfterContentInit, AfterContentChecked
 } from '@angular/core';
 import { TileBase } from '../tiles/tiles.component';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { GridsterComponent } from 'angular2gridster';
 
 @Directive({
-  selector: '[appDashboardPageHost]'
+  selector: '[appDashboardTileHost]'
 })
 export class PageTileHost implements OnChanges {
   @Input()
@@ -19,6 +17,21 @@ export class PageTileHost implements OnChanges {
   ngOnChanges() {
     if (this.vc.length < 1) {
       this.vc.createEmbeddedView(this.tile.definition.content, { '$implicit': this.tile });
+    }
+  }
+}
+@Directive({
+  selector: '[appDashboardTileSettingsHost]'
+})
+export class PageTileSettingsHost implements OnChanges {
+  @Input()
+  tile: PageTileInstance;
+
+  constructor(private vc: ViewContainerRef) { }
+
+  ngOnChanges() {
+    if (this.vc.length < 1) {
+      this.vc.createEmbeddedView(this.tile.definition.settings, { '$implicit': this.tile });
     }
   }
 }
@@ -60,7 +73,7 @@ export class PageTileInstance implements OnChanges, AfterContentChecked {
   }
   private _definition: TileBase;
 
-  constructor(private dialog: MatDialog) { }
+  constructor() { }
 
   ngOnChanges() {
     this.isDataValid = false;
@@ -70,14 +83,6 @@ export class PageTileInstance implements OnChanges, AfterContentChecked {
     if (!this.isDataValid) {
       this.refresh();
     }
-  }
-
-  customize() {
-    const dialogRef = this.dialog.open(PageTileSettingsDialog, {
-      width: '400px'
-    });
-    dialogRef.afterClosed().subscribe(() => {
-    });
   }
 
   private refresh() {
@@ -127,18 +132,5 @@ export class DashboardPage implements AfterContentChecked {
         instance.definition = this.tileDefinitions.find((item) => item.id == instance.definitionId);
       }
     });
-  }
-}
-
-@Component({
-  selector: 'app-dashboard-tile-settings',
-  templateUrl: './settings.html',
-})
-export class PageTileSettingsDialog {
-
-  constructor(private dialogRef: MatDialogRef<PageTileSettingsDialog>, @Inject(MAT_DIALOG_DATA) private data: any) { }
-
-  onOk() {
-    this.dialogRef.close();
   }
 }

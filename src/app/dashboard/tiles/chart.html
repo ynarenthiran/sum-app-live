@@ -1,11 +1,17 @@
 <ng-template #content let-tile>
     <ng-container *ngFor="let series of seriesList">
-        <ngx-charts-pie-chart *ngIf="series.id==tile.context.seriesId" [results]="tile.data.records$ | async"
+        <ngx-charts-pie-chart *ngIf="series.id==tile.context.seriesId" animations="false" [results]="tile.data.records$ | async"
             legend="true" labels="true" class="chart">
         </ngx-charts-pie-chart>
     </ng-container>
-    <!--<ngx-charts-bar-vertical *ngFor="let series of seriesList" [results]="series.records$ | async" legend="true"
+    <!--<ngx-charts-bar-vertical *ngFor="let series of seriesList" animations="false" [results]="series.records$ | async" legend="true"
         xAxis="true" yAxis="true" showXAxisLabel="true" showYAxisLabel="true" [xAxisLabel]="series.label"
         yAxisLabel="Count" class="chart">
     </ngx-charts-bar-vertical>-->
+    <button mat-mini-fab class="tile-fab" (click)=customize(tile)>
+        <mat-icon>settings</mat-icon>
+    </button>
+</ng-template>
+<ng-template #settings let-tile>
+    Hello World !!!
 </ng-template>
