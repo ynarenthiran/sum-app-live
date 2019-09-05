@@ -5,6 +5,7 @@ import {
 } from '@angular/core';
 import { TileBase } from '../tiles/tiles.component';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { GridsterComponent } from 'angular2gridster';
 
 @Directive({
   selector: '[appDashboardPageHost]'
@@ -82,7 +83,8 @@ export class PageTileInstance implements OnChanges, AfterContentChecked {
   private refresh() {
     if (this.definition) {
       this.data = this.definition.getData(this.context);
-      this.isDataValid = true;
+      if (this.data)
+        this.isDataValid = true;
     }
   }
 }
@@ -93,11 +95,25 @@ export class PageTileInstance implements OnChanges, AfterContentChecked {
   styleUrls: ['./page.component.scss']
 })
 export class DashboardPage implements AfterContentChecked {
+  /*private gridsterOptions = {
+    lanes: 12,
+    direction: 'vertical',
+    dragAndDrop: false,
+    resizable: false,
+    shrink: true,
+    useCSSTransforms: true,
+    responsiveView: true,
+    responsiveToParent: true,
+  };*/
+
   @ContentChildren(PageTileInstance)
   tileInstances: QueryList<PageTileInstance>;
 
   @ContentChildren(TileBase)
   tileDefinitions: QueryList<TileBase>;
+
+  //@ViewChild(GridsterComponent)
+  //grid: GridsterComponent;
 
   constructor() { }
 

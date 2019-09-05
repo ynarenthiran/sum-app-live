@@ -1,13 +1,7 @@
 <mat-grid-list [cols]="_columns" [rowHeight]="_options.rowHeight" [gutterSize]="_options.gap">
   <mat-grid-tile *ngFor="let tile of _tiles" [colspan]="tile.cols" [rowspan]="tile.rows">
-    <div class="tile-nw"></div>
-    <div class="tile-n"></div>
-    <div class="tile-ne"></div>
-    <div class="tile-w"></div>
-    <div class="tile-e"></div>
-    <div class="tile-sw"></div>
-    <div class="tile-s"></div>
-    <div class="tile-se"></div>
-    <ng-container [ngTemplateOutlet]="tile.item.content"></ng-container>
+    <lib-resize>
+      <ng-container [ngTemplateOutlet]="tile.item.content"></ng-container>
+    </lib-resize>
   </mat-grid-tile>
 </mat-grid-list>

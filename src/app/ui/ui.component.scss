@@ -34,19 +34,78 @@
     display: flex;
     flex-direction: column;
 }
+/* Styles for grid component                                                                             */
+/*********************************************************************************************************/
 .tile-n,.tile-s {
+    position: absolute;
+    height: 10px;
+    left: 5px;    
+    right: 5px;
     cursor: ns-resize;
+    z-index: 5;
 }
 .tile-e,.tile-w {
+    position: absolute;
+    width: 10px;
+    top: 5px;    
+    bottom: 5px;
     cursor: ew-resize;
+    z-index: 5;
 }
 .tile-nw,.tile-se {
+    position: absolute;
+    width: 10px;
+    height: 10px;
     cursor: nwse-resize;
+    z-index: 10;
 }
 .tile-ne,.tile-sw {
+    position: absolute;
+    width: 10px;
+    height: 10px;
     cursor: nesw-resize;
+    z-index: 10;
 }
-
+.tile-n {
+    top: 5px;
+}
+.tile-s {
+    bottom: 5px;
+}
+.tile-w {
+    right: 5px;
+}
+.tile-e {
+    left: 5px;
+}
+.tile-nw {
+    left: 5px;
+    top: 5px;
+}
+.tile-ne {
+    right: 5px;
+    top: 5px;
+}
+.tile-sw {
+    left: 5px;
+    bottom: 5px;
+}
+.tile-se {
+    right: 5px;
+    bottom: 5px;
+}
+.tile-placeholder {
+    position: absolute;
+    background: rgba(#ffffff, 0.5);
+    z-index: 2;
+    border: 1px dashed black;
+}
+.tile-content {
+    flex: 1 1 auto;
+    align-self: stretch;
+    justify-self: stretch;
+    display: flex;
+}
 /* Styles for flip component                                                                             */
 /*********************************************************************************************************/
 .flip-card {

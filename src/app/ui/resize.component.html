@@ -1,0 +1,12 @@
+<div #handleNW class="tile-nw"></div>
+<div #handleN class="tile-n"></div>
+<div #handleNE class="tile-ne"></div>
+<div #handleW class="tile-w"></div>
+<div #handleE class="tile-e"></div>
+<div #handleSW class="tile-sw"></div>
+<div #handleS class="tile-s"></div>
+<div #handleSE class="tile-se"></div>
+<div #resizePlaceholder class="tile-placeholder" [ngClass]="{'tile-placeholder-resizing': isResizing}"></div>
+<div class="tile-content">
+  <ng-content></ng-content>
+</div>

@@ -1,7 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ObjectService, ObjectType } from '../object/object.service';
 import { Observable } from 'rxjs';
+import { Status, CollaborationService } from '../collaboration/collaboration.service';
+import { map } from 'rxjs/operators';
+import { DashboardService } from './dashboard.service';
 
+interface ObjectTypeExt extends ObjectType {
+  statuses$: Observable<Status[]>;
+}
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -10,9 +16,15 @@ import { Observable } from 'rxjs';
 export class DashboardComponent implements OnInit {
   collaborationTypes$: Observable<ObjectType[]>;
 
-  constructor(private srvObj: ObjectService) { }
+  constructor(private srv: DashboardService, private srvObj: ObjectService) { }
 
   ngOnInit() {
-    this.collaborationTypes$ = this.srvObj.getObjectTypes("collaborationTypes")
+    this.collaborationTypes$ =
+      this.srvObj.getObjectTypes("collaborationTypes")
+        .pipe(
+          map((types) => types.map((type) => {
+            return { statuses$: this.srv.getStatuses(type.id), ...type };
+          }))
+        );
   }
 }

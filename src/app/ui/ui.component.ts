@@ -341,3 +341,89 @@ export class FormAdvancedComponent {
     this.group = new FormGroup(controls);
   }
 }
+
+@Component({
+  selector: 'lib-resize',
+  templateUrl: './resize.component.html',
+  styleUrls: ['./resize.component.scss'],
+})
+export class ResizableComponent {
+  @ViewChild('handleN', { read: ElementRef })
+  handleN: ElementRef<HTMLElement>;
+  @ViewChild('handleW', { read: ElementRef })
+  handleW: ElementRef<HTMLElement>;
+  @ViewChild('handleS', { read: ElementRef })
+  handleS: ElementRef<HTMLElement>;
+  @ViewChild('handleE', { read: ElementRef })
+  handleE: ElementRef<HTMLElement>;
+  @ViewChild('handleNW', { read: ElementRef })
+  handleNW: ElementRef<HTMLElement>;
+  @ViewChild('handleNE', { read: ElementRef })
+  handleNE: ElementRef<HTMLElement>;
+  @ViewChild('handleSW', { read: ElementRef })
+  handleSW: ElementRef<HTMLElement>;
+  @ViewChild('handleSE', { read: ElementRef })
+  handleSE: ElementRef<HTMLElement>;
+
+  private isResizing: boolean = false;
+  private resizeMode: string = "";
+
+  constructor(private el: ElementRef) { }
+
+  @HostListener('mousedown', ['$event'])
+  onMouseDown(e: any) {
+    if (e.offsetY < this.handleN.nativeElement.offsetTop + this.handleN.nativeElement.offsetHeight) {
+      if (e.offsetX < this.handleNW.nativeElement.offsetLeft + this.handleNW.nativeElement.offsetWidth) {
+        this.resizeMode = "NW";
+      }
+      else if (e.offsetX < this.handleNE.nativeElement.offsetLeft) {
+        this.resizeMode = "N"
+      }
+      else {
+        this.resizeMode = "NW"
+      }
+      this.isResizing = true;
+    }
+    else if (e.offsetY >= this.handleS.nativeElement.offsetTop) {
+      if (e.offsetX < this.handleSW.nativeElement.offsetLeft + this.handleSW.nativeElement.offsetWidth) {
+        this.resizeMode = "SW";
+      }
+      else if (e.offsetX < this.handleSE.nativeElement.offsetLeft) {
+        this.resizeMode = "S"
+      }
+      else {
+        this.resizeMode = "SW"
+      }
+      this.isResizing = true;
+    }
+
+    if (this.isResizing) {
+      if (e.preventDefault) {
+        e.preventDefault();
+      }
+    }
+  }
+
+  @HostListener('mouseup', ['$event'])
+  onMouseUp(e: any) {
+    if (!this.isResizing)
+      return;
+
+    //TODO Resize grid tile
+    this.isResizing = false;
+
+    if (e.preventDefault) {
+      e.preventDefault();
+    }
+  }
+
+  @HostListener('mousemove', ['$event'])
+  onMouseMove(e: any) {
+    if (!this.isResizing)
+      return;
+
+    if (e.preventDefault) {
+      e.preventDefault();
+    }
+  }
+}

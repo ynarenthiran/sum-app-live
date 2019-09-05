@@ -1,12 +1,10 @@
 import {
   Component, TemplateRef, Input, OnChanges, ViewChild, EventEmitter,
   Output, Directive, ContentChild, OnInit, AfterContentChecked,
-  ContentChildren, QueryList
+  ContentChildren, QueryList, AfterContentInit
 } from '@angular/core';
 import { DashboardService, TileDataSet, } from '../dashboard.service';
-import { map, tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import { CollaborationService, Status } from 'src/app/collaboration/collaboration.service';
 
 @Component({
   selector: 'app-tile-base',
@@ -116,41 +114,18 @@ export class TileChartSeries {
   styleUrls: ['./tiles.component.scss'],
   providers: [{ provide: TileBase, useExisting: TileChart }]
 })
-export class TileChart extends TileBase implements AfterContentChecked {
+export class TileChart extends TileBase implements AfterContentInit {
   @ContentChildren(TileChartSeries)
   seriesList: QueryList<TileChartSeries>;
 
-  ngAfterContentChecked() {
-    if (false) {
-      // TODO trigger refresh if series changed
+  ngAfterContentInit(): void {
+    this.seriesList.changes.subscribe(() => {
       this.refresh.emit();
-    }
+    });
   }
 
   getData(context: any): any {
     const series = this.seriesList.find((item) => item.id == context.seriesId);
-    return { records$: series.getData(this.dataSet) };
-  }
-}
-
-@Component({
-  selector: 'app-tile-chart-type',
-  templateUrl: './chart.html',
-  styleUrls: ['./tiles.component.scss'],
-  providers: [{ provide: TileBase, useExisting: TileChartType }]
-})
-export class TileChartType extends TileChart {
-  @Input()
-  typeId: string;
-
-  statuses$: Observable<Status[]>;
-
-  constructor(protected srv: DashboardService, private srvColl: CollaborationService) {
-    super(srv);
-  }
-
-  ngOnChanges(): void {
-    super.ngOnChanges();
-    this.statuses$ = this.srvColl.getStatuses(this.typeId);
+    return (series) ? { records$: series.getData(this.dataSet) } : undefined;
   }
 }
