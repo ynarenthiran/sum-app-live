@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Observable, combineLatest, observable, of } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { AppConfigService } from '../services/app.config';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AuthService } from '../authentication/auth.service';
-import { map, flatMap, tap, share, mergeMap, concatAll, shareReplay } from 'rxjs/operators';
+import { map, flatMap } from 'rxjs/operators';
 import _ from "lodash";
 import * as moment from 'moment';
 
@@ -158,9 +158,42 @@ export class DashboardService {
     return this.read(dataSet, filter)
       .pipe(
         map((records) => {
-          return { total: records.length, increased: true, percent: records.length, trends: [] }
-        }),
-        tap((record) => console.log(record))
+          const startMoment = this.getOffsetMoment(startOffset, unit);
+          const prevMoment = this.getOffsetMoment(endOffset, unit, startMoment);
+          const endMoment = this.getOffsetMoment(endOffset, unit, prevMoment);
+          var current = 0, previous = 0;
+          var trends = [];
+          for (var i = 0; i < endOffset; i++) {
+            trends.push({
+              name: this.getOffsetMoment(i + 1, unit, startMoment),
+              value: 0
+            });
+          }
+          records.forEach((record) => {
+            const createdOn = this.getMoment(record.createdOn);
+            if (createdOn.isAfter(endMoment)) {
+              if (createdOn.isAfter(prevMoment)) {
+                current++;
+                trends.every((trend) => {
+                  if (trend.name.isAfter(createdOn)) {
+                    trend.value++;
+                    return false;
+                  }
+                  return true;
+                });
+              }
+              else if (createdOn.isBefore(startMoment)) {
+                previous++;
+              }
+            }
+          });
+          return {
+            total: records.length,
+            increased: (current > previous) ? true : false,
+            percent: (previous == 0) ? current * 100 : Math.round((previous - current) * 100 / previous),
+            trends: trends
+          };
+        })
       );
   }
 
