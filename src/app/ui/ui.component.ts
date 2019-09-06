@@ -366,38 +366,32 @@ export class ResizableComponent {
   handleSE: ElementRef<HTMLElement>;
 
   private isResizing: boolean = false;
-  private resizeMode: string = "";
+  private resizeDirection = { n: false, w: false, s: false, e: false };
 
   constructor(private el: ElementRef) { }
 
   @HostListener('mousedown', ['$event'])
   onMouseDown(e: any) {
-    if (e.offsetY < this.handleN.nativeElement.offsetTop + this.handleN.nativeElement.offsetHeight) {
-      if (e.offsetX < this.handleNW.nativeElement.offsetLeft + this.handleNW.nativeElement.offsetWidth) {
-        this.resizeMode = "NW";
-      }
-      else if (e.offsetX < this.handleNE.nativeElement.offsetLeft) {
-        this.resizeMode = "N"
-      }
-      else {
-        this.resizeMode = "NW"
-      }
-      this.isResizing = true;
+    this.isResizing = false;
+    this.resizeDirection = { n: false, w: false, s: false, e: false };
+    if (e.clientY < this.handleN.nativeElement.clientTop + this.handleN.nativeElement.clientHeight) {
+      this.resizeDirection.n = true;
+      this.isResizing = false;
     }
-    else if (e.offsetY >= this.handleS.nativeElement.offsetTop) {
-      if (e.offsetX < this.handleSW.nativeElement.offsetLeft + this.handleSW.nativeElement.offsetWidth) {
-        this.resizeMode = "SW";
-      }
-      else if (e.offsetX < this.handleSE.nativeElement.offsetLeft) {
-        this.resizeMode = "S"
-      }
-      else {
-        this.resizeMode = "SW"
-      }
-      this.isResizing = true;
+    else if (e.clientY >= this.handleS.nativeElement.clientTop) {
+      this.resizeDirection.s = true;
+      this.isResizing = false;
     }
-
+    if (e.clientX < this.handleN.nativeElement.clientLeft + this.handleN.nativeElement.clientWidth) {
+      this.resizeDirection.w = true;
+      this.isResizing = false;
+    }
+    else if (e.clientX >= this.handleS.nativeElement.clientLeft) {
+      this.resizeDirection.e = true;
+      this.isResizing = false;
+    }
     if (this.isResizing) {
+      this.startResizing(e.clientX, e.clientY);
       if (e.preventDefault) {
         e.preventDefault();
       }
@@ -408,10 +402,7 @@ export class ResizableComponent {
   onMouseUp(e: any) {
     if (!this.isResizing)
       return;
-
-    //TODO Resize grid tile
-    this.isResizing = false;
-
+    this.endResizing();
     if (e.preventDefault) {
       e.preventDefault();
     }
@@ -421,9 +412,19 @@ export class ResizableComponent {
   onMouseMove(e: any) {
     if (!this.isResizing)
       return;
-
+    this.keepResizing(e.clientX, e.clientY);
     if (e.preventDefault) {
       e.preventDefault();
     }
+  }
+
+  private startResizing(mx, my) {
+
+  }
+  private endResizing() {
+    this.isResizing = false;
+  }
+  private keepResizing(mx, my) {
+
   }
 }
