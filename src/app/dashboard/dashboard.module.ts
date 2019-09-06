@@ -58,6 +58,8 @@ import { UIModule } from '../ui/ui.module';
     MatInputModule,
     MatCardModule,
     MatDialogModule,
+    MatSidenavModule,
+    MatExpansionModule,
     DashboardRoutingModule,
     UIModule,
     MomentModule,

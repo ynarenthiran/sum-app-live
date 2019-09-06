@@ -1,17 +1,49 @@
-<lib-grid>
-    <lib-grid-item *ngFor="let tile of tileInstances" [width]="tile.width" [height]="tile.height">
-        <ng-container [ngSwitch]="tile.definition?.withoutFrame">
-            <ng-container *ngSwitchCase="true">
-                <div class="grid-item hbox mat-elevation-z2 mat-typography">
-                    <div appDashboardTileHost [tile]="tile"></div>
-                </div>
-            </ng-container>
-            <ng-container *ngSwitchCase="false">
-                <lib-frame [icon]="tile.icon" [title]="tile.title" [description]="tile.description"
-                    class="grid-item mat-elevation-z2 mat-typography">
-                    <div appDashboardTileHost [tile]="tile"></div>
-                </lib-frame>
-            </ng-container>
-        </ng-container>
-    </lib-grid-item>
-</lib-grid>
+<mat-sidenav-container class="dashboard-page-container">
+    <mat-sidenav-content>
+        <!--Page Content-->
+        <lib-grid libDropArea="true">
+            <lib-grid-item *ngFor="let tile of tileInstances" [width]="tile.width" [height]="tile.height">
+                <ng-container [ngSwitch]="tile.definition?.withoutFrame">
+                    <ng-container *ngSwitchCase="true">
+                        <div class="grid-item hbox mat-elevation-z2 mat-typography">
+                            <div appDashboardTileHost [tile]="tile"></div>
+                        </div>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="false">
+                        <lib-frame [icon]="tile.icon" [title]="tile.title" [description]="tile.description"
+                            class="grid-item mat-elevation-z2 mat-typography">
+                            <div appDashboardTileHost [tile]="tile"></div>
+                        </lib-frame>
+                    </ng-container>
+                </ng-container>
+            </lib-grid-item>
+        </lib-grid>
+        <div class="page-panel-border">
+            <svg width="40" height="120">
+                <path
+                    d="m40 0s-0.297 12.3-20.6 26.4c-12.3 9.58-19.4 21.6-19.4 33.6s10.1 22.2 22.1 32.5c17.7 16.2 17.9 27.5 17.9 27.5z" />
+            </svg>
+            <div>
+                <button mat-icon-button (click)="panel.opened = !panel.opened">
+                    <mat-icon>{{panel.opened ? 'chevron_right' : 'chevron_left'}}</mat-icon>
+                </button>
+            </div>
+        </div>
+    </mat-sidenav-content>
+    <mat-sidenav #panel autoresize position="end" mode="side" class="page-panel">
+        <!--Page Panel-->
+        <mat-accordion>
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title class="page-panel-text">
+                        <h2>Available Tiles</h2>
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <mat-list-item *ngFor="let tileDef of tileDefinitions" libDragEntity="true"
+                    [dragData]="{definitionId: tileDef.id}">
+                    <h3 matLine> {{tileDef.id}} </h3>
+                </mat-list-item>
+            </mat-expansion-panel>
+        </mat-accordion>
+    </mat-sidenav>
+</mat-sidenav-container>

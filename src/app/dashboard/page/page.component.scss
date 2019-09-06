@@ -1,9 +1,14 @@
+@import '../../../global';
+
 :host {
     position: relative;
     flex: 1 0 auto;
     display: flex;
 }
 lib-grid {
+    flex: 1 1 auto;
+}
+.dashboard-page-container {
     flex: 1 1 auto;
 }
 .grid-item {
@@ -17,4 +22,33 @@ lib-grid {
     right: 14px;
     bottom: 14px;
     z-index: 10;
+}
+.page-panel-border {
+    position: relative;
+    border-right: 10px solid $color-accent;
+}
+.page-panel-border svg {
+    padding-top: 40px;
+    fill: $color-accent;
+}
+.page-panel-border div {
+    position: absolute;
+    top: 80px;
+    left: 0;
+    color: $color-accent-text;
+    z-index: 5;
+}
+.page-panel {
+    background-color: $color-accent;
+    color: $color-accent-text;
+}
+.page-panel mat-expansion-panel {
+    background-color: $color-accent;
+    color: $color-accent-text;
+}
+.page-panel mat-expansion-panel-header {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+.page-panel-text {
+    color: $color-accent-text;
 }
