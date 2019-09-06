@@ -7,6 +7,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireStorage, AngularFireStorageModule } from '@angular/fire/storage';
 import { AngularFireFunctionsModule } from '@angular/fire/functions';
 import {
+  MatCardModule,
   MatSidenavModule,
   MatButtonModule,
   MatIconModule,
@@ -28,6 +29,7 @@ import { LayoutModule } from './layout/layout.module';
 import { ShellComponent, ShellService } from './shell/shell.component';
 import { MomentModule } from 'ngx-moment';
 import { UserProfileComponent } from './user-profile/user-profile.component';
+import { DialogModule } from './dialog/dialog.module';
 
 const appInitializerFn = (appConfig: AppConfigService) => {
   return () => {
@@ -48,6 +50,7 @@ const appInitializerFn = (appConfig: AppConfigService) => {
     AngularFireStorageModule,
     AngularFireFunctionsModule,
     LayoutModule,
+    DialogModule,
     MatSidenavModule,
     MatButtonModule,
     MatIconModule,

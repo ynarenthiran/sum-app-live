@@ -11,7 +11,8 @@ import {
   MatRippleModule,
   MatTreeModule,
   MatExpansionModule,
-  MatSidenavModule
+  MatSidenavModule,
+  MatDividerModule
 } from '@angular/material';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { GridsterModule } from 'angular2gridster';
@@ -56,7 +57,8 @@ import { DragulaModule } from 'ng2-dragula';
     DragulaModule,
     GridsterModule,
     DialogModule,
-    UIModule
+    UIModule,
+    MatCardModule
   ],
   declarations: [
     PageComponent,
@@ -92,7 +94,9 @@ import { DragulaModule } from 'ng2-dragula';
     PageSectionToolbar,
     PageSectionDetail,
     PageNode,
-    FlexiblePageSectionAction
+    FlexiblePageSectionAction,
+    MatCardModule,
+    MatDividerModule
   ],
   providers: [
     PageService

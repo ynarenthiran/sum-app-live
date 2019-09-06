@@ -2,3 +2,20 @@
     flex: 1 1 auto;
     display: flex;
 }
+.profileimg{
+  -ms-layout-grid: inline-block;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+.headerProfile{
+    display: block;
+  border: 1px solid black;
+}
+.cardStyle{
+    position: absolute;
+    top: -64px;
+    left: 32px;
+}
+

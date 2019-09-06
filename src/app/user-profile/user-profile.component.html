@@ -1,16 +1,27 @@
 <lib-page-basic>
-  <lib-page-sidebar-header>
+  <!--  <lib-page-sidebar-header>
     Sidebar Header
-  </lib-page-sidebar-header>
-  <lib-page-sidebar-content>
-    Sidebar Content
+  </lib-page-sidebar-header> -->
+  <lib-page-sidebar-content class="cardStyle">
+    <mat-card id="imageId" >
+      <img mat-card-sm-image src="assets/images/img1.jpg" class="profileimg">
+      <mat-card-actions>
+        <button mat-button>EDIT</button>
+        <button mat-button>CANCEL</button>
+      </mat-card-actions>
+    </mat-card>
   </lib-page-sidebar-content>
   <lib-page-header>
-    Header
+    <p class="vbox">
+      User Proile Settings
   </lib-page-header>
+
   <lib-page-content>
     <p>
       user-profile works!
     </p>
+    <lib-form *ngIf="user$ | async as user" [model]="user" [labels]="{displayName: 'Name',email: 'Email'}">
+    </lib-form>
+    <button mat-button (click)="saveUser()">Save</button>
   </lib-page-content>
 </lib-page-basic>
