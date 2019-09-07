@@ -1,7 +1,7 @@
 <mat-sidenav-container class="dashboard-page-container">
     <mat-sidenav-content>
         <!--Page Content-->
-        <lib-grid libDropArea="true">
+        <lib-grid libDropArea="true" (over)="onItemOver($event)">
             <lib-grid-item *ngFor="let tile of tileInstances" [width]="tile.width" [height]="tile.height">
                 <ng-container [ngSwitch]="tile.definition?.withoutFrame">
                     <ng-container *ngSwitchCase="true">
@@ -39,10 +39,12 @@
                         <h2>Available Tiles</h2>
                     </mat-panel-title>
                 </mat-expansion-panel-header>
-                <mat-list-item *ngFor="let tileDef of tileDefinitions" libDragEntity="true"
-                    [dragData]="{definitionId: tileDef.id}">
-                    <h3 matLine> {{tileDef.id}} </h3>
-                </mat-list-item>
+                <div class="spacer vbox">
+                    <div *ngFor="let tileDef of tileDefinitions" libDragEntity="true"
+                        [dragData]="{definitionId: tileDef.id}" class="vbox page-item">
+                        <span>{{tileDef.id}}</span>
+                    </div>
+                </div>
             </mat-expansion-panel>
         </mat-accordion>
     </mat-sidenav>

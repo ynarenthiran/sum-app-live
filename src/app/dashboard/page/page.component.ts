@@ -126,6 +126,10 @@ export class DashboardPage implements AfterContentChecked {
     this.initializeTileInstances();
   }
 
+  onItemOver(e) {
+    console.log(e);
+  }
+
   private initializeTileInstances() {
     this.tileInstances.forEach((instance) => {
       if (!instance.definition) {

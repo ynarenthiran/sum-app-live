@@ -112,6 +112,8 @@ export class UIDropArea {
   dropEffect: string = "copy"
   @Output()
   dropped: EventEmitter<any> = new EventEmitter<any>();
+  @Output()
+  over: EventEmitter<any> = new EventEmitter<any>();
 
   constructor(private el: ElementRef) {
   }
@@ -123,6 +125,7 @@ export class UIDropArea {
         e.preventDefault();
       }
       e.dataTransfer.dropEffect = this.dropEffect;
+      this.over.emit(e);
       if (this.dropTargetClass)
         this.el.nativeElement.classList.add(this.dropTargetClass);
       return false;
