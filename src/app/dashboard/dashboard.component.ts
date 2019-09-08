@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { Status, CollaborationService } from '../collaboration/collaboration.service';
 import { map } from 'rxjs/operators';
 import { DashboardService } from './dashboard.service';
+import { TileEventData } from './page/page.component';
 
 interface ObjectTypeExt extends ObjectType {
   statuses$: Observable<Status[]>;
@@ -14,7 +15,9 @@ interface ObjectTypeExt extends ObjectType {
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
-  collaborationTypes$: Observable<ObjectType[]>;
+  private collaborationTypes$: Observable<ObjectType[]>;
+
+  private tiles: TileEventData[] = [];
 
   constructor(private srv: DashboardService, private srvObj: ObjectService) { }
 
@@ -26,5 +29,9 @@ export class DashboardComponent implements OnInit {
             return { statuses$: this.srv.getStatuses(type.id), ...type };
           }))
         );
+  }
+
+  addNewTile(e: TileEventData) {
+    this.tiles.push(e);
   }
 }

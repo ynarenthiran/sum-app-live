@@ -19,6 +19,12 @@ export class TileBase implements OnChanges {
   id: string;
 
   @Input()
+  icon: string;
+
+  @Input()
+  title: string;
+
+  @Input()
   dataSet?: TileDataSet;
 
   @Output()
@@ -131,6 +137,11 @@ export class TileChartSeries {
 export class TileChart extends TileBase implements AfterContentInit {
   @ContentChildren(TileChartSeries)
   seriesList: QueryList<TileChartSeries>;
+
+  private chartTypes:any[] = [
+    {id: 'pie', label: 'Pie Chart'},
+    {id: 'bar1', label: 'Vertical Bar Chart'},    
+  ];
 
   ngAfterContentInit(): void {
     this.seriesList.changes.subscribe(() => {

@@ -1,7 +1,7 @@
 <mat-sidenav-container class="dashboard-page-container">
     <mat-sidenav-content>
         <!--Page Content-->
-        <lib-grid libDropArea="true" (over)="onItemOver($event)">
+        <lib-grid>
             <lib-grid-item *ngFor="let tile of tileInstances" [width]="tile.width" [height]="tile.height">
                 <ng-container [ngSwitch]="tile.definition?.withoutFrame">
                     <ng-container *ngSwitchCase="true">
@@ -12,10 +12,23 @@
                     <ng-container *ngSwitchCase="false">
                         <lib-frame [icon]="tile.icon" [title]="tile.title" [description]="tile.description"
                             class="grid-item mat-elevation-z2 mat-typography">
+                            <lib-frame-toolbar>
+                                <button mat-icon-button (click)="customize(tile)">
+                                    <mat-icon>settings</mat-icon>
+                                </button>
+                                <button mat-icon-button>
+                                    <mat-icon>close</mat-icon>
+                                </button>
+                            </lib-frame-toolbar>
                             <div appDashboardTileHost [tile]="tile"></div>
                         </lib-frame>
                     </ng-container>
                 </ng-container>
+            </lib-grid-item>
+            <lib-grid-item width="1" height="1">
+                <div matRipple matRippleCentered="centered" (click)="addTile()" class="grid-item grid-item-add">
+                    <mat-icon>add_circle</mat-icon>
+                </div>
             </lib-grid-item>
         </lib-grid>
         <div class="page-panel-border">
@@ -42,7 +55,14 @@
                 <div class="spacer vbox">
                     <div *ngFor="let tileDef of tileDefinitions" libDragEntity="true"
                         [dragData]="{definitionId: tileDef.id}" class="vbox page-item">
-                        <span>{{tileDef.id}}</span>
+                        <div class="row">
+                            <div class="vbox">
+                                <mat-icon>{{tileDef.icon}}</mat-icon>
+                            </div>
+                            <div class="vbox">
+                                <span>{{tileDef.title}}</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </mat-expansion-panel>

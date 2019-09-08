@@ -1,0 +1,40 @@
+<h2 mat-dialog-title>Add New Tile</h2>
+<mat-dialog-content>
+    <mat-accordion class="example-headers-align">
+        <mat-expansion-panel [expanded]="step === 0" (opened)="step = 0" hideToggle>
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    Tile Definition
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="column">
+                <mat-form-field>
+                    <mat-label>Select tile definition</mat-label>
+                    <mat-select [(value)]="selectedTileDefinition" required
+                        (selectionChange)="onTileDefSelection($event)">
+                        <mat-option *ngFor="let tileDef of tileDefinitions" [value]="tileDef">{{tileDef.title}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <mat-action-row>
+                <button mat-button (click)="step = 1">Next</button>
+                <button mat-button color="warn" mat-dialog-close>Cancel</button>
+            </mat-action-row>
+        </mat-expansion-panel>
+        <mat-expansion-panel [expanded]="step === 1" (opened)="step = 1" hideToggle>
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    Tile Details
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div *ngIf="selectedTileDefinition" appDashboardTileSettingsHost [definition]="selectedTileDefinition"
+                [(context)]="tileContext"></div>
+            <mat-action-row>
+                <button mat-button color="primary" (click)="onOk()">Add</button>
+                <button mat-button (click)="step = 0">Previous</button>
+                <button mat-button color="warn" mat-dialog-close>Cancel</button>
+            </mat-action-row>
+        </mat-expansion-panel>
+    </mat-accordion>
+</mat-dialog-content>

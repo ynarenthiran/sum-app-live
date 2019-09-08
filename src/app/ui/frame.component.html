@@ -3,9 +3,10 @@
     <mat-icon class="panel-header-icon">{{icon}}</mat-icon>
   </div>
   <div class="spacer vbox panel-drag-handle">
-    <span class="mat-title no-margin">{{title}}</span>
-    <span class="mat-caption no-margin">{{description}}</span>
+    <span class="mat-title no-margin text-nowrap">{{title}}</span>
+    <span class="mat-caption no-margin text-nowrap">{{description}}</span>
   </div>
+  <ng-content select="lib-frame-toolbar"></ng-content>
 </div>
 <div class="frame-rule"></div>
 <div class="spacer vbox anchor">

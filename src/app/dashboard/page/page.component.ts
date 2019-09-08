@@ -1,9 +1,9 @@
 import {
-  Component, OnInit, ContentChildren, ViewChild,
-  Directive, Input, QueryList, ViewContainerRef, OnChanges,
-  ElementRef, NgZone, Inject, AfterContentInit, AfterContentChecked
+  Component, ContentChildren, Directive, Input, QueryList, ViewContainerRef,
+  OnChanges, Inject, AfterContentChecked, Output, EventEmitter
 } from '@angular/core';
 import { TileBase } from '../tiles/tiles.component';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog, MatSelectChange } from '@angular/material';
 
 @Directive({
   selector: '[appDashboardTileHost]'
@@ -25,13 +25,16 @@ export class PageTileHost implements OnChanges {
 })
 export class PageTileSettingsHost implements OnChanges {
   @Input()
-  tile: PageTileInstance;
+  definition: TileBase
+
+  @Input()
+  context: any;
 
   constructor(private vc: ViewContainerRef) { }
 
   ngOnChanges() {
     if (this.vc.length < 1) {
-      this.vc.createEmbeddedView(this.tile.definition.settings, { '$implicit': this.tile });
+      this.vc.createEmbeddedView(this.definition.settings, { '$implicit': this.context });
     }
   }
 }
@@ -94,40 +97,47 @@ export class PageTileInstance implements OnChanges, AfterContentChecked {
   }
 }
 
+export interface TileEventData {
+  definitionId: string;
+  icon: string;
+  title: string;
+  description: string;
+  context: any;
+}
 @Component({
   selector: 'app-dashboard-page',
   templateUrl: './page.html',
   styleUrls: ['./page.component.scss']
 })
 export class DashboardPage implements AfterContentChecked {
-  /*private gridsterOptions = {
-    lanes: 12,
-    direction: 'vertical',
-    dragAndDrop: false,
-    resizable: false,
-    shrink: true,
-    useCSSTransforms: true,
-    responsiveView: true,
-    responsiveToParent: true,
-  };*/
-
   @ContentChildren(PageTileInstance)
   tileInstances: QueryList<PageTileInstance>;
 
   @ContentChildren(TileBase)
   tileDefinitions: QueryList<TileBase>;
 
-  //@ViewChild(GridsterComponent)
-  //grid: GridsterComponent;
+  @Output()
+  tileAddition: EventEmitter<TileEventData> = new EventEmitter<TileEventData>();
 
-  constructor() { }
+  constructor(protected dialog: MatDialog) { }
 
   ngAfterContentChecked() {
     this.initializeTileInstances();
   }
 
-  onItemOver(e) {
-    console.log(e);
+  addTile() {
+    const dialogRef = this.dialog.open(TileCreateDialog, {
+      width: '400px',
+      data: { tileDefinitions: this.tileDefinitions.toArray() }
+    });
+    dialogRef.afterClosed().subscribe((tileData: TileEventData) => {
+      if (tileData)
+        this.tileAddition.emit(tileData);
+    });
+  }
+
+  customize(tile: PageTileInstance) {
+    alert("Hello");
   }
 
   private initializeTileInstances() {
@@ -136,5 +146,37 @@ export class DashboardPage implements AfterContentChecked {
         instance.definition = this.tileDefinitions.find((item) => item.id == instance.definitionId);
       }
     });
+  }
+}
+
+@Component({
+  selector: 'app-tile-create',
+  templateUrl: './create-tile-dialog.html',
+})
+export class TileCreateDialog {
+  private step: number = 0;
+  private tileDefinitions: TileBase[];
+  private selectedTileDefinition: TileBase;
+  private tileIcon = "";
+  private tileTitle = "";
+  private tileDescription = "";
+  private tileContext: any = {}
+
+  constructor(private dialogRef: MatDialogRef<TileCreateDialog>, @Inject(MAT_DIALOG_DATA) private data: any) {
+    this.tileDefinitions = data.tileDefinitions;
+  }
+
+  onTileDefSelection(e: MatSelectChange) {
+  }
+
+  onOk() {
+    const tileData: TileEventData = {
+      definitionId: this.selectedTileDefinition.id,
+      icon: this.tileIcon,
+      title: this.tileTitle,
+      description: this.tileDescription,
+      context: this.tileContext
+    };
+    this.dialogRef.close(tileData);
   }
 }

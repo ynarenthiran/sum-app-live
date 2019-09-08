@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import {
   MatSidenavModule,
   MatButtonModule,
@@ -11,7 +12,9 @@ import {
   MatFormFieldModule,
   MatInputModule,
   MatCardModule,
-  MatDialogModule
+  MatDialogModule,
+  MatRippleModule,
+  MatSelectModule
 } from '@angular/material';
 import { MomentModule } from 'ngx-moment';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
@@ -24,7 +27,7 @@ import {
 } from './tiles/tiles.component';
 import { DashboardComponent } from './dashboard.component';
 import {
-  DashboardPage, PageTileInstance, PageTileHost, PageTileSettingsHost
+  DashboardPage, PageTileInstance, PageTileHost, PageTileSettingsHost, TileCreateDialog
 } from './page/page.component';
 import { GridsterModule } from 'angular2gridster';
 import { UIModule } from '../ui/ui.module';
@@ -43,10 +46,12 @@ import { UIModule } from '../ui/ui.module';
     TileTrend,
     TileChart,
     TileChartSeries,
-    TileSettingsDialog
+    TileSettingsDialog,
+    TileCreateDialog
   ],
   imports: [
     CommonModule,
+    FormsModule,
     MatSidenavModule,
     MatButtonModule,
     MatIconModule,
@@ -60,6 +65,8 @@ import { UIModule } from '../ui/ui.module';
     MatDialogModule,
     MatSidenavModule,
     MatExpansionModule,
+    MatRippleModule,
+    MatSelectModule,
     DashboardRoutingModule,
     UIModule,
     MomentModule,
@@ -71,7 +78,8 @@ import { UIModule } from '../ui/ui.module';
   providers: [
   ],
   entryComponents: [
-    TileSettingsDialog
+    TileSettingsDialog,
+    TileCreateDialog
   ]
 })
 export class DashboardModule { }

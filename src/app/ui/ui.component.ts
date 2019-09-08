@@ -84,6 +84,15 @@ export class PanelComponent implements AfterContentChecked {
   }
 }
 
+@Directive({
+  selector: 'lib-frame-toolbar',
+  host: {
+    '[style.display]': '"flex"',
+    '[style.flex-direction]': '"row"'
+  }
+})
+export class FrameToolbar {
+}
 @Component({
   selector: 'lib-frame',
   templateUrl: './frame.component.html',
@@ -268,6 +277,12 @@ export class GridComponent implements OnChanges, AfterContentChecked {
 
   ngAfterContentChecked() {
     this.initializeTiles();
+  }
+
+  onItemOver(e) {
+    // Check if the mouse is over some item
+    // If yes show a placeholder before it
+    // If no show a placeholder in the end
   }
 
   private initializeTiles() {

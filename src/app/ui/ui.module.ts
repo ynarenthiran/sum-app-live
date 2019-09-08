@@ -3,20 +3,21 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import {
   MatToolbarModule, MatIconModule, MatRippleModule,
-  MatGridListModule, MatButtonModule, MatFormFieldModule, MatInputModule, 
+  MatGridListModule, MatButtonModule, MatFormFieldModule, MatInputModule,
   MatSelectModule
 } from '@angular/material';
 import { AngularDraggableModule } from 'angular2-draggable';
 import {
   PanelComponent, UIDropArea, UIDragEntity, FrameComponent,
-  UINotifyResize, GridComponent, UIGridItem, FlipComponent, UIFlipFront, 
-  UIFlipBack, FormAdvancedComponent, ResizableComponent
+  UINotifyResize, GridComponent, UIGridItem, FlipComponent, UIFlipFront,
+  UIFlipBack, FormAdvancedComponent, ResizableComponent, FrameToolbar
 } from './ui.component';
 
 @NgModule({
   declarations: [
     PanelComponent,
     FrameComponent,
+    FrameToolbar,
     UIDropArea,
     UIDragEntity,
     UINotifyResize,
@@ -45,6 +46,7 @@ import {
   exports: [
     PanelComponent,
     FrameComponent,
+    FrameToolbar,
     UIDropArea,
     UIDragEntity,
     UINotifyResize,

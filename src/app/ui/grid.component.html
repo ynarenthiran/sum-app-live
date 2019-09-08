@@ -1,4 +1,5 @@
-<mat-grid-list [cols]="_columns" [rowHeight]="_options.rowHeight" [gutterSize]="_options.gap">
+<mat-grid-list [cols]="_columns" [rowHeight]="_options.rowHeight" [gutterSize]="_options.gap" libDropArea="true"
+  (over)="onItemOver($event)">
   <mat-grid-tile *ngFor="let tile of _tiles" [colspan]="tile.cols" [rowspan]="tile.rows">
     <ng-container [ngTemplateOutlet]="tile.item.content"></ng-container>
   </mat-grid-tile>

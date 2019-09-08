@@ -17,6 +17,22 @@ lib-grid {
     align-self: stretch;
     justify-self: stretch;
 }
+.grid-item-add {
+    border: 2px dashed #000000;
+    border-radius: 4px;
+    background-color: $color-secondary;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+.grid-item-add mat-icon {
+    font-size: 36px;
+    width: 36px;
+    height: 36px;
+    user-select: none;
+    pointer-events: none;
+}
 .grid-fab {
     position: absolute;
     right: 14px;

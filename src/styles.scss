@@ -65,6 +65,11 @@
     cursor: pointer;
     color: $color-primary;
 }
+.text-nowrap {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 
 /* Global classes because of view encapsulation issues */
 .sidebar-nav-list-item {

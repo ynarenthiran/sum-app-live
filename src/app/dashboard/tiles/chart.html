@@ -1,17 +1,34 @@
 <ng-template #content let-tile>
     <ng-container *ngFor="let series of seriesList">
-        <ngx-charts-pie-chart *ngIf="series.id==tile.context.seriesId" animations="false" [results]="tile.data.records$ | async"
-            legend="true" labels="true" class="chart">
-        </ngx-charts-pie-chart>
+        <ng-container *ngIf="series.id==tile.context.seriesId" [ngSwitch]="tile.context.chartType">
+            <ngx-charts-pie-chart *ngSwitchCase="'pie'" animations="false" [results]="tile.data.records$ | async"
+                legend="true" labels="true" class="chart">
+            </ngx-charts-pie-chart>
+            <ngx-charts-bar-vertical *ngSwitchCase="'bar1'" animations="false" [results]="tile.data.records$ | async"
+                legend="true" xAxis="true" yAxis="true" showXAxisLabel="true" showYAxisLabel="true"
+                [xAxisLabel]="series.label" yAxisLabel="Count" class="chart">
+            </ngx-charts-bar-vertical>
+        </ng-container>
     </ng-container>
-    <!--<ngx-charts-bar-vertical *ngFor="let series of seriesList" animations="false" [results]="series.records$ | async" legend="true"
-        xAxis="true" yAxis="true" showXAxisLabel="true" showYAxisLabel="true" [xAxisLabel]="series.label"
-        yAxisLabel="Count" class="chart">
-    </ngx-charts-bar-vertical>-->
     <button mat-mini-fab class="tile-fab" (click)=customize(tile)>
         <mat-icon>settings</mat-icon>
     </button>
 </ng-template>
-<ng-template #settings let-tile>
-    Hello World !!!
+<ng-template #settings let-context>
+    <div class="vbox">
+        <mat-form-field>
+            <mat-label>Select Series</mat-label>
+            <mat-select [(value)]="context.seriesId" required>
+                <mat-option *ngFor="let series of seriesList" [value]="series.id">{{series.label}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Select Chart Type</mat-label>
+            <mat-select [(value)]="context.chartType" required>
+                <mat-option *ngFor="let chartType of chartTypes" [value]="chartType.id">{{chartType.label}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
 </ng-template>
